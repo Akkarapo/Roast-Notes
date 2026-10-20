@@ -1,6 +1,6 @@
 # Plan: foundation
 
-> อ้างอิง [docs/specs/SPEC-foundation.md](../docs/specs/SPEC-foundation.md) · สถานะ: **รอรีวิว**
+> อ้างอิง [docs/specs/SPEC-foundation.md](../docs/specs/SPEC-foundation.md) · สถานะ: **เสร็จแล้ว (2026-10-21)**
 
 ## องค์ประกอบและลำดับ
 
