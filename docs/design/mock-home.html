@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roast &amp; Notes mock</title>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sriracha&display=swap" rel="stylesheet">
+<style>
+:root{--cobalt:#2338C4;--cobalt-ink:#18248A;--cream:#F3EEE3;--paper:#FBF8F1;--line:#2338C4}
+*{box-sizing:border-box;margin:0}
+body{background:var(--cream);color:var(--cobalt);font-family:Anuphan,sans-serif}
+.script{font-family:Sriracha,cursive;font-weight:400}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+nav{display:flex;align-items:center;justify-content:space-between;height:76px;border-bottom:2px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
+.brand .script{font-size:26px}
+.links{display:flex;gap:28px;font-weight:500}
+.links a{color:var(--cobalt);text-decoration:none;padding:6px 2px}
+.links a.on{border-bottom:3px solid var(--cobalt)}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 22px;font-weight:600;font-size:15px;text-decoration:none;border:2px solid var(--cobalt)}
+.pill.solid{background:var(--cobalt);color:var(--paper)}
+.pill.ghost{color:var(--cobalt)}
+.pill.light{border-color:var(--paper);color:var(--paper)}
+.pill.cream{background:var(--paper);color:var(--cobalt);border-color:var(--paper)}
+.hero{background:var(--cobalt);color:var(--paper);border-radius:28px;margin-top:28px;padding:56px 56px 0;display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;min-height:380px}
+.hero h1{font-size:54px;line-height:1.1;font-weight:600}
+.hero h1 .script{font-size:72px;display:block;margin-top:4px}
+.hero p{margin-top:18px;font-size:18px;max-width:440px;opacity:.9}
+.hero .cta{margin-top:28px;display:flex;gap:12px}
+.hero .meta{margin-top:40px;font-size:13px;opacity:.8;padding-bottom:40px}
+.hero svg{width:100%;height:auto;align-self:end}
+h2{font-size:30px;font-weight:600;margin:56px 0 4px;display:flex;align-items:baseline;gap:12px}
+h2 .script{font-size:36px}
+.sub{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.sub span{opacity:.75}
+.sub a{color:var(--cobalt);font-weight:600}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.chip{border:1.5px solid var(--cobalt);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:500}
+.chip.on{background:var(--cobalt);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:var(--paper);border:2px solid var(--cobalt);border-radius:22px;padding:18px;display:flex;flex-direction:column;position:relative}
+.card.feature{background:var(--cobalt);color:var(--paper)}
+.card .origin,.card .name{padding-right:66px}.card .origin{font-size:13px;opacity:.75}
+.card .name{font-size:19px;font-weight:600;margin-top:2px}
+.card .name .script{display:block;font-size:30px;line-height:1.1}
+.card svg{height:150px;margin:8px auto 0}
+.card .notes{font-size:13px;margin-top:6px}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;border-top:1.5px dashed currentColor;padding-top:12px}
+.price{font-family:Sriracha;font-size:26px;padding:0 10px;border-radius:10px;transform:rotate(-4deg)}
+.card .price{background:var(--cobalt);color:var(--paper)}
+.card.feature .price{background:var(--paper);color:var(--cobalt)}
+.add{font-size:14px;font-weight:600}
+.match{position:absolute;top:14px;right:14px;width:62px;height:62px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center;text-align:center;line-height:1;transform:rotate(8deg)}
+.match b{font-family:Sriracha;font-size:22px;font-weight:400}
+.match small{font-size:9px;display:block}
+footer{margin-top:72px;border-top:2px solid var(--line);padding:24px 0 40px;font-size:14px;display:flex;justify-content:space-between}
+@media (max-width:760px){.links{display:none}.hero{grid-template-columns:1fr;padding:36px 28px 0}.hero h1{font-size:38px}.hero h1 .script{font-size:52px}.grid{grid-template-columns:1fr 1fr}.wrap{padding:0 16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 64 64" fill="none" stroke="#2338C4" stroke-width="4" stroke-linecap="round"><ellipse cx="32" cy="32" rx="18" ry="25" transform="rotate(-30 32 32)"/><path d="M21 13c10 8 13 15 11 21s-6 12-4 19"/></svg>
+    Roast <span class="script">&amp;</span> Notes
+  </div>
+  <div class="links"><a class="on">หน้าแรก</a><a>สินค้า</a><a>ตะกร้า</a><a>แอดมิน</a></div>
+  <a class="pill ghost">ผู้ดูแลร้าน ▾</a>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1>หาเมล็ดที่เข้ากับลิ้นคุณ<span class="script">sip your notes!</span></h1>
+    <p>บอกเราว่าชอบโน้ตรสชาติแบบไหน แล้วทุกเมล็ดจะบอกว่าเข้ากับลิ้นคุณกี่เปอร์เซ็นต์</p>
+    <div class="cta"><a class="pill cream">เลือกซื้อเมล็ด →</a><a class="pill light">ทำ Taste Quiz</a></div>
+    <div class="meta">คั่วสดทุกวันจันทร์ · ส่งทั่วประเทศ<br>เมล็ด · ดริปแบ็ก · Single origin</div>
+  </div>
+  <!-- original line illustration: pour-over kettle over dripper -->
+  <svg viewBox="0 0 420 340" fill="none" stroke="#FBF8F1" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 120c-8-22 6-40 30-42h70c26 2 38 22 30 44l-12 52H162z"/>
+    <path d="M180 78c-2-16 12-26 30-26s32 10 30 26"/>
+    <path d="M286 104c30-14 54-6 72 12"/>
+    <path d="M150 128C118 92 78 92 52 116"/>
+    <path d="M52 116c-6 6-10 12-12 20"/>
+    <path d="M44 150c0 14 2 30 4 46M58 156c0 10 0 22 2 34M70 160c0 8 0 16 2 24" stroke-dasharray="2 14"/>
+    <path d="M10 214h120l-22 40H32z"/>
+    <path d="M24 254h92l6 86H18z"/>
+    <path d="M40 286c20 10 50 10 70 0"/>
+    <circle cx="210" cy="148" r="10"/>
+    <path d="M300 230c10-8 26-8 36 0M318 214c10-6 22-6 30 2"/>
+  </svg>
+</section>
+
+<h2>เมล็ดล็อตใหม่ <span class="script">fresh roast</span></h2>
+<div class="sub"><span>คั่วภายใน 7 วันที่ผ่านมา</span><a>ดูทั้งหมด →</a></div>
+<div class="chips"><span class="chip on">ทั้งหมด</span><span class="chip">Fruity</span><span class="chip">Chocolate</span><span class="chip">Nutty</span><span class="chip">Floral</span><span class="chip">Light</span><span class="chip">Medium</span><span class="chip">Dark</span><span class="chip">ดริปแบ็ก</span></div>
+
+<div class="grid">
+  <div class="card">
+    <div class="match"><div><b>85%</b><small>เข้ากับลิ้น</small></div></div>
+    <div class="origin">เอธิโอเปีย · Washed</div>
+    <div class="name">Yirgacheffe<span class="script">Floral Light</span></div>
+    <svg viewBox="0 0 120 150" fill="none" stroke="#2338C4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 30h72l8 110H16z"/><path d="M24 30l6-14h60l6 14"/><path d="M40 70h40M40 82h28"/><ellipse cx="60" cy="112" rx="10" ry="14" transform="rotate(-25 60 112)"/><path d="M55 100c6 6 6 18 0 24"/></svg>
+    <div class="notes">Jasmine · Bergamot · Peach</div>
+    <div class="row"><span class="price">฿420</span><span class="add">ใส่ตะกร้า ›</span></div>
+  </div>
+  <div class="card feature">
+    <div class="match"><div><b>92%</b><small>เข้ากับลิ้น</small></div></div>
+    <div class="origin">ไทย · ดอยช้าง · Honey</div>
+    <div class="name">Doi Chang<span class="script">Double Delight</span></div>
+    <svg viewBox="0 0 120 150" fill="none" stroke="#FBF8F1" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 30h72l8 110H16z"/><path d="M24 30l6-14h60l6 14"/><path d="M40 70h40M40 82h28"/><ellipse cx="60" cy="112" rx="10" ry="14" transform="rotate(-25 60 112)"/><path d="M55 100c6 6 6 18 0 24"/></svg>
+    <div class="notes">Caramel · Red apple · Cocoa</div>
+    <div class="row"><span class="price">฿380</span><span class="add">ใส่ตะกร้า ›</span></div>
+  </div>
+  <div class="card">
+    <div class="match"><div><b>40%</b><small>เข้ากับลิ้น</small></div></div>
+    <div class="origin">บราซิล · Natural</div>
+    <div class="name">Cerrado<span class="script">Nutty Comfort</span></div>
+    <svg viewBox="0 0 120 150" fill="none" stroke="#2338C4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 30h72l8 110H16z"/><path d="M24 30l6-14h60l6 14"/><path d="M40 70h40M40 82h28"/><ellipse cx="60" cy="112" rx="10" ry="14" transform="rotate(-25 60 112)"/><path d="M55 100c6 6 6 18 0 24"/></svg>
+    <div class="notes">Hazelnut · Milk chocolate</div>
+    <div class="row"><span class="price">฿350</span><span class="add">ใส่ตะกร้า ›</span></div>
+  </div>
+  <div class="card">
+    <div class="match"><div><b>67%</b><small>เข้ากับลิ้น</small></div></div>
+    <div class="origin">โคลอมเบีย · ดริปแบ็ก 10 ซอง</div>
+    <div class="name">Huila Drip<span class="script">Berry Twist</span></div>
+    <svg viewBox="0 0 120 150" fill="none" stroke="#2338C4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 44h60v70c0 10-8 18-18 18H48c-10 0-18-8-18-18z"/><path d="M30 44l-12-12M90 44l12-12"/><path d="M18 32h20M82 32h20"/><path d="M44 74c10 10 22 10 32 0"/><path d="M60 20v14" stroke-dasharray="2 6"/></svg>
+    <div class="notes">Blueberry · Cacao nib</div>
+    <div class="row"><span class="price">฿290</span><span class="add">ใส่ตะกร้า ›</span></div>
+  </div>
+</div>
+
+<footer><span>Roast &amp; Notes · Specialty Coffee Beans</span><span class="script" style="font-size:20px">come for the beans, stay for the notes</span></footer>
+</div>
+</body>
+</html>
