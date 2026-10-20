@@ -10,7 +10,7 @@
 | Module id | ความรับผิดชอบ | ตารางที่เป็นเจ้าของ | Depends on |
 |---|---|---|---|
 | foundation | โปรเจค Laravel + Sail + MySQL, layout หลัก, Register/Login, role member/admin, middleware admin | users | — |
-| catalog | สินค้า + variant (ขนาดถุง/ราคา/สต็อก), โน้ตรสชาติ, หน้า Products (กรองโน้ต/ระดับคั่ว/แหล่งปลูก/ประเภท), หน้ารายละเอียดสินค้า, Home ส่วน "ล็อตใหม่" | products, product_variants, flavor_notes, product_flavor_notes | foundation |
+| catalog | สินค้า + variant (ขนาดถุง/ราคา/สต็อก), โน้ตรสชาติ, หน้า Products (กรองโน้ต/ระดับคั่ว/แหล่งปลูก/ประเภท), หน้ารายละเอียดสินค้า, Home ส่วน "ล็อตใหม่" | origins, products, cupping_scores (1:1), product_variants, flavor_notes, product_flavor_notes | foundation |
 | taste-profile | Taste Quiz 3 ข้อหลังสมัคร, แก้ Taste Profile, คำนวณ "เข้ากับลิ้นคุณ X%", Home ส่วน "แนะนำสำหรับคุณ" | user_taste_preferences (+ ระดับคั่วที่ชอบใน users) | foundation, catalog |
 | ordering | Cart (เลือกขนาด/การบด), Checkout, ยืนยันออเดอร์, ตัดสต็อก, Member Info + ประวัติสั่งซื้อ, Home ส่วน "ขายดี"; เป็นเจ้าของ **pricing pipeline** ที่โมดูลส่วนลดมาเสียบ | carts, cart_items, orders, order_items | catalog |
 | promotions | Coupon % (เฉพาะสินค้าร่วมรายการ), Buy X Get Y, สรุปส่วนลดใน checkout | promotions (supertype), coupons, buy_x_get_y, promotion_products | ordering |
@@ -49,7 +49,7 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | Module id | Spec | Plan/Tasks | Implement |
 |---|---|---|---|
 | foundation | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (51 tests ผ่าน) |
-| catalog | ⏭️ ถัดไป | — | — |
+| catalog | 📝 รอรีวิว | — | — |
 | ordering … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
