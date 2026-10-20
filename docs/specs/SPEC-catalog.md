@@ -1,7 +1,7 @@
 # Spec: catalog
 
 > โมดูลที่ 2 ของ Roast & Notes — ดู [CAPABILITY-MAP.md](CAPABILITY-MAP.md) · หน้าตาตาม [DESIGN.md](DESIGN.md)
-> สถานะ: **รออนุมัติ** · Depends on: foundation · ผู้ใช้ต่อ: ordering, taste-profile, promotions, loyalty, community, admin, sales-report
+> สถานะ: **อนุมัติแล้ว (2026-10-21)** · Depends on: foundation · ผู้ใช้ต่อ: ordering, taste-profile, promotions, loyalty, community, admin, sales-report
 
 ## Objective
 
@@ -29,23 +29,56 @@
 | คัดเลือก | ล็อตที่มีข้อมูลครบ (ภูมิภาค, สายพันธุ์, วิธีแปรรูป, ความสูง) และคะแนนรวม ≥ 82 → 596 ล็อต → คัด **40 ล็อต** กระจายหลายประเทศ (รวมไทยทุกล็อตที่ผ่านเกณฑ์) |
 | ไฟล์ใน repo | `database/data/cqi-selected.csv` (40 แถว คัดแล้ว) + สคริปต์ที่ใช้คัด `database/data/select_cqi.py` เพื่อให้ทำซ้ำได้ |
 
-**สิ่งที่ CQI ไม่มี** และต้องกำหนดเองแบบมีกฎ (ระบุใน seeder ว่าเป็นข้อมูลสาธิต):
+**สิ่งที่ CQI ไม่มี** ต้องสร้างขึ้นตามวิธีที่ผู้ใช้กำหนด (2026-10-21) — ทุกค่าสุ่มด้วย seed คงที่ต่อล็อต (`cqi_ref`) จึง seed ซ้ำได้ผลเท่าเดิม และ seeder มีคอมเมนต์ระบุว่าเป็นข้อมูลสาธิต
 
-| ฟิลด์ | กฎ (deterministic ต่อล็อต) |
-|---|---|
-| โน้ตรสชาติ | Natural → กลุ่ม fruity · Washed + acidity ≥ 8.0 → floral/fruity (citrus) · body ≥ 8.0 หรือบราซิล → chocolate/nutty · Honey/Pulped natural → caramel · ทุกล็อตได้ 2–4 โน้ต |
-| ระดับคั่ว | acidity ≥ 8.0 และ washed → Light · body ≥ 8.0 หรือ acidity < 7.5 → Dark · อื่น ๆ → Medium |
-| ราคา | 100g = 150 + (คะแนนรวม − 80) × 25 ปัดเป็นเลขลงท้าย 0 · 250g ≈ ×2.3 · 500g ≈ ×4.2 · ดริปแบ็ก 1 ซอง ≈ 100g ÷ 5 |
-| วันคั่ว | สุ่มแบบกำหนด seed ภายใน 30 วันก่อนวันรัน seeder |
-| ชื่อเล่น (ตัวลายมือบนการ์ด) | จากกลุ่มรสหลัก + ระดับคั่ว เช่น "Floral Light", "Nutty Comfort" |
+> หมายเหตุ: คอลัมน์ `Color` ใน CQI คือ **สีของสารกาแฟ (green bean)** เช่น Green / Bluish-Green ไม่ใช่ระดับคั่ว จึงไม่ใช้กำหนดระดับคั่ว และคะแนน cupping ของ CQI ชิมจากการคั่วมาตรฐาน SCA (คั่วอ่อน) ระดับคั่วที่ได้จึงเป็น "แนวโน้มสาธิต"
+
+**1) โน้ตรสชาติ — WCR Sensory Lexicon + Score-Based Probabilistic Mapping**
+
+โครงสร้างโน้ตอิง World Coffee Research Sensory Lexicon (หมวด → หมวดย่อย → โน้ต) และใช้คะแนน `Flavor` แบ่ง tier ความซับซ้อน แล้วสุ่มหมวดย่อยตามน้ำหนัก:
+
+| Process | Flavor tier | น้ำหนักหมวดย่อย |
+|---|---|---|
+| Natural | < 8.0 | Dried fruit 60% · Cocoa/Nutty 30% · Fermented 10% *(ผู้ใช้กำหนด)* |
+| Natural | 8.0–8.49 | Berry 45% · Dried fruit 30% · Cocoa 25% *(เสนอเติมช่วงกลาง)* |
+| Natural | ≥ 8.5 | Tropical fruit 50% · Berry/Floral 40% · Stone fruit 10% *(ผู้ใช้กำหนด)* |
+| Washed | < 8.0 | Cocoa/Nutty 45% · Brown sugar 35% · Citrus 20% *(เสนอ)* |
+| Washed | 8.0–8.49 | Citrus 40% · Stone fruit 30% · Brown sugar 30% *(เสนอ)* |
+| Washed | ≥ 8.5 | Floral 50% · Citrus 30% · Berry 20% *(เสนอ)* |
+| Honey / Semi-washed / Other | < 8.0 | Brown sugar 50% · Nutty 30% · Stone fruit 20% *(เสนอ)* |
+| Honey / Semi-washed / Other | ≥ 8.0 | Brown sugar 40% · Stone fruit 35% · Tropical 25% *(เสนอ)* |
+
+จำนวนโน้ต: tier < 8.0 = 2 โน้ต · 8.0–8.49 = 3 · ≥ 8.5 = 4 (ยิ่งคะแนนสูงยิ่งซับซ้อน) — สุ่มหมวดย่อยตามน้ำหนักแล้วหยิบโน้ตในหมวดนั้นที่ยังไม่ซ้ำ
+
+**2) ระดับคั่ว — Acidity : Body ratio**
+
+`ratio = Acidity / Body` → `> 1.05` Light · `0.95–1.05` Medium · `< 0.95` Dark *(ผู้ใช้กำหนด)*
+
+ใน 596 ล็อตที่ผ่านเกณฑ์ ได้ Light 37 · Medium 531 · Dark 28 — เกือบทั้งหมดเป็น Medium จึง **คัด 40 ล็อตแบบแบ่งชั้น**: Light 13 · Medium 14 · Dark 13 (คงสูตรเดิม แต่ demo มีครบทุกระดับให้กรองได้)
+
+**3) ราคา — Hedonic (non-linear) price model** *(ผู้ใช้กำหนดรูปแบบ, ค่าคงที่เสนอ)*
+
+```
+ราคา 250g = 280 + (Total − 80)^2.0 × 6 × M_process × M_origin   → ปัดเป็นหลักสิบ
+M_process: Natural 1.2 · Honey 1.15 · Other 1.05 · Washed / Semi-washed 1.0
+M_origin:  Ethiopia, Kenya, Panama 1.2 · United States (Hawaii) 1.4 · อื่น ๆ 1.0
+100g = 250g × 0.45 · 500g = 250g × 1.85 · ดริปแบ็ก 1 ซอง (12g) = 250g × 12/250 × 1.4
+```
+ตัวอย่าง (Washed, origin 1.0): 82 → ฿300 · 84 → ฿380 · 86 → ฿500 · 88 → ฿660 · 90 → ฿880 ต่อ 250g
+
+**4) วันคั่ว — Inventory lifecycle & resting period**
+
+สุ่มอายุหลังคั่วแบบ Normal distribution ค่าเฉลี่ย 15 วัน, SD 6 วัน, ตัดให้อยู่ในช่วง 7–60 วัน → `roast_date = วันรัน seeder − อายุ`
+
+**ไม่ทำในรอบนี้**: KNN imputation จาก Coffee Review dataset (ยังไม่มีชุดข้อมูลที่ license ชัดเจนในมือ) — เก็บเป็นงานต่อยอด
 
 ล็อตที่คะแนนสูงสุด 8 ล็อตทำเป็น **ดริปแบ็ก** เพิ่ม (สินค้าแยก type `drip_bag`)
 
 ## Data (โมดูลนี้เป็นเจ้าของ)
 
 ```
-origins 1 ──< products >── product_flavor_notes ──< flavor_notes
-                │ 1
+origins 1 ──< products >── product_flavor_notes ──< flavor_notes >── 1 flavor_categories ─┐
+                │ 1                                                            ^ parent_id ──┘ (recursive)
                 ├──< product_variants
                 └── 1 cupping_scores        (1:1)
 ```
@@ -104,17 +137,29 @@ origins 1 ──< products >── product_flavor_notes ──< flavor_notes
 
 การบดไม่อยู่ที่นี่ (ตัดสินใจแล้ว — เลือกตอนใส่ตะกร้า) และดริปแบ็กไม่มีตัวเลือกการบด
 
+**flavor_categories** — ลำดับชั้น WCR แบบอ้างอิงตัวเอง (unary / recursive relationship)
+
+| คอลัมน์ | ชนิด | หมายเหตุ |
+|---|---|---|
+| id | bigint PK | |
+| parent_id | FK → flavor_categories NULL | NULL = หมวดหลัก |
+| slug | varchar(40) UNIQUE | เช่น `fruity`, `berry` |
+| name | varchar(60) | |
+
+หมวดหลัก (ใช้เป็นตัวกรองและตัวเลือก Taste Quiz): **Fruity · Floral · Sweet · Nutty/Cocoa · Sour/Fermented**
+หมวดย่อย: Berry, Dried fruit, Citrus, Stone fruit, Tropical fruit (← Fruity) · Floral, Black tea (← Floral) · Brown sugar, Honey (← Sweet) · Nutty, Cocoa (← Nutty/Cocoa) · Fermented, Winey (← Sour/Fermented)
+
 **flavor_notes** + **product_flavor_notes** (M:N)
 
 | flavor_notes | ชนิด |
 |---|---|
 | id | bigint PK |
-| name | varchar(40) UNIQUE เช่น Jasmine, Blueberry, Hazelnut |
-| category | enum('fruity','floral','chocolate','nutty','caramel') |
+| flavor_category_id | FK → flavor_categories (หมวดย่อย) |
+| name | varchar(40) UNIQUE เช่น Blueberry, Raisin, Jasmine, Mango, Peach |
 
-`product_flavor_notes(product_id, flavor_note_id)` PK คู่, ไม่มีคอลัมน์อื่น
+`product_flavor_notes(product_id, flavor_note_id)` PK คู่
 
-Seed โน้ต ~20 ตัว (5 กลุ่ม × ~4) — `taste-profile` จะใช้ `category` เป็นตัวเลือกใน Taste Quiz
+Seed โน้ต ~35 ตัว (~2–3 ต่อหมวดย่อย) — ตัวกรอง "กลุ่มรส" ใช้หมวดหลัก (join ผ่านหมวดย่อย → parent)
 
 ## หน้าจอ
 
@@ -122,7 +167,7 @@ Seed โน้ต ~20 ตัว (5 กลุ่ม × ~4) — `taste-profile` �
 
 ```
 [ หัวข้อ: สินค้า  all beans ]                                   [ เรียง: คั่วล่าสุด ▾ ]
-กลุ่มรส:  (Fruity) (Floral) (Chocolate) (Nutty) (Caramel)
+กลุ่มรส:  (Fruity) (Floral) (Sweet) (Nutty/Cocoa) (Fermented)
 ระดับคั่ว: (Light) (Medium) (Dark)      ประเภท: (เมล็ด) (ดริปแบ็ก)      ประเทศ: [ ทั้งหมด ▾ ]
 พบ 23 รายการ · ล้างตัวกรอง
 ┌card┐ ┌card┐ ┌card┐ ┌card┐          4 คอลัมน์ (lg) · 2 (sm) · 1 (มือถือ)
@@ -186,7 +231,7 @@ public function scopeActive(Builder $query): void
 
 public function scopeWithFlavorCategories(Builder $query, array $categories): void
 {
-    $query->whereHas('flavorNotes', fn (Builder $q) => $q->whereIn('category', $categories));
+    $query->whereHas('flavorNotes.category.parent', fn (Builder $q) => $q->whereIn('slug', $categories));
 }
 
 // app/Http/Controllers/ProductController.php
@@ -204,7 +249,7 @@ public function index(ProductFilterRequest $request): View
 }
 ```
 
-- Enums: `ProductType`, `ProcessMethod`, `RoastLevel`, `BagSize`, `FlavorCategory` (มี `label()` ภาษาไทย/อังกฤษสำหรับ UI)
+- Enums: `ProductType`, `ProcessMethod`, `RoastLevel`, `BagSize` (มี `label()` สำหรับ UI) — หมวดรสเป็นตาราง ไม่ใช่ enum
 - ป้องกัน N+1: หน้า list ต้อง eager load และใช้ `withMin` ไม่วนหา min price ใน Blade
 - ราคาแสดงเป็น `฿` + number_format ไม่มีทศนิยมถ้าเป็นจำนวนเต็ม
 
@@ -217,7 +262,8 @@ public function index(ProductFilterRequest $request): View
 | ProductListTest | เห็นเฉพาะ active · paginate 12 · กรองกลุ่มรส (OR) · กรองระดับคั่ว · กรองประเภท · กรองประเทศ · กรองหลายแบบพร้อมกัน (AND) · query แปลก ๆ ไม่ error · เรียงตามราคา/คะแนน/คั่วล่าสุด · ไม่พบ → empty state |
 | ProductShowTest | แสดงข้อมูลล็อต + variants + โน้ต · slug ผิด 404 · inactive 404 · ไม่มี cupping → ไม่มีส่วนคะแนน · ปุ่มใส่ตะกร้าของ guest ลิงก์ไป login |
 | HomeNewLotsTest | หน้าแรกแสดง 4 ตัวคั่วล่าสุด ไม่รวม inactive |
-| CatalogSeederTest | seed แล้วได้ 40 เมล็ด + 8 ดริปแบ็ก · เมล็ดมี 3 variants · ดริปแบ็กมี 1 variant (`sachet`) · ทุกสินค้ามีโน้ต 2–4 ตัว · ทุกสินค้า CQI มี cupping_scores · มีสินค้าจากไทย ≥ 1 · seed ซ้ำได้ผลเท่าเดิม |
+| CatalogSeederTest | seed แล้วได้ 40 เมล็ด + 8 ดริปแบ็ก · เมล็ดมี 3 variants · ดริปแบ็กมี 1 variant (`sachet`) · มีครบ 3 ระดับคั่ว · มีสินค้าจากไทย ≥ 1 · ทุกสินค้า CQI มี cupping_scores · seed ซ้ำได้ผลเท่าเดิม |
+| CatalogRulesTest (unit) | จำนวนโน้ตตาม tier · ratio → ระดับคั่วที่ขอบ 0.95/1.05 · ราคาตามสูตร (ตัวอย่าง 82/86/90) · อายุคั่วอยู่ใน 7–60 วันเสมอ · seed เดียวกันได้ผลเดียวกัน |
 | SchemaTest | unique (product_id, size), unique slug, ลบ product แล้ว cupping_scores/variants/pivot ถูกลบตาม |
 
 ## Boundaries
@@ -228,7 +274,7 @@ public function index(ProductFilterRequest $request): View
 
 ## Success Criteria
 
-1. `migrate:fresh --seed` ได้ 40 เมล็ด + 8 ดริปแบ็ก จากหลายประเทศ (มีไทย) พร้อม variants, โน้ต, cupping scores
+1. `migrate:fresh --seed` ได้ 40 เมล็ด + 8 ดริปแบ็ก จากหลายประเทศ (มีไทย) ครบ 3 ระดับคั่ว พร้อม variants, โน้ต, cupping scores
 2. `/products` แสดงการ์ดตาม DESIGN.md, กรอง 4 แบบ + เรียง 4 แบบ ทำงานร่วมกันและคงค่าตอนเปลี่ยนหน้า
 3. หน้าสินค้าแสดงข้อมูลล็อต, ขนาด/ราคา/สต็อก, คะแนน cupping, เมล็ดที่คล้ายกัน; slug ผิด/inactive = 404
 4. หน้าแรกแสดง 4 เมล็ดคั่วล่าสุด
@@ -236,10 +282,10 @@ public function index(ProductFilterRequest $request): View
 6. ใช้งานบนมือถือได้ (การ์ด 1 คอลัมน์, ตัวกรองเลื่อนแนวนอนได้)
 7. `sail artisan test` ผ่านทั้งหมด, `sail pint --test` สะอาด
 
-## Open Questions
+## Decisions (2026-10-21)
 
-1. **ข้อมูลที่ CQI ไม่มี** (โน้ตรส, ระดับคั่ว, ราคา, วันคั่ว) — กำหนดด้วยกฎตามตารางด้านบนโอเคไหม? หรืออยากกำหนดราคา/โน้ตเองบางตัว
-2. **จำนวนสินค้า** 40 เมล็ด + 8 ดริปแบ็ก พอสำหรับ demo ไหม?
-3. **ดริปแบ็กขายทีละซอง** (โปร "ซื้อ 10 แถม 2" นับจำนวนซองในตะกร้า) — ตรงกับที่คิดไว้ไหม? หรืออยากขายเป็นกล่อง 10 ซอง
-4. **แสดงคะแนน cupping จาก CQI** บนหน้าสินค้า (แถบ 6 ด้าน + คะแนนรวม) — อยากได้ไหม?
-5. ชื่อสินค้าใช้ภาษาอังกฤษตามแหล่งปลูก (เช่น "Guji Hambela", "Chiang Rai Typica") ส่วนคำอธิบาย/ป้ายเป็นไทย — โอเคไหม?
+1. ข้อมูลที่ CQI ไม่มี ใช้วิธีของผู้ใช้ (WCR + probabilistic, Acidity:Body, Hedonic price, Normal roast age) — ค่าที่ผู้ใช้ไม่ได้ระบุ (ช่วงกลางของ tier, process อื่น, ค่าคงที่ราคา) ใช้ตามที่เสนอในตาราง ปรับได้ภายหลังที่ `app/Support/Catalog/DemoDataRules.php` ไฟล์เดียว
+2. 40 เมล็ด + 8 ดริปแบ็ก (คัดแบบแบ่งชั้นตามระดับคั่ว)
+3. ดริปแบ็กขายทีละซอง
+4. แสดงคะแนน cupping บนหน้าสินค้า (ร้าน specialty ส่วนใหญ่แสดงคะแนน SCA/cupping)
+5. ชื่อสินค้าอังกฤษ, คำอธิบาย/ป้ายไทย

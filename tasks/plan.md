@@ -1,41 +1,48 @@
-# Plan: foundation
+# Plan: catalog
 
-> อ้างอิง [docs/specs/SPEC-foundation.md](../docs/specs/SPEC-foundation.md) · สถานะ: **เสร็จแล้ว (2026-10-21)**
+> อ้างอิง [docs/specs/SPEC-catalog.md](../docs/specs/SPEC-catalog.md) · หน้าตา [DESIGN.md](../docs/specs/DESIGN.md) · สถานะ: **รอรีวิว**
+> งานโมดูลก่อนหน้าอยู่ที่ `tasks/archive/`
 
 ## องค์ประกอบและลำดับ
 
 ```
-T1 Scaffold (Laravel + Sail + Breeze)
- └─ T2 users schema + UserRole
-     ├─ T3 Registration (phone/address, กัน role injection, redirect ตั้งค่าได้)
-     ├─ T4 Admin area (middleware + routes/admin.php)
-     │   └─ T5 Layout + navigation + หน้า placeholder ที่ต้องล็อกอิน
-     └─ T6 Seeders (admin + members)
-          └─ T7 Checkpoint: ตรวจ Success Criteria ครบ 7 ข้อ
+C1 คัดข้อมูล CQI (สคริปต์ + CSV 48 แถว + MIT notice)
+C2 Schema: migrations + enums
+ └─ C3 Models + relations + factories
+     ├─ C4 DemoDataRules (โน้ต / คั่ว / ราคา / วันคั่ว) — pure PHP + unit tests
+     │   └─ C5 Seeders: หมวดรส WCR + สินค้าจาก CSV  ← ต้องมี C1, C4
+     ├─ C6 หน้า /products: ตัวกรอง + เรียง + การ์ด
+     │   ├─ C7 หน้า /products/{slug}: ข้อมูลล็อต + cupping + เมล็ดที่คล้ายกัน
+     │   └─ C8 หน้าแรก "เมล็ดล็อตใหม่"
+     └──────── C9 Checkpoint
 ```
-
-ทำคนเดียว จึงทำตามลำดับ T1 → T7 แต่ละ task จบด้วยเทสผ่าน + 1 commit
 
 ## การตัดสินใจทางเทคนิค
 
 | เรื่อง | เลือก | เหตุผล |
 |---|---|---|
-| redirect หลังสมัคร | `config('roastnotes.after_register_route')` (ค่าเริ่มต้น `home`) | Laravel 12 ไม่มี `RouteServiceProvider::HOME` แล้ว; `taste-profile` เปลี่ยนค่าเดียวที่ config |
-| หน้า dashboard ของ Breeze | ลบออก, redirect หลัง login ไป `home` | เว็บร้านค้าไม่มี dashboard ฝั่ง member |
-| หน้า profile ของ Breeze | คงไว้ที่ `/member` (แก้ชื่อ/อีเมล/รหัสผ่าน + เพิ่ม phone/address) | `ordering` จะเติมประวัติสั่งซื้อในหน้านี้ |
-| admin routes | ไฟล์ `routes/admin.php` ลงทะเบียนใน `bootstrap/app.php` ด้วย prefix `admin`, name `admin.`, middleware `web, auth, admin` | แยกชัด โมดูล `admin` เติม route ได้ที่เดียว |
-| ทดสอบ | MySQL `testing` ของ Sail + `RefreshDatabase` | ใช้ engine เดียวกับ production |
+| คัดล็อต | Python script ใน `database/data/select_cqi.py` รันครั้งเดียว ผลลัพธ์ commit เป็น CSV | seeder ไม่ต้องพึ่งไฟล์ 650KB / network; ทำซ้ำได้ |
+| การสุ่ม | `mt_srand(crc32(cqi_ref))` ต่อสินค้า ใน DemoDataRules | ผลคงที่ทุกครั้งที่ seed, ทดสอบได้ |
+| Normal distribution | Box–Muller จาก RNG ข้างบน | ไม่ต้องเพิ่ม package |
+| slug | `Str::slug(name)` + เติม `-2` ถ้าซ้ำ | ไม่ต้องเพิ่ม package |
+| ตัวกรองหมวดรส | `whereHas('flavorNotes.category.parent')` ด้วย slug หมวดหลัก | หมวดเป็นตาราง recursive |
+| ราคาเริ่มต้นบนการ์ด | `withMin('variants', 'price')` | กัน N+1 |
+| เมล็ดที่คล้ายกัน | นับหมวดหลักที่ตรงกัน (subquery) เรียงมาก→น้อย, ตัดตัวเอง, 4 ตัว | ไม่ต้องคำนวณใน PHP |
+| แถบ cupping | div ความกว้าง % (สเกล 6–10) | ไม่ต้องใช้ chart library |
+| ปุ่มใส่ตะกร้า | guest → ลิงก์ login; member → ปุ่ม disabled "เร็ว ๆ นี้" | ordering จะเปลี่ยนเป็นฟอร์มจริง |
 
 ## ความเสี่ยง
 
-| ความเสี่ยง | ผลกระทบ | วิธีลด |
-|---|---|---|
-| โปรเจคอยู่บนไดรฟ์ D: ของ Windows → Sail ผ่าน WSL2 ช้า (I/O ข้าม filesystem) | หน้าเว็บโหลดช้า 1–3 วิ ระหว่าง dev | ใช้ได้สำหรับงานนี้; ถ้าช้าเกินไป ย้าย clone ไปไว้ใน `~/` ของ WSL |
-| Line ending CRLF จาก Windows ทำให้สคริปต์ `sail` / shell พัง | `sail up` error `bad interpreter` | เพิ่ม `.gitattributes` บังคับ `eol=lf` ใน T1 |
-| พอร์ต 80 / 3306 ชนกับ XAMPP หรือ MySQL ในเครื่อง | Sail ขึ้นไม่ได้ | ตั้ง `APP_PORT` / `FORWARD_DB_PORT` ใน `.env.example` เป็น 8080 / 3307 |
+| ความเสี่ยง | วิธีลด |
+|---|---|
+| ข้อมูล CQI สกปรก (region ตัวพิมพ์เล็ก/สะกดผิด เช่น "thialand", ชื่อซ้ำ) | สคริปต์ทำความสะอาด: title case, ตัดชื่อประเทศซ้ำในภูมิภาค, ตรวจด้วยตาก่อน commit CSV |
+| ชื่อสินค้าซ้ำกัน (ภูมิภาค+สายพันธุ์เดียวกัน) | เติมชื่อฟาร์ม/เลขล็อต หรือ slug `-2` |
+| ล็อต Light/Dark มีน้อย (37/28) | คัดแบบแบ่งชั้นตาม spec; ถ้าบางชั้นไม่พอให้รายงานก่อน |
+| `whereHas` ซ้อน 3 ชั้นช้า | ข้อมูลแค่ 48 แถว ไม่เป็นปัญหา; ใส่ index ที่ FK ทุกตัว |
+| MySQL `enum` ต่างจาก SQLite | เทสรันบน MySQL ของ Sail ตาม foundation |
 
 ## Verification checkpoints
 
-- หลัง T1: `sail up -d` + `sail artisan test` ผ่าน (เทสของ Breeze)
-- หลัง T5: เปิดเว็บด้วยมือ ลองสมัคร/ล็อกอิน/เข้า `/admin` ทั้งสอง role
-- T7: ไล่ Success Criteria 1–7 ใน spec ทีละข้อ
+- หลัง C5: `migrate:fresh --seed` แล้วดูตัวเลขใน DB (จำนวน, ระดับคั่ว, ราคา, โน้ต) ว่าสมเหตุสมผล
+- หลัง C6: เปิด `/products` ลองกรองทุกแบบด้วยมือ + มือถือ
+- C9: Success Criteria 1–7 + screenshot เทียบ DESIGN.md

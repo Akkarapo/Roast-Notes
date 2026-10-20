@@ -49,7 +49,7 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | Module id | Spec | Plan/Tasks | Implement |
 |---|---|---|---|
 | foundation | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (51 tests ผ่าน) |
-| catalog | 📝 รอรีวิว | — | — |
+| catalog | ✅ อนุมัติ | 📝 รอรีวิว | — |
 | ordering … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
