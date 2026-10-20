@@ -1,18 +1,18 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-cream">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between h-[76px] border-b-2 border-cobalt">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
-                        <x-application-logo class="block h-8 w-auto fill-current text-amber-900" />
-                        <span class="font-semibold text-lg text-amber-950">Roast &amp; Notes</span>
+                        <x-application-logo class="block h-8 w-8 text-cobalt" />
+                        <span class="font-bold text-xl text-cobalt">Roast <span class="font-script font-normal text-2xl">&amp;</span> Notes</span>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-12 sm:flex">
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
@@ -37,7 +37,7 @@
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <button class="inline-flex items-center px-5 py-2 border-2 border-cobalt text-sm leading-4 font-semibold rounded-full text-cobalt hover:bg-cobalt hover:text-paper focus:outline-none transition">
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ms-1">
@@ -66,16 +66,16 @@
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <div class="flex items-center gap-4 text-sm font-medium">
-                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900">{{ __('Log in') }}</a>
-                        <a href="{{ route('register') }}" class="px-4 py-2 rounded-md bg-amber-900 text-white hover:bg-amber-800">{{ __('Register') }}</a>
+                    <div class="flex items-center gap-3 text-sm font-semibold">
+                        <a href="{{ route('login') }}" class="px-5 py-2 rounded-full border-2 border-cobalt text-cobalt hover:bg-paper">{{ __('Log in') }}</a>
+                        <a href="{{ route('register') }}" class="px-5 py-2 rounded-full border-2 border-cobalt bg-cobalt text-paper hover:bg-cobalt-ink">{{ __('Register') }}</a>
                     </div>
                 @endauth
             </div>
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-full text-cobalt hover:bg-paper focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -86,7 +86,7 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-b-2 border-cobalt">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 {{ __('Home') }}
@@ -107,11 +107,11 @@
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="pt-4 pb-1 border-t-2 border-cobalt">
             @auth
                 <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <div class="font-semibold text-base text-cobalt">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-cobalt/70">{{ Auth::user()->email }}</div>
                 </div>
 
                 <div class="mt-3 space-y-1">

@@ -27,7 +27,7 @@
         <div class="mt-4">
             <x-input-label for="address" :value="__('Shipping Address')" />
             <textarea id="address" name="address" rows="3" maxlength="500" autocomplete="street-address"
-                class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('address') }}</textarea>
+                class="block mt-1 w-full bg-paper border-2 border-cobalt/40 text-cobalt rounded-[14px] focus:border-cobalt focus:ring-0">{{ old('address') }}</textarea>
             <x-input-error :messages="$errors->get('address')" class="mt-2" />
         </div>
 
@@ -55,7 +55,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline underline-offset-4 text-sm text-cobalt/80 hover:text-cobalt rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-cobalt" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 

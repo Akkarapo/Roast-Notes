@@ -9,28 +9,33 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600|noto-sans-thai:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=anuphan:400,500,600,700|sriracha:400&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased bg-cream text-cobalt">
+        <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
+                <header class="max-w-7xl w-full mx-auto pt-10 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
                 </header>
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="flex-1">
                 {{ $slot }}
             </main>
+
+            <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mt-16 border-t-2 border-cobalt py-6 flex flex-col sm:flex-row gap-2 justify-between text-sm">
+                    <span>Roast &amp; Notes · Specialty Coffee Beans</span>
+                    <span class="font-script text-lg">come for the beans, stay for the notes</span>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

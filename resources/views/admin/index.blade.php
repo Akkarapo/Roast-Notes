@@ -1,17 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Admin Dashboard') }}
-        </h2>
+        <x-page-title script="back of house">{{ __('Admin Dashboard') }}</x-page-title>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __('Welcome, :name', ['name' => auth()->user()->name]) }}
-                </div>
-            </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-paper border-2 border-cobalt rounded-card p-6">
+            {{ __('Welcome, :name', ['name' => auth()->user()->name]) }}
         </div>
     </div>
 </x-app-layout>

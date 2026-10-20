@@ -1,8 +1,8 @@
 # Design Spec: Roast & Notes
 
-> สถานะ: **รออนุมัติ** · ใช้กับทุกโมดูลที่มีหน้าจอ
+> สถานะ: **อนุมัติแล้ว (2026-10-21)** · ใช้กับทุกโมดูลที่มีหน้าจอ
 > Reference จากผู้ใช้: two-tone cobalt + cream, ภาพวาดลายเส้น, ตัวหนังสือลายมือเป็นจุดเน้น (ใช้เป็นแรงบันดาลใจด้านสไตล์เท่านั้น — ภาพประกอบทุกชิ้นวาดใหม่เอง)
-> Mock: `docs/design/mock-home-desktop.png`, `docs/design/mock-home-mobile.png`
+> Mock: `docs/design/mock-home-desktop.png`, `docs/design/mock-home-mobile.png` · หน้าจริง: `docs/design/screen-*.png`
 
 ## หลักการ
 

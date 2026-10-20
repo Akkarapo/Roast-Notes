@@ -11,8 +11,20 @@ export default {
 
     theme: {
         extend: {
+            // Design tokens — see docs/specs/DESIGN.md
+            colors: {
+                cobalt: { DEFAULT: '#2338C4', ink: '#18248A' },
+                cream: '#F3EEE3',
+                paper: '#FBF8F1',
+                brick: '#B3261E',
+            },
             fontFamily: {
-                sans: ['Figtree', 'Noto Sans Thai', ...defaultTheme.fontFamily.sans],
+                sans: ['Anuphan', ...defaultTheme.fontFamily.sans],
+                script: ['Sriracha', 'cursive'],
+            },
+            borderRadius: {
+                card: '22px',
+                hero: '28px',
             },
         },
     },
