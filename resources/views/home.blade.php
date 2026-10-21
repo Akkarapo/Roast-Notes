@@ -18,7 +18,33 @@
             <x-illustrations.pour-over class="w-full max-w-md self-end justify-self-center text-paper" />
         </section>
 
-        {{-- Still to come: "for you" (taste-profile) --}}
+        @if ($taster && $forYou->isNotEmpty())
+            <section id="for-you" class="mt-14">
+                <x-page-title as="h2" script="picked for you">{{ __('Recommended for you') }}</x-page-title>
+                <p class="mt-1 text-cobalt/70">
+                    {{ __('Based on your taste profile:') }}
+                    {{ $taster->tastePreferences->pluck('name')->join(' · ') }}@if ($taster->preferred_roast_level) · {{ $taster->preferred_roast_level->label() }}@endif
+                    · <a href="{{ route('taste-quiz.edit') }}" class="underline underline-offset-4">{{ __('Edit') }}</a>
+                </p>
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($forYou as $product)
+                        <x-product-card :product="$product" :featured="$loop->first" />
+                    @endforeach
+                </div>
+            </section>
+        @elseif (! $taster)
+            <section id="taste-quiz-prompt" class="mt-14 grid items-center gap-6 rounded-card border-2 border-dashed border-cobalt bg-paper p-6 sm:grid-cols-[auto_1fr_auto] sm:p-8">
+                <x-illustrations.empty-cup class="h-20 w-auto" />
+                <div>
+                    <p class="font-script text-3xl">what's your taste?</p>
+                    <p class="mt-1">{{ __('Take the 3-question Taste Quiz and we will tell you which beans match your taste.') }}</p>
+                </div>
+                <a href="{{ $showQuizPrompt ? route('taste-quiz.edit') : route('register') }}" class="inline-flex justify-center rounded-full border-2 border-cobalt bg-cobalt px-6 py-2.5 font-semibold text-paper hover:bg-cobalt-ink">
+                    {{ $showQuizPrompt ? __('Take the Taste Quiz') : __('Sign up & take the quiz') }} →
+                </a>
+            </section>
+        @endif
+
         @if ($bestSellers->isNotEmpty())
             <section id="best-sellers" class="mt-14">
                 <x-page-title as="h2" script="crowd favourites">{{ __('Best sellers') }}</x-page-title>

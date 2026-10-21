@@ -42,6 +42,9 @@
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-5 py-2 border-2 border-cobalt text-sm leading-4 font-semibold rounded-full text-cobalt hover:bg-cobalt hover:text-paper focus:outline-none transition">
                                 <div>{{ Auth::user()->name }}</div>
+                                @if ($needsTasteQuiz)
+                                    <span class="ms-1.5 h-2 w-2 rounded-full bg-brick" data-quiz-dot></span>
+                                @endif
 
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -54,6 +57,12 @@
                         <x-slot name="content">
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Member Info') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('taste-quiz.edit')" class="flex items-center justify-between">
+                                {{ __('Taste Profile') }}
+                                @if ($needsTasteQuiz)
+                                    <span class="h-2.5 w-2.5 rounded-full bg-brick" title="{{ __('Not done yet') }}"></span>
+                                @endif
                             </x-dropdown-link>
 
                             <!-- Authentication -->
@@ -123,6 +132,12 @@
                 <div class="mt-3 space-y-1">
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Member Info') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('taste-quiz.edit')">
+                        {{ __('Taste Profile') }}
+                        @if ($needsTasteQuiz)
+                            <span class="ms-1 inline-block h-2.5 w-2.5 rounded-full bg-brick"></span>
+                        @endif
                     </x-responsive-nav-link>
 
                     <!-- Authentication -->

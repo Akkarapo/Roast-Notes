@@ -14,8 +14,8 @@
 - [x] **T4 — หน้าสินค้า**
   - Acceptance: badge ใหญ่ + "ตรงกับที่คุณชอบ: …" + "คั่วระดับที่คุณชอบ"; ไม่มี profile → ลิงก์ไป quiz; การบดเริ่มต้นตามวิธีชง
   - Verify: เพิ่มใน `ProductMatchDisplayTest.php`
-- [ ] **T5 — แนะนำสำหรับคุณ + ทางกลับมาทำ quiz**
+- [x] **T5 — แนะนำสำหรับคุณ + ทางกลับมาทำ quiz**
   - Acceptance: หน้าแรก 4 อันดับ (ตัด 0%/inactive/หมด) หรือการ์ดชวนทำ quiz; เมนูผู้ใช้ "Taste Profile" + จุดเตือน; การ์ด Taste Profile ในหน้าสมาชิก
   - Verify: `tests/Feature/TasteProfile/RecommendationsTest.php`
-- [ ] **T6 — Checkpoint**
+- [x] **T6 — Checkpoint**
   - Acceptance: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP

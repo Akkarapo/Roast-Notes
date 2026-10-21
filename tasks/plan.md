@@ -1,6 +1,6 @@
 # Plan: taste-profile
 
-> อ้างอิง [docs/specs/SPEC-taste-profile.md](../docs/specs/SPEC-taste-profile.md) · สถานะ: **รอรีวิว**
+> อ้างอิง [docs/specs/SPEC-taste-profile.md](../docs/specs/SPEC-taste-profile.md) · สถานะ: **เสร็จแล้ว (2026-10-21)**
 
 ## ลำดับ
 
