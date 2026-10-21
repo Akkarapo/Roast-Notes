@@ -42,25 +42,43 @@
                     <p class="mt-5 leading-relaxed text-cobalt/90">{{ $product->description }}</p>
                 @endif
 
-                {{-- The ordering module turns this into the real add-to-cart form (grind choice, quantity). --}}
-                <form class="mt-6 rounded-card border-2 border-cobalt bg-paper p-5" onsubmit="return false">
-                    <h2 class="text-sm font-semibold">{{ $isDrip ? __('Pack') : __('Bag size') }}</h2>
-                    <div class="mt-3 flex flex-wrap gap-2">
-                        @foreach ($product->variants as $variant)
-                            <x-filter-chip type="radio" name="variant_id" :value="$variant->id" :checked="$firstInStock?->is($variant)" :disabled="! $variant->inStock()">
-                                {{ $variant->size->label() }} · {{ Money::baht($variant->price) }}
-                                @unless ($variant->inStock()) ({{ __('Sold out') }}) @endunless
-                            </x-filter-chip>
-                        @endforeach
+                <form method="POST" action="{{ route('cart.items.store') }}" class="mt-6 rounded-card border-2 border-cobalt bg-paper p-5 space-y-5">
+                    @csrf
+                    <div>
+                        <h2 class="text-sm font-semibold">{{ $isDrip ? __('Pack') : __('Bag size') }}</h2>
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            @foreach ($product->variants as $variant)
+                                <x-filter-chip type="radio" name="variant_id" :value="$variant->id"
+                                    :checked="old('variant_id') ? (int) old('variant_id') === $variant->id : $firstInStock?->is($variant)"
+                                    :disabled="! $variant->inStock()">
+                                    {{ $variant->size->label() }} · {{ Money::baht($variant->price) }}
+                                    @unless ($variant->inStock()) ({{ __('Sold out') }}) @endunless
+                                </x-filter-chip>
+                            @endforeach
+                        </div>
+                        <x-input-error :messages="$errors->get('variant_id')" class="mt-2" />
                     </div>
 
-                    <div class="mt-5">
-                        @guest
-                            <a href="{{ route('login') }}" class="inline-flex px-6 py-2.5 rounded-full border-2 border-cobalt bg-cobalt text-paper font-semibold hover:bg-cobalt-ink">{{ __('Log in to order') }}</a>
-                        @else
-                            <x-primary-button type="button" disabled>{{ __('Add to cart') }} · {{ __('coming soon') }}</x-primary-button>
-                        @endguest
+                    @unless ($isDrip)
+                        <div>
+                            <h2 class="text-sm font-semibold">{{ __('Grind') }}</h2>
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                @foreach (\App\Enums\Grind::forBeans() as $grind)
+                                    <x-filter-chip type="radio" name="grind" :value="$grind->value" :checked="old('grind', 'whole_bean') === $grind->value">{{ $grind->label() }}</x-filter-chip>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endunless
+
+                    <div class="flex flex-wrap items-center gap-4">
+                        <x-quantity-stepper :value="old('quantity', 1)" :max="\App\Models\CartItem::MAX_QUANTITY" />
+                        <x-primary-button :disabled="! $firstInStock">{{ __('Add to cart') }}</x-primary-button>
                     </div>
+                    <x-input-error :messages="$errors->get('quantity')" />
+
+                    @guest
+                        <p class="text-sm text-cobalt/70">{{ __('You will be asked to log in first, then brought back here.') }}</p>
+                    @endguest
                 </form>
             </div>
         </div>

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -12,7 +15,13 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 
 // Member pages
 Route::middleware('auth')->group(function () {
-    Route::view('/cart', 'cart.index')->name('cart.index'); // filled by ordering module
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/items', [CartItemController::class, 'store'])->name('cart.items.store');
+    Route::patch('/cart/items/{item}', [CartItemController::class, 'update'])->name('cart.items.update');
+    Route::delete('/cart/items/{item}', [CartItemController::class, 'destroy'])->name('cart.items.destroy');
+
+    Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 
     Route::get('/member', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/member', [ProfileController::class, 'update'])->name('profile.update');

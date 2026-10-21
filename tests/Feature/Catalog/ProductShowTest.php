@@ -82,12 +82,13 @@ class ProductShowTest extends TestCase
             ->assertSee('8.75');
     }
 
-    public function test_guest_is_asked_to_log_in_and_member_sees_disabled_cart_button(): void
+    public function test_guest_and_member_both_see_the_add_to_cart_form(): void
     {
         $this->guji();
 
-        $this->get('/products/guji-heirloom')->assertSee('เข้าสู่ระบบเพื่อสั่งซื้อ')->assertSee(route('login'));
-        $this->actingAs(User::factory()->create())->get('/products/guji-heirloom')->assertSee('เร็ว ๆ นี้');
+        $this->get('/products/guji-heirloom')->assertSee(route('cart.items.store'))->assertSee('ระบบจะให้เข้าสู่ระบบก่อน');
+        $this->actingAs(User::factory()->create())->get('/products/guji-heirloom')
+            ->assertSee(route('cart.items.store'))->assertDontSee('ระบบจะให้เข้าสู่ระบบก่อน');
     }
 
     public function test_similar_beans_share_a_flavor_category_and_skip_the_same_lot(): void

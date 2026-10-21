@@ -22,6 +22,9 @@
                     @auth
                         <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                             {{ __('Cart') }}
+                            @if ($cartCount > 0)
+                                <span class="ms-1.5 inline-grid min-w-5 place-items-center rounded-full bg-cobalt px-1.5 text-xs font-semibold text-paper" data-cart-count>{{ $cartCount }}</span>
+                            @endif
                         </x-nav-link>
                         @if (Auth::user()->isAdmin())
                             <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">
@@ -97,6 +100,9 @@
             @auth
                 <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                     {{ __('Cart') }}
+                    @if ($cartCount > 0)
+                        <span class="ms-1.5 inline-grid min-w-5 place-items-center rounded-full bg-cobalt px-1.5 text-xs font-semibold text-paper" data-cart-count>{{ $cartCount }}</span>
+                    @endif
                 </x-responsive-nav-link>
                 @if (Auth::user()->isAdmin())
                     <x-responsive-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">

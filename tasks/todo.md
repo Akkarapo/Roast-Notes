@@ -12,12 +12,12 @@
   - Verify: `tests/Unit/Ordering/PriceCalculatorTest.php` (กฎปลอม 2 ตัว)
   - Files: `app/Support/Pricing/*.php`, `app/Support/Money.php`, `config/roastnotes.php`
 
-- [ ] **O3 — ใส่ตะกร้า**
+- [x] **O3 — ใส่ตะกร้า**
   - Acceptance: `AddToCart` action (รวมบรรทัดซ้ำ, ดริปแบ็ก grind `none`, จำนวน 1–20, ≤ สต็อก, inactive ปฏิเสธ); ฟอร์มในหน้าสินค้า (ขนาด/การบด/จำนวน); guest ไป login แล้วกลับหน้าเดิม; flash "ใส่ตะกร้าแล้ว"; badge ใน navbar
   - Verify: `tests/Feature/Ordering/AddToCartTest.php`
   - Files: `app/Actions/AddToCart.php`, `CartItemController@store`, `AddToCartRequest`, `products/show.blade.php`, navigation + view composer
 
-- [ ] **O4 — หน้าตะกร้า**
+- [x] **O4 — หน้าตะกร้า**
   - Acceptance: รายการ + แก้การบด/จำนวน/ลบ (Policy), กล่องสรุปจาก `Quote`, แจ้งเกินสต็อก + ปิดปุ่มชำระเงิน, ข้อความ "อีก ฿x ส่งฟรี"
   - Verify: `tests/Feature/Ordering/CartTest.php`
   - Files: `CartController`, `CartItemController@update/destroy`, `CartItemPolicy`, `cart/index.blade.php`, `components/order-summary.blade.php`

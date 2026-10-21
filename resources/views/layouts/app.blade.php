@@ -18,6 +18,8 @@
         <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
 
+            <x-flash />
+
             <!-- Page Heading -->
             @isset($header)
                 <header class="max-w-7xl w-full mx-auto pt-10 px-4 sm:px-6 lg:px-8">
