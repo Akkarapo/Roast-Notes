@@ -7,12 +7,12 @@
   - Verify: รันสคริปต์ซ้ำได้ CSV เดิม (diff ว่าง), เปิด CSV ตรวจด้วยตา
   - Files: `database/data/select_cqi.py`, `database/data/cqi-selected.csv`, `database/data/README.md`
 
-- [ ] **C2 — Migrations + enums**
+- [x] **C2 — Migrations + enums**
   - Acceptance: 7 ตารางตาม spec (origins, flavor_categories, flavor_notes, products, product_flavor_notes, product_variants, cupping_scores) พร้อม FK, unique, index, cascade; enums `ProductType`, `ProcessMethod`, `RoastLevel`, `BagSize` มี `label()`
   - Verify: `tests/Feature/Catalog/SchemaTest.php` (unique, cascade)
   - Files: `database/migrations/*_create_catalog_tables.php`, `app/Enums/*.php`, test
 
-- [ ] **C3 — Models + relations + factories**
+- [x] **C3 — Models + relations + factories**
   - Acceptance: `Origin`, `FlavorCategory` (parent/children), `FlavorNote`, `Product` (origin, variants, flavorNotes, cupping, scopes `active`, `filter`), `ProductVariant`, `CuppingScore`; factories พร้อม states `dripBag()`, `inactive()`, `withVariants()`
   - Verify: SchemaTest + เทส relation พื้นฐาน
   - Files: `app/Models/*.php`, `database/factories/*.php`

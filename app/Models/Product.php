@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\ProcessMethod;
+use App\Enums\ProductType;
+use App\Enums\RoastLevel;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    public const SORTS = ['newest', 'price_asc', 'price_desc', 'score'];
+
+    protected $fillable = [
+        'origin_id', 'name', 'slug', 'nickname', 'type', 'farm_name', 'variety', 'process',
+        'altitude_m', 'roast_level', 'roast_date', 'description', 'is_active', 'cqi_ref',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'type' => ProductType::class,
+            'process' => ProcessMethod::class,
+            'roast_level' => RoastLevel::class,
+            'roast_date' => 'date',
+            'is_active' => 'boolean',
+            'altitude_m' => 'integer',
+        ];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function origin(): BelongsTo
+    {
+        return $this->belongsTo(Origin::class);
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->orderBy('weight_g');
+    }
+
+    public function flavorNotes(): BelongsToMany
+    {
+        return $this->belongsToMany(FlavorNote::class, 'product_flavor_notes');
+    }
+
+    public function cupping(): HasOne
+    {
+        return $this->hasOne(CuppingScore::class);
+    }
+
+    public function isSoldOut(): bool
+    {
+        return $this->variants->every(fn (ProductVariant $variant) => ! $variant->inStock());
+    }
+
+    // ---- Query scopes (reused by taste-profile and admin) ----
+
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('products.is_active', true);
+    }
+
+    /** @param  list<string>  $slugs  top-level flavor category slugs, OR-ed together */
+    public function scopeWithFlavorCategories(Builder $query, array $slugs): void
+    {
+        $query->whereHas('flavorNotes.category.parent', fn (Builder $q) => $q->whereIn('slug', $slugs));
+    }
+
+    /** @param  list<RoastLevel>  $levels */
+    public function scopeRoastLevels(Builder $query, array $levels): void
+    {
+        $query->whereIn('roast_level', array_map(fn (RoastLevel $level) => $level->value, $levels));
+    }
+
+    public function scopeOfType(Builder $query, ProductType $type): void
+    {
+        $query->where('type', $type->value);
+    }
+
+    public function scopeFromCountry(Builder $query, string $country): void
+    {
+        $query->whereHas('origin', fn (Builder $q) => $q->where('country', $country));
+    }
+
+    public function scopeSorted(Builder $query, string $sort): void
+    {
+        match ($sort) {
+            'price_asc' => $query->orderBy('variants_min_price')->orderBy('products.id'),
+            'price_desc' => $query->orderByDesc('variants_min_price')->orderBy('products.id'),
+            'score' => $query->orderByDesc(
+                CuppingScore::select('total_points')->whereColumn('cupping_scores.product_id', 'products.id')
+            )->orderBy('products.id'),
+            default => $query->orderByDesc('roast_date')->orderBy('products.id'),
+        };
+    }
+
+    /**
+     * Apply validated filters from ProductFilterRequest::filters().
+     *
+     * @param  array{flavor?: list<string>, roast?: list<RoastLevel>, type?: ?ProductType, country?: ?string}  $filters
+     */
+    public function scopeFilter(Builder $query, array $filters): void
+    {
+        $query
+            ->when($filters['flavor'] ?? [], fn (Builder $q, array $slugs) => $q->withFlavorCategories($slugs))
+            ->when($filters['roast'] ?? [], fn (Builder $q, array $levels) => $q->roastLevels($levels))
+            ->when($filters['type'] ?? null, fn (Builder $q, ProductType $type) => $q->ofType($type))
+            ->when($filters['country'] ?? null, fn (Builder $q, string $country) => $q->fromCountry($country));
+    }
+}
