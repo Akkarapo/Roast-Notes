@@ -1,0 +1,41 @@
+cqi_ref,country,region,farm_name,variety,process,altitude_m,graded_on,roast_tendency,aroma,flavor,aftertaste,acidity,body,balance,uniformity,clean_cup,sweetness,cupper_points,total_points,drip_bag
+1,Ethiopia,Guji-Hambela,Metad Plc,,washed,2075,2015-04-04,medium,8.67,8.83,8.67,8.75,8.50,8.42,10.00,10.00,10.00,8.75,90.58,1
+10,Ethiopia,Gimbowereda,Tulla Coffee Farm,,natural,1822,2015-03-30,light,8.08,8.58,8.50,8.50,7.67,8.42,10.00,10.00,10.00,8.50,88.25,1
+19,China,Yunnan,Echo Coffee,Catimor,washed,1450,2016-04-07,medium,8.42,8.25,8.08,8.17,7.92,8.00,10.00,10.00,10.00,8.42,87.25,1
+22,Costa Rica,San Ramon,,Caturra,washed,1300,2014-04-02,medium,8.08,8.25,8.00,8.17,8.00,8.33,10.00,10.00,10.00,8.33,87.17,1
+23,Mexico,Xalapa,La Herradura,,washed,1320,2012-07-26,medium,8.17,8.25,8.17,8.00,7.83,8.17,10.00,10.00,10.00,8.58,87.17,1
+26,Brazil,South of Minas,Fazenda Kaquend,Bourbon,natural,1250,2011-12-03,medium,8.50,8.50,8.00,8.00,8.00,8.00,10.00,10.00,10.00,7.92,86.92,1
+28,Uganda,Kapchorwa Eastern,Chebonet (23) Women Coffee,SL14,washed,1950,2014-06-26,medium,8.42,8.17,8.17,8.17,7.83,7.92,10.00,10.00,10.00,8.17,86.83,1
+30,Taiwan,Chiayi County,Tsoustructive Garden 鄒築園,Sumatra,honey,1200,2016-05-18,medium,8.00,8.00,8.00,8.25,8.00,8.17,10.00,10.00,10.00,8.17,86.58,1
+36,Kenya,Muranga,Kangunu,SL34,washed,1800,2014-05-30,medium,8.08,8.00,8.00,8.25,7.92,7.92,10.00,10.00,10.00,8.08,86.25,0
+37,United States (Hawaii),Kona,,Hawaiian Kona,natural,,2012-04-06,medium,8.08,8.17,8.00,7.92,7.92,7.83,10.00,10.00,10.00,8.33,86.25,0
+41,Thailand,Chiang Rai,Co-Op #12,Caturra,washed,1300,2012-04-12,light,7.83,8.33,7.83,8.25,7.58,7.92,10.00,10.00,10.00,8.42,86.17,0
+48,Colombia,Tolima,Ecobio Colombia,Caturra,washed,1200,2014-03-20,medium,7.75,7.92,7.83,8.08,8.08,8.17,10.00,10.00,10.00,8.17,86.00,0
+49,Kenya,Kiambu,Kianjavi,SL28,washed,1860,2014-02-06,light,7.92,8.17,7.83,8.50,7.50,7.92,10.00,10.00,10.00,8.17,86.00,0
+53,Guatemala,Nuevo Oriente,La Esperanza y Anexos,Bourbon,washed,,2016-05-16,medium,7.92,8.08,7.92,8.08,8.08,7.83,10.00,10.00,10.00,8.00,85.92,0
+56,Panama,Boquete,La Berlina Estate,Gesha,washed,1600,2017-10-09,medium,8.00,8.00,7.92,8.08,7.83,8.00,10.00,10.00,10.00,8.00,85.83,0
+59,Guatemala,Nuevo Oriente,Finca el Limon,Catuai,washed,1417,2012-06-05,light,8.00,8.00,7.83,8.33,7.83,7.83,10.00,10.00,10.00,8.00,85.83,0
+61,Peru,Cajamarca,,,washed,,2014-01-22,medium,8.00,8.00,8.00,8.08,7.92,7.75,10.00,10.00,10.00,8.00,85.75,0
+62,Papua New Guinea,Eastern Highlands Province,Tairora Cherry – Bonta,,washed,1700,2012-10-25,medium,8.33,8.42,7.83,8.33,8.00,8.25,9.33,9.33,10.00,7.92,85.75,0
+63,El Salvador,Apaneca,El Majahual,Bourbon,washed,1500,2013-03-18,medium,7.92,8.17,8.00,7.92,7.75,7.83,10.00,10.00,10.00,8.00,85.58,0
+70,Guatemala,Huehuetenango,Asoperc,Bourbon,washed,1731,2013-02-26,light,8.00,7.83,7.67,8.33,7.83,8.00,10.00,10.00,10.00,7.83,85.50,0
+85,Colombia,Santander,,Caturra,washed,1550,2015-04-08,light,8.17,7.92,7.83,8.00,7.58,7.83,10.00,10.00,10.00,7.92,85.25,0
+87,Indonesia,Lintong,,Sumatra Lintong,semi_washed,1325,2012-11-26,medium,7.75,7.83,7.67,8.00,8.08,7.83,10.00,10.00,10.00,8.00,85.17,0
+109,Taiwan,Natou County,Baishengcun Coffee 百勝村咖啡莊園,Typica,semi_washed,800,2015-06-09,dark,7.67,7.83,8.00,7.58,8.00,7.92,10.00,10.00,10.00,7.92,84.92,0
+114,Brazil,South of Minas,Sitio Claro,Catuai,natural,1000,2011-12-03,light,8.00,8.00,7.75,8.00,7.50,7.75,10.00,10.00,10.00,7.92,84.92,0
+128,Japan,Ada Okinawa,Ada Farm,Mundo Novo,honey,,2016-11-02,dark,7.75,7.75,7.75,7.42,8.08,7.83,10.00,10.00,10.00,8.08,84.67,0
+131,Costa Rica,Tarrazu,Coopetarrazú,Caturra,washed,1750,2015-07-06,dark,8.17,8.00,7.83,7.17,7.83,7.75,10.00,10.00,10.00,7.92,84.67,0
+167,Mexico,Hustusco,La Barranca,Typica,washed,1350,2012-07-11,light,8.00,7.92,7.42,8.08,7.50,7.67,10.00,10.00,10.00,7.92,84.50,0
+176,Taiwan,Mountain Ali,Tropica Galliard,Typica,washed,1200,2013-07-10,light,7.83,7.83,7.75,8.00,7.50,7.75,10.00,10.00,10.00,7.75,84.42,0
+193,Thailand,Chiang Rai,Matsuzawa Coffee,Catimor,natural,1200,2016-11-02,dark,7.83,7.75,7.75,7.42,7.83,7.67,10.00,10.00,10.00,8.00,84.25,0
+223,Colombia,Huila,,,washed,1530,2014-10-15,dark,7.67,7.50,7.67,7.42,7.83,8.58,10.00,10.00,10.00,7.50,84.17,0
+242,Ethiopia,Sidamo,Kerchanshe,Gesha,natural,1800,2017-06-05,light,7.83,7.75,7.67,7.75,7.33,7.75,10.00,10.00,10.00,7.92,84.00,0
+252,Brazil,South of Minas,Fazenda Rio Verde,Yellow Bourbon,natural,1260,2014-01-02,dark,7.58,7.83,7.67,7.25,8.00,7.75,10.00,10.00,10.00,7.92,84.00,0
+260,Mexico,Veracruz,Cafetal,Mundo Novo,washed,1300,2017-07-03,light,7.83,7.83,7.58,7.92,7.42,7.50,10.00,10.00,10.00,7.83,83.92,0
+303,Uganda,West Nile,Erussi Farmers Group,Bourbon,natural,1400,2014-06-30,light,8.00,7.92,7.58,7.75,7.33,7.50,10.00,10.00,10.00,7.67,83.75,0
+330,Guatemala,Oriente,Finca Quequesquez,Caturra,natural,1450,2012-08-23,dark,8.17,8.17,7.83,7.67,8.08,7.75,9.33,9.33,9.33,8.00,83.67,0
+500,Uganda,Mt. Rwenzori,Isule Farmers Group,Bourbon,washed,1473,2016-07-18,dark,7.67,7.58,7.42,7.42,7.83,7.50,10.00,10.00,10.00,7.58,83.00,0
+555,Vietnam,Don Duong,"Apollo Co., Ltd.",,natural,1040,2012-07-20,dark,7.67,7.33,7.17,7.58,8.08,7.42,10.00,10.00,10.00,7.67,82.92,0
+556,Mexico,La Cumbre,El Jabali,Typica,washed,1400,2012-03-05,dark,8.00,7.92,7.67,7.17,7.67,7.42,9.33,10.00,10.00,7.75,82.92,0
+563,El Salvador,Quezaltepec,El Barbaro,Pacas,washed,1250,2016-04-08,light,7.33,7.67,7.67,7.83,7.33,7.67,10.00,10.00,10.00,7.33,82.83,0
+622,Thailand,Phahi,M10,Caturra,washed,1500,2013-09-03,medium,7.42,7.50,7.50,7.67,7.58,7.50,10.00,10.00,10.00,7.50,82.67,0

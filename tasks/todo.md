@@ -2,7 +2,7 @@
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [ ] **C1 — คัดข้อมูล CQI**
+- [x] **C1 — คัดข้อมูล CQI**
   - Acceptance: `database/data/select_cqi.py` อ่าน `arabica_data_cleaned.csv` → คัดล็อตครบข้อมูล & ≥ 82 → แบ่งชั้นตาม Acidity:Body (Light 13 / Medium 14 / Dark 13, รวมไทยทุกล็อตที่ผ่าน) → `database/data/cqi-selected.csv` 40 แถว + คอลัมน์ `drip_bag` = 1 สำหรับ 8 ล็อตคะแนนสูงสุด; ทำความสะอาดชื่อภูมิภาค/ประเทศ; `database/data/README.md` มีที่มา + MIT notice
   - Verify: รันสคริปต์ซ้ำได้ CSV เดิม (diff ว่าง), เปิด CSV ตรวจด้วยตา
   - Files: `database/data/select_cqi.py`, `database/data/cqi-selected.csv`, `database/data/README.md`
