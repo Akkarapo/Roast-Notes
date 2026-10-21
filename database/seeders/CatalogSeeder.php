@@ -88,7 +88,7 @@ class CatalogSeeder extends Seeder
     private function description(array $row, ProcessMethod $process): string
     {
         $parts = [
-            'ล็อตจาก '.($row['farm_name'] ?: $row['region']).', '.$row['region'].' ประเทศ'.$row['country'],
+            'ล็อตจาก '.($row['farm_name'] ? $row['farm_name'].' (' : '').$row['region'].', '.$row['country'].($row['farm_name'] ? ')' : ''),
             $row['altitude_m'] !== '' ? 'ปลูกที่ความสูง '.number_format((int) $row['altitude_m']).' เมตร' : null,
             $row['variety'] ? 'สายพันธุ์ '.$row['variety'] : null,
             'แปรรูปแบบ '.$process->label(),

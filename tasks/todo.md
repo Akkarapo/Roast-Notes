@@ -32,7 +32,7 @@
   - Verify: `tests/Feature/Catalog/ProductListTest.php` (รวม query count)
   - Files: `app/Http/Controllers/ProductController.php`, `app/Http/Requests/ProductFilterRequest.php`, `resources/views/products/index.blade.php`, `resources/views/components/product-card.blade.php`, `routes/web.php`
 
-- [ ] **C7 — หน้า /products/{slug}**
+- [x] **C7 — หน้า /products/{slug}**
   - Acceptance: ข้อมูลล็อต, เลือกขนาด (radio chips, หมด = disabled), ปุ่มใส่ตะกร้าแบบชั่วคราว, แถบ cupping 6 ด้าน + คะแนนรวม, เมล็ดที่คล้ายกัน 4 ตัว; 404 เมื่อไม่พบ/inactive
   - Verify: `tests/Feature/Catalog/ProductShowTest.php`
   - Files: `ProductController@show`, `resources/views/products/show.blade.php`, `resources/views/components/cupping-bars.blade.php`
