@@ -27,7 +27,7 @@
   - Verify: `tests/Feature/Catalog/CatalogSeederTest.php` + ตรวจข้อมูลจริงหลัง `migrate:fresh --seed`
   - Files: `database/seeders/FlavorTaxonomySeeder.php`, `database/seeders/CatalogSeeder.php`, `DatabaseSeeder.php`, test
 
-- [ ] **C6 — หน้า /products**
+- [x] **C6 — หน้า /products**
   - Acceptance: ตัวกรอง 4 แบบ + เรียง 4 แบบ ผ่าน `ProductFilterRequest`, paginate 12 + คง query, chips ตาม DESIGN.md, `<x-product-card>` (เว้น slot match badge, ป้ายหมด), empty state + ล้างตัวกรอง, มือถือเลื่อนตัวกรองแนวนอน
   - Verify: `tests/Feature/Catalog/ProductListTest.php` (รวม query count)
   - Files: `app/Http/Controllers/ProductController.php`, `app/Http/Requests/ProductFilterRequest.php`, `resources/views/products/index.blade.php`, `resources/views/components/product-card.blade.php`, `routes/web.php`

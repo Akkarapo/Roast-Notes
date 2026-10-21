@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Public pages
 Route::view('/', 'home')->name('home');
-Route::view('/products', 'products.index')->name('products.index'); // filled by catalog module
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Member pages
 Route::middleware('auth')->group(function () {

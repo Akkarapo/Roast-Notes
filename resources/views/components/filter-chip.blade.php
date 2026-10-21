@@ -1,0 +1,10 @@
+@props(['name', 'value', 'checked' => false, 'type' => 'checkbox'])
+
+<label class="shrink-0 cursor-pointer">
+    <input type="{{ $type }}" name="{{ $name }}" value="{{ $value }}" @checked($checked) class="peer sr-only">
+    <span class="inline-flex items-center rounded-full border-[1.5px] border-cobalt px-3.5 py-1.5 text-sm font-medium text-cobalt transition
+                 hover:bg-paper peer-checked:bg-cobalt peer-checked:text-paper peer-focus-visible:ring-2 peer-focus-visible:ring-cobalt peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-cream
+                 peer-disabled:opacity-40 peer-disabled:line-through peer-disabled:cursor-not-allowed">
+        {{ $slot }}
+    </span>
+</label>
