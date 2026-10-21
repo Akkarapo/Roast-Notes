@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Enums\ProcessMethod;
 use App\Enums\ProductType;
 use App\Enums\RoastLevel;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
@@ -54,6 +56,19 @@ class Product extends Model
     public function flavorNotes(): BelongsToMany
     {
         return $this->belongsToMany(FlavorNote::class, 'product_flavor_notes');
+    }
+
+    public function orderItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(OrderItem::class, ProductVariant::class, 'product_id', 'product_variant_id');
+    }
+
+    /** Units sold across all sizes, ignoring cancelled orders (adds `units_sold`). */
+    public function scopeWithUnitsSold(Builder $query): void
+    {
+        $query->withSum(['orderItems as units_sold' => fn (Builder $q) => $q->whereHas(
+            'order', fn (Builder $o) => $o->where('status', '!=', OrderStatus::Cancelled->value)
+        )], 'quantity');
     }
 
     public function cupping(): HasOne

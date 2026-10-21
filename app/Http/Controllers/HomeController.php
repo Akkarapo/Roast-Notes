@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function __invoke(): View
     {
-        // Sections still to come: best sellers (ordering) and "for you" (taste-profile)
+        // Still to come: "for you" (taste-profile)
         $newLots = Product::query()
             ->active()
             ->with(['origin', 'flavorNotes', 'variants'])
@@ -18,6 +18,17 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('home', ['newLots' => $newLots]);
+        $bestSellers = Product::query()
+            ->active()
+            ->withUnitsSold()
+            ->with(['origin', 'flavorNotes', 'variants'])
+            ->withMin('variants', 'price')
+            ->having('units_sold', '>', 0)
+            ->orderByDesc('units_sold')
+            ->orderBy('products.id')
+            ->take(4)
+            ->get();
+
+        return view('home', ['newLots' => $newLots, 'bestSellers' => $bestSellers]);
     }
 }

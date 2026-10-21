@@ -32,7 +32,7 @@
   - Verify: `tests/Feature/Ordering/OrderTest.php`
   - Files: `OrderController`, `OrderPolicy`, `app/Actions/CancelOrder.php`, `orders/show.blade.php`, `profile/edit.blade.php`, `components/order-status-badge.blade.php`
 
-- [ ] **O7 — ออเดอร์ตัวอย่าง + ขายดี**
+- [x] **O7 — ออเดอร์ตัวอย่าง + ขายดี**
   - Acceptance: `OrderSeeder` ~60 ออเดอร์ 90 วันของ member1–3, deterministic, ไม่แตะสต็อก; หน้าแรกส่วน "ขายดี" 4 อันดับ (ไม่นับ cancelled, ซ่อนถ้าไม่มี)
   - Verify: `tests/Feature/Ordering/OrderSeederTest.php`, `tests/Feature/Ordering/BestSellersTest.php`
   - Files: `database/seeders/OrderSeeder.php`, `DatabaseSeeder.php`, `HomeController`, `home.blade.php`

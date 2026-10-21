@@ -139,5 +139,7 @@
     "Status": "สถานะ",
     "Items": "ชิ้น",
     "Order history": "ประวัติการสั่งซื้อ",
-    "View all (:count)": "ดูทั้งหมด (:count)"
+    "View all (:count)": "ดูทั้งหมด (:count)",
+    "Best sellers": "ขายดี",
+    "What our members order most": "เมล็ดที่สมาชิกสั่งมากที่สุด"
 }

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             FlavorTaxonomySeeder::class,
             CatalogSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

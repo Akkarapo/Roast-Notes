@@ -18,7 +18,19 @@
             <x-illustrations.pour-over class="w-full max-w-md self-end justify-self-center text-paper" />
         </section>
 
-        {{-- Still to come: best sellers (ordering) and "for you" (taste-profile) --}}
+        {{-- Still to come: "for you" (taste-profile) --}}
+        @if ($bestSellers->isNotEmpty())
+            <section id="best-sellers" class="mt-14">
+                <x-page-title as="h2" script="crowd favourites">{{ __('Best sellers') }}</x-page-title>
+                <p class="mt-1 text-cobalt/70">{{ __('What our members order most') }}</p>
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($bestSellers as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
         <section id="new-lots" class="mt-14">
             <div class="flex flex-wrap items-end justify-between gap-2">
                 <div>
