@@ -18,11 +18,25 @@
             <x-illustrations.pour-over class="w-full max-w-md self-end justify-self-center text-paper" />
         </section>
 
-        {{-- Sections filled in by later modules: catalog (new lots), ordering (best sellers), taste-profile (for you) --}}
+        {{-- Still to come: best sellers (ordering) and "for you" (taste-profile) --}}
         <section id="new-lots" class="mt-14">
-            <x-page-title as="h2" script="fresh roast">{{ __('Freshly roasted lots') }}</x-page-title>
-            <p class="mt-1 mb-6 text-cobalt/70">{{ __('Roasted within the last 7 days') }}</p>
-            <x-empty-state illustration="bean-bag">{{ __('No beans yet.') }}</x-empty-state>
+            <div class="flex flex-wrap items-end justify-between gap-2">
+                <div>
+                    <x-page-title as="h2" script="fresh roast">{{ __('Freshly roasted lots') }}</x-page-title>
+                    <p class="mt-1 text-cobalt/70">{{ __('Our most recent roasts') }}</p>
+                </div>
+                <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="font-semibold underline-offset-4 hover:underline">{{ __('View all') }} →</a>
+            </div>
+
+            @if ($newLots->isEmpty())
+                <x-empty-state illustration="bean-bag" class="mt-6">{{ __('No beans yet.') }}</x-empty-state>
+            @else
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($newLots as $product)
+                        <x-product-card :product="$product" :featured="$loop->first" />
+                    @endforeach
+                </div>
+            @endif
         </section>
     </div>
 </x-app-layout>

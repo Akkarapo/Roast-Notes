@@ -37,11 +37,11 @@
   - Verify: `tests/Feature/Catalog/ProductShowTest.php`
   - Files: `ProductController@show`, `resources/views/products/show.blade.php`, `resources/views/components/cupping-bars.blade.php`
 
-- [ ] **C8 — หน้าแรก "เมล็ดล็อตใหม่"**
+- [x] **C8 — หน้าแรก "เมล็ดล็อตใหม่"**
   - Acceptance: 4 การ์ด roast_date ล่าสุด (active) + "ดูทั้งหมด →"
   - Verify: `tests/Feature/Catalog/HomeNewLotsTest.php`
   - Files: `app/Http/Controllers/HomeController.php`, `routes/web.php`, `resources/views/home.blade.php`
 
-- [ ] **C9 — Checkpoint**
+- [x] **C9 — Checkpoint**
   - Acceptance: Success Criteria 1–7 ครบ, screenshot desktop/มือถือ, `pint --test` สะอาด, อัปเดต CAPABILITY-MAP + ภาพใน `docs/design/`
   - Verify: ไล่ทีละข้อ + `sail artisan test`

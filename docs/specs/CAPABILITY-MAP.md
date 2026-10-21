@@ -49,8 +49,9 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | Module id | Spec | Plan/Tasks | Implement |
 |---|---|---|---|
 | foundation | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (51 tests ผ่าน) |
-| catalog | ✅ อนุมัติ | 📝 รอรีวิว | — |
-| ordering … sales-report | — | — | — |
+| catalog | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (40 เมล็ด + 8 ดริปแบ็กจาก CQI) |
+| ordering | ⏭️ ถัดไป | — | — |
+| taste-profile … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
 
