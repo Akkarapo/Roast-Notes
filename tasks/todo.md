@@ -7,7 +7,7 @@
   - Verify: `tests/Feature/Ordering/SchemaTest.php`, `tests/Unit/Ordering/OrderStatusTest.php`
   - Files: migration, `app/Enums/Grind.php`, `app/Enums/OrderStatus.php`, `app/Models/{Cart,CartItem,Order,OrderItem,OrderDiscount}.php`, factories
 
-- [ ] **O2 — Pricing pipeline**
+- [x] **O2 — Pricing pipeline**
   - Acceptance: `DiscountRule`, `PricingContext`, `DiscountLine`, `Quote`, `PriceCalculator` (ค่าส่ง ฿50 / ฟรี ≥ ฿1,000 จาก config, ส่วนลดรวมไม่เกิน subtotal, กฎเรียงตาม config)
   - Verify: `tests/Unit/Ordering/PriceCalculatorTest.php` (กฎปลอม 2 ตัว)
   - Files: `app/Support/Pricing/*.php`, `app/Support/Money.php`, `config/roastnotes.php`
