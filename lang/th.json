@@ -141,5 +141,21 @@
     "Order history": "ประวัติการสั่งซื้อ",
     "View all (:count)": "ดูทั้งหมด (:count)",
     "Best sellers": "ขายดี",
-    "What our members order most": "เมล็ดที่สมาชิกสั่งมากที่สุด"
+    "What our members order most": "เมล็ดที่สมาชิกสั่งมากที่สุด",
+    "Taste profile saved — here are beans picked for you.": "บันทึก Taste Profile แล้ว — นี่คือเมล็ดที่เลือกมาให้คุณ",
+    "Edit your taste profile": "แก้ไข Taste Profile",
+    "3 quick questions about how you like your coffee": "3 คำถามสั้น ๆ ว่าคุณชอบกาแฟแบบไหน",
+    "Your answers turn into a “matches your taste X%” on every bean.": "คำตอบของคุณจะกลายเป็น “เข้ากับลิ้นคุณ X%” บนเมล็ดทุกตัว",
+    "Question 1": "คำถามที่ 1",
+    "Question 2": "คำถามที่ 2",
+    "Question 3": "คำถามที่ 3",
+    "Which flavors do you enjoy? (pick 1–3)": "ชอบรสแบบไหน? (เลือก 1–3 แบบ)",
+    "Please pick from the list.": "กรุณาเลือกจากรายการ",
+    "How do you like it roasted?": "ชอบระดับคั่วแบบไหน?",
+    "Not sure": "ไม่แน่ใจ",
+    "How do you brew most often?": "ชงกาแฟวิธีไหนบ่อยที่สุด?",
+    "Back": "ย้อนกลับ",
+    "Next": "ถัดไป",
+    "Save my taste profile": "บันทึก Taste Profile",
+    "Skip for now": "ข้ามไปก่อน"
 }

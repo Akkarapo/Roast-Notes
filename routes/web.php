@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TasteQuizController;
 use Illuminate\Support\Facades\Route;
 
 // Public pages
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+
+    Route::get('/taste-quiz', [TasteQuizController::class, 'edit'])->name('taste-quiz.edit');
+    Route::put('/taste-quiz', [TasteQuizController::class, 'update'])->name('taste-quiz.update');
 
     Route::get('/member', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/member', [ProfileController::class, 'update'])->name('profile.update');

@@ -2,10 +2,10 @@
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [ ] **T1 — Schema + BrewMethod + TasteProfile helper**
-  - Acceptance: migration `user_taste_preferences` + คอลัมน์ users 3 ตัว; enum `BrewMethod` (label, `defaultGrind()`); `User::tastePreferences()`; `TasteProfile` (exists, likedCategoryIds, roast, brew)
+- [x] **T1 — Schema + BrewMethod + TasteProfile helper**
+  - Acceptance: migration `user_taste_preferences` + คอลัมน์ users 3 ตัว; enum `BrewMethod` (label, `defaultGrind()`); `User::tastePreferences()`, `hasTasteProfile()`, `likedCategoryIds()`, `defaultGrind()` (ใส่ใน User แทนคลาส TasteProfile แยก — เล็กพอ)
   - Verify: `tests/Feature/TasteProfile/SchemaTest.php`, `tests/Unit/TasteProfile/DefaultGrindTest.php`
-- [ ] **T2 — Taste Quiz**
+- [x] **T2 — Taste Quiz**
   - Acceptance: GET/PUT `/taste-quiz` (3 ขั้น Alpine, ปิด JS ได้, เติมคำตอบเดิม, ข้ามได้); validate 1–3 หมวดหลัก; หลังสมัคร redirect มาที่นี่; `TasteProfileSeeder`
   - Verify: `tests/Feature/TasteProfile/TasteQuizTest.php`
 - [ ] **T3 — Match % + sort**
