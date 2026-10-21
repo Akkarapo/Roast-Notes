@@ -22,7 +22,7 @@
   - Verify: `tests/Unit/Catalog/DemoDataRulesTest.php`
   - Files: `app/Support/Catalog/DemoDataRules.php`, test
 
-- [ ] **C5 — Seeders**
+- [x] **C5 — Seeders**
   - Acceptance: `FlavorTaxonomySeeder` (5 หมวดหลัก, หมวดย่อย, ~35 โน้ต) + `CatalogSeeder` อ่าน CSV → origins, products (+ ดริปแบ็ก 8), variants, cupping, โน้ต; `DatabaseSeeder` เรียกต่อจาก `UserSeeder`
   - Verify: `tests/Feature/Catalog/CatalogSeederTest.php` + ตรวจข้อมูลจริงหลัง `migrate:fresh --seed`
   - Files: `database/seeders/FlavorTaxonomySeeder.php`, `database/seeders/CatalogSeeder.php`, `DatabaseSeeder.php`, test

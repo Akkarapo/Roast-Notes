@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         // One seeder per module, in build order (see docs/specs/CAPABILITY-MAP.md)
         $this->call([
             UserSeeder::class,
+            FlavorTaxonomySeeder::class,
+            CatalogSeeder::class,
         ]);
     }
 }

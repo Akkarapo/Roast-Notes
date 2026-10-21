@@ -149,7 +149,7 @@ origins 1 ──< products >── product_flavor_notes ──< flavor_notes >�
 | name | varchar(60) | |
 
 หมวดหลัก (ใช้เป็นตัวกรองและตัวเลือก Taste Quiz): **Fruity · Floral · Sweet · Nutty/Cocoa · Sour/Fermented**
-หมวดย่อย: Berry, Dried fruit, Citrus, Stone fruit, Tropical fruit (← Fruity) · Floral, Black tea (← Floral) · Brown sugar, Honey (← Sweet) · Nutty, Cocoa (← Nutty/Cocoa) · Fermented, Winey (← Sour/Fermented)
+หมวดย่อย: Berry, Dried fruit, Citrus, Stone fruit, Tropical fruit (← Fruity) · Blossom, Black tea (← Floral) · Brown sugar, Honey (← Sweet) · Nutty, Cocoa (← Nutty/Cocoa) · Fermented (← Sour/Fermented)
 
 **flavor_notes** + **product_flavor_notes** (M:N)
 
@@ -161,7 +161,7 @@ origins 1 ──< products >── product_flavor_notes ──< flavor_notes >�
 
 `product_flavor_notes(product_id, flavor_note_id)` PK คู่
 
-Seed โน้ต ~35 ตัว (~2–3 ต่อหมวดย่อย) — ตัวกรอง "กลุ่มรส" ใช้หมวดหลัก (join ผ่านหมวดย่อย → parent)
+Seed โน้ต 36 ตัว (~2–3 ต่อหมวดย่อย) — ตัวกรอง "กลุ่มรส" ใช้หมวดหลัก (join ผ่านหมวดย่อย → parent)
 
 ## หน้าจอ
 
