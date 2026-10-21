@@ -15,7 +15,7 @@
 | ordering | Cart (เลือกขนาด/การบด), Checkout, ยืนยันออเดอร์, ตัดสต็อก, Member Info + ประวัติสั่งซื้อ, Home ส่วน "ขายดี"; เป็นเจ้าของ **pricing pipeline** ที่โมดูลส่วนลดมาเสียบ | carts, cart_items, orders, order_items, order_discounts | catalog |
 | promotions | Coupon % (เฉพาะสินค้าร่วมรายการ), Buy X Get Y, สรุปส่วนลดใน checkout | promotions (supertype), coupons, buy_x_get_y, promotion_products | ordering |
 | loyalty | ระดับ Bean / Barista / Roaster Master ตามยอดซื้อสะสม, ส่วนลดตามระดับ, สิทธิ์ซื้อล็อตหายากก่อน | member_tiers | ordering |
-| community | Wish List, Reviews (เฉพาะคนที่ซื้อแล้ว, 1 รีวิวต่อ 1 รายการที่ซื้อ, ระบุวิธีชง, กรองตามวิธีชง), Rating 1–5 + ค่าเฉลี่ยแยกตามวิธีชง | wishlists, reviews | catalog, ordering |
+| community | Wish List, Reviews (เฉพาะคนที่ซื้อแล้วและออเดอร์ "ได้รับแล้ว", 1 รีวิวต่อ 1 รายการที่ซื้อ, ระบุวิธีชง, กรองตามวิธีชง), Rating 1–5 + ค่าเฉลี่ยแยกตามวิธีชง | wishlists, reviews | catalog, ordering |
 | admin | Admin Dashboard: จัดการสินค้า/ขนาดถุง/สต็อก/โปรโมชั่น/ออเดอร์/ผู้ใช้ | — (ใช้ตารางของโมดูลอื่น) | catalog, ordering, promotions, loyalty |
 | sales-report | ยอดขายรายเดือน, เมล็ดขายดี, สัดส่วนตามระดับคั่ว, โน้ตรสชาติยอดนิยม | — (query อย่างเดียว) | ordering, taste-profile |
 
@@ -50,7 +50,7 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 |---|---|---|---|
 | foundation | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (51 tests ผ่าน) |
 | catalog | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (40 เมล็ด + 8 ดริปแบ็กจาก CQI) |
-| ordering | 📝 รอรีวิว | — | — |
+| ordering | ✅ อนุมัติ | 📝 รอรีวิว | — |
 | taste-profile … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)

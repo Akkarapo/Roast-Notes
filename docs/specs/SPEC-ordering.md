@@ -1,7 +1,7 @@
 # Spec: ordering
 
 > โมดูลที่ 3 ของ Roast & Notes — ดู [CAPABILITY-MAP.md](CAPABILITY-MAP.md) · หน้าตาตาม [DESIGN.md](DESIGN.md)
-> สถานะ: **รออนุมัติ** · Depends on: catalog · ผู้ใช้ต่อ: promotions, loyalty, community, admin, sales-report
+> สถานะ: **อนุมัติแล้ว (2026-10-21)** · Depends on: catalog · ผู้ใช้ต่อ: promotions, loyalty, community, admin, sales-report
 
 ## Objective
 
@@ -53,7 +53,7 @@ users 1 ──< orders 1 ──< order_items >── 1 product_variants
 | id | bigint PK | |
 | order_number | varchar(20) UNIQUE | `RN-20261021-0007` (วันที่ + ลำดับของวัน) |
 | user_id | FK → users, restrict | |
-| status | enum('pending','confirmed','shipped','delivered','cancelled') | เริ่มที่ `pending` |
+| status | enum('pending','confirmed','shipped','in_transit','delivered','cancelled') | เริ่มที่ `pending` — ดูลำดับสถานะด้านล่าง |
 | subtotal | decimal(10,2) | ผลรวม line_total |
 | discount_total | decimal(10,2) | ผลรวม order_discounts |
 | shipping_fee | decimal(10,2) | |
@@ -120,7 +120,7 @@ final class Quote { lines, subtotal, discounts (list<DiscountLine>), discountTot
 - ส่วนลดรวมไม่เกิน subtotal, เงินคิดด้วย `bcmath`/สตริงทศนิยม 2 ตำแหน่ง ไม่ใช้ float
 - หน้า Cart และ Checkout ใช้ `Quote` ตัวเดียวกัน ตัวเลขจึงตรงกันเสมอ
 
-**ค่าส่ง (เสนอ)**: ฿50 ต่อออเดอร์ · ส่งฟรีเมื่อยอดหลังหักส่วนลด ≥ ฿1,000 — ค่าอยู่ใน `config/roastnotes.php`
+**ค่าส่ง**: ฿50 ต่อออเดอร์ · ส่งฟรีเมื่อยอดหลังหักส่วนลด ≥ ฿1,000 — ค่าอยู่ใน `config/roastnotes.php`
 
 ## การยืนยันออเดอร์ (POST /checkout)
 
@@ -133,7 +133,17 @@ final class Quote { lines, subtotal, discounts (list<DiscountLine>), discountTot
 
 ตะกร้าว่างหรือมีสินค้าที่ถูกปิดขาย (`is_active = false`) → ไม่ให้ยืนยัน
 
-**ยกเลิกออเดอร์ (เสนอ)**: สมาชิกยกเลิกเองได้เฉพาะสถานะ `pending` → คืนสต็อก, `cancelled_at = now()`
+**ยกเลิกออเดอร์**: สมาชิกยกเลิกเองได้เฉพาะสถานะ `pending` → คืนสต็อก, `cancelled_at = now()`
+
+**ลำดับสถานะ** (`OrderStatus` enum มี `next()` และ `canTransitionTo()` ให้ `admin` ใช้)
+
+```
+pending ──> confirmed ──> shipped ──> in_transit ──> delivered
+รอยืนยัน     ยืนยันแล้ว     ส่งพัสดุแล้ว    อยู่ระหว่างจัดส่ง    ได้รับแล้ว
+   │
+   └──> cancelled (ยกเลิก) — สมาชิกทำได้ตอน pending, แอดมินทำได้ก่อน shipped
+```
+รีวิว (`community`) เปิดให้เขียนได้เมื่อออเดอร์เป็น `delivered` เท่านั้น — `OrderStatus::allowsReview()`
 
 ## หน้าจอ
 
@@ -186,9 +196,9 @@ final class Quote { lines, subtotal, discounts (list<DiscountLine>), discountTot
 ### หน้าแรก — "ขายดี"
 4 สินค้า active ที่ขายได้จำนวนชิ้นมากที่สุดจาก order_items ของออเดอร์ที่ไม่ถูกยกเลิก · ถ้ายังไม่มียอดขายให้ซ่อนส่วนนี้
 
-## ข้อมูลตัวอย่าง (เสนอ)
+## ข้อมูลตัวอย่าง
 
-`OrderSeeder` สร้างออเดอร์ย้อนหลัง ~60 ออเดอร์ใน 90 วัน ของ member1–3 (สุ่มแบบกำหนด seed, สถานะคละกันส่วนใหญ่ `delivered`) เพื่อให้ "ขายดี" มีข้อมูล และโมดูล `sales-report` / `loyalty` (ยอดซื้อสะสม) มีตัวเลขให้ทดสอบ — ไม่ตัดสต็อกจริงของ seed
+`OrderSeeder` สร้างออเดอร์ย้อนหลัง ~60 ออเดอร์ใน 90 วัน ของ member1–3 (สุ่มแบบกำหนด seed; ออเดอร์เก่ากว่า 7 วันส่วนใหญ่ `delivered`, ใหม่กว่านั้นคละ `pending`…`in_transit`, ~5% `cancelled`) เพื่อให้ "ขายดี" มีข้อมูล และโมดูล `sales-report` / `loyalty` (ยอดซื้อสะสม) มีตัวเลขให้ทดสอบ — ไม่ตัดสต็อกจริงของ seed
 
 ## Code Style
 
@@ -219,6 +229,8 @@ public function store(CheckoutRequest $request, PlaceOrder $placeOrder): Redirec
 | PriceCalculatorTest (unit) | subtotal · ค่าส่ง ฿50 / ฟรีเมื่อ ≥ ฿1,000 · กฎส่วนลดปลอมถูกเรียกตามลำดับและส่ง discountedSoFar ถูก · ส่วนลดรวมไม่เกิน subtotal |
 | CheckoutTest | ตะกร้าว่างเข้าไม่ได้ · เติมที่อยู่จากโปรไฟล์ · ยืนยันแล้วได้ order + items snapshot + discounts · ตัดสต็อก · ล้างตะกร้า · สต็อกไม่พอ = ไม่สร้างอะไรเลย · ราคาเปลี่ยนหลังสั่ง ออเดอร์เดิมไม่เปลี่ยน · order_number ไม่ซ้ำ |
 | OrderTest | เจ้าของเห็น · คนอื่น 404 · ยกเลิก pending คืนสต็อก · ยกเลิกสถานะอื่นไม่ได้ · ประวัติในหน้าสมาชิกเรียงล่าสุดก่อน |
+| OrderStatusTest (unit) | ลำดับ next() · canTransitionTo() · allowsReview() เฉพาะ delivered · label ไทย |
+| OrderSeederTest | ~60 ออเดอร์ใน 90 วัน · ทุกออเดอร์ยอดรวม = items − discounts + ค่าส่ง · seed ซ้ำได้ผลเดิม · ไม่แตะสต็อก |
 | BestSellersTest | เรียงตามจำนวนชิ้น · ไม่นับออเดอร์ยกเลิก · ไม่แสดงสินค้า inactive · ไม่มียอดขาย = ซ่อนส่วน |
 
 ## Boundaries
@@ -237,9 +249,9 @@ public function store(CheckoutRequest $request, PlaceOrder $placeOrder): Redirec
 6. `PriceCalculator` รับกฎส่วนลดเพิ่มได้โดยไม่ต้องแก้ Cart/Checkout (พิสูจน์ด้วยเทสกฎปลอม)
 7. ใช้งานบนมือถือได้, `sail artisan test` ผ่าน, `sail pint --test` สะอาด
 
-## Open Questions
+## Decisions (2026-10-21)
 
-1. **ค่าส่ง** ฿50 และส่งฟรีเมื่อ ≥ ฿1,000 โอเคไหม? หรือไม่คิดค่าส่งเลย
-2. **สมาชิกยกเลิกออเดอร์เอง** ได้ตอนยัง `pending` — ใส่ไหม?
-3. **ออเดอร์ตัวอย่าง ~60 ออเดอร์ย้อนหลัง 90 วัน** สำหรับ "ขายดี" / รายงานยอดขาย / ระดับสมาชิก — ใส่ไหม?
-4. **สถานะออเดอร์** 5 ขั้น: รอยืนยัน → ยืนยันแล้ว → จัดส่งแล้ว → ได้รับแล้ว / ยกเลิก — พอไหม? (รีวิวจะเปิดให้เมื่อ "ได้รับแล้ว" หรือทันทีที่สั่ง?)
+1. ค่าส่ง ฿50 · ฟรีเมื่อยอดหลังหักส่วนลด ≥ ฿1,000
+2. สมาชิกยกเลิกเองได้ตอน `pending` (คืนสต็อก)
+3. สร้างออเดอร์ตัวอย่าง ~60 ออเดอร์ย้อนหลัง 90 วัน
+4. เพิ่มสถานะ "อยู่ระหว่างจัดส่ง" (`in_transit`) → 6 สถานะ; รีวิวได้เมื่อ "ได้รับแล้ว" — ตีความว่า "ส่งพัสดุแล้ว" (ร้านส่งให้ขนส่ง) มาก่อน "อยู่ระหว่างจัดส่ง" (ขนส่งกำลังนำส่ง)

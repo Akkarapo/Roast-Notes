@@ -1,47 +1,42 @@
-# Todo: catalog
+# Todo: ordering
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [x] **C1 — คัดข้อมูล CQI**
-  - Acceptance: `database/data/select_cqi.py` อ่าน `arabica_data_cleaned.csv` → คัดล็อตครบข้อมูล & ≥ 82 → แบ่งชั้นตาม Acidity:Body (Light 13 / Medium 14 / Dark 13, รวมไทยทุกล็อตที่ผ่าน) → `database/data/cqi-selected.csv` 40 แถว + คอลัมน์ `drip_bag` = 1 สำหรับ 8 ล็อตคะแนนสูงสุด; ทำความสะอาดชื่อภูมิภาค/ประเทศ; `database/data/README.md` มีที่มา + MIT notice
-  - Verify: รันสคริปต์ซ้ำได้ CSV เดิม (diff ว่าง), เปิด CSV ตรวจด้วยตา
-  - Files: `database/data/select_cqi.py`, `database/data/cqi-selected.csv`, `database/data/README.md`
+- [ ] **O1 — Schema, enums, models, factories**
+  - Acceptance: migrations carts, cart_items, orders, order_items, order_discounts ตาม spec; enums `Grind` (label ไทย), `OrderStatus` (6 สถานะ, label ไทย, `next()`, `canTransitionTo()`, `allowsReview()`, `isCancellableByMember()`); models + relations (`User::cart()`, `User::orders()`); factories
+  - Verify: `tests/Feature/Ordering/SchemaTest.php`, `tests/Unit/Ordering/OrderStatusTest.php`
+  - Files: migration, `app/Enums/Grind.php`, `app/Enums/OrderStatus.php`, `app/Models/{Cart,CartItem,Order,OrderItem,OrderDiscount}.php`, factories
 
-- [x] **C2 — Migrations + enums**
-  - Acceptance: 7 ตารางตาม spec (origins, flavor_categories, flavor_notes, products, product_flavor_notes, product_variants, cupping_scores) พร้อม FK, unique, index, cascade; enums `ProductType`, `ProcessMethod`, `RoastLevel`, `BagSize` มี `label()`
-  - Verify: `tests/Feature/Catalog/SchemaTest.php` (unique, cascade)
-  - Files: `database/migrations/*_create_catalog_tables.php`, `app/Enums/*.php`, test
+- [ ] **O2 — Pricing pipeline**
+  - Acceptance: `DiscountRule`, `PricingContext`, `DiscountLine`, `Quote`, `PriceCalculator` (ค่าส่ง ฿50 / ฟรี ≥ ฿1,000 จาก config, ส่วนลดรวมไม่เกิน subtotal, กฎเรียงตาม config)
+  - Verify: `tests/Unit/Ordering/PriceCalculatorTest.php` (กฎปลอม 2 ตัว)
+  - Files: `app/Support/Pricing/*.php`, `config/roastnotes.php`, `composer.json` (ext-bcmath)
 
-- [x] **C3 — Models + relations + factories**
-  - Acceptance: `Origin`, `FlavorCategory` (parent/children), `FlavorNote`, `Product` (origin, variants, flavorNotes, cupping, scopes `active`, `filter`), `ProductVariant`, `CuppingScore`; factories พร้อม states `dripBag()`, `inactive()`, `withVariants()`
-  - Verify: SchemaTest + เทส relation พื้นฐาน
-  - Files: `app/Models/*.php`, `database/factories/*.php`
+- [ ] **O3 — ใส่ตะกร้า**
+  - Acceptance: `AddToCart` action (รวมบรรทัดซ้ำ, ดริปแบ็ก grind `none`, จำนวน 1–20, ≤ สต็อก, inactive ปฏิเสธ); ฟอร์มในหน้าสินค้า (ขนาด/การบด/จำนวน); guest ไป login แล้วกลับหน้าเดิม; flash "ใส่ตะกร้าแล้ว"; badge ใน navbar
+  - Verify: `tests/Feature/Ordering/AddToCartTest.php`
+  - Files: `app/Actions/AddToCart.php`, `CartItemController@store`, `AddToCartRequest`, `products/show.blade.php`, navigation + view composer
 
-- [x] **C4 — DemoDataRules**
-  - Acceptance: คลาสเดียวคำนวณ โน้ต (ตามตารางน้ำหนัก + จำนวนตาม tier), ระดับคั่ว (ratio), ราคา (hedonic), อายุคั่ว (normal 15±6, clamp 7–60); deterministic ต่อ `cqi_ref`
-  - Verify: `tests/Unit/Catalog/DemoDataRulesTest.php`
-  - Files: `app/Support/Catalog/DemoDataRules.php`, test
+- [ ] **O4 — หน้าตะกร้า**
+  - Acceptance: รายการ + แก้การบด/จำนวน/ลบ (Policy), กล่องสรุปจาก `Quote`, แจ้งเกินสต็อก + ปิดปุ่มชำระเงิน, ข้อความ "อีก ฿x ส่งฟรี"
+  - Verify: `tests/Feature/Ordering/CartTest.php`
+  - Files: `CartController`, `CartItemController@update/destroy`, `CartItemPolicy`, `cart/index.blade.php`, `components/order-summary.blade.php`
 
-- [x] **C5 — Seeders**
-  - Acceptance: `FlavorTaxonomySeeder` (5 หมวดหลัก, หมวดย่อย, ~35 โน้ต) + `CatalogSeeder` อ่าน CSV → origins, products (+ ดริปแบ็ก 8), variants, cupping, โน้ต; `DatabaseSeeder` เรียกต่อจาก `UserSeeder`
-  - Verify: `tests/Feature/Catalog/CatalogSeederTest.php` + ตรวจข้อมูลจริงหลัง `migrate:fresh --seed`
-  - Files: `database/seeders/FlavorTaxonomySeeder.php`, `database/seeders/CatalogSeeder.php`, `DatabaseSeeder.php`, test
+- [ ] **O5 — Checkout**
+  - Acceptance: GET เติมที่อยู่จากโปรไฟล์; POST ผ่าน `PlaceOrder` (transaction, lock, คำนวณใหม่, snapshot, discounts, ตัดสต็อก, ล้างตะกร้า, เลขออเดอร์); สต็อกไม่พอ → กลับตะกร้าพร้อมรายละเอียด ไม่สร้างอะไร
+  - Verify: `tests/Feature/Ordering/CheckoutTest.php`
+  - Files: `app/Actions/PlaceOrder.php`, `app/Exceptions/OutOfStock.php`, `CheckoutController`, `CheckoutRequest`, `checkout/index.blade.php`
 
-- [x] **C6 — หน้า /products**
-  - Acceptance: ตัวกรอง 4 แบบ + เรียง 4 แบบ ผ่าน `ProductFilterRequest`, paginate 12 + คง query, chips ตาม DESIGN.md, `<x-product-card>` (เว้น slot match badge, ป้ายหมด), empty state + ล้างตัวกรอง, มือถือเลื่อนตัวกรองแนวนอน
-  - Verify: `tests/Feature/Catalog/ProductListTest.php` (รวม query count)
-  - Files: `app/Http/Controllers/ProductController.php`, `app/Http/Requests/ProductFilterRequest.php`, `resources/views/products/index.blade.php`, `resources/views/components/product-card.blade.php`, `routes/web.php`
+- [ ] **O6 — หน้าออเดอร์ + ยกเลิก + ประวัติ**
+  - Acceptance: `/orders/{order_number}` ใบสรุป; คนอื่น 404; ยกเลิก pending คืนสต็อก; การ์ดประวัติในหน้าสมาชิก (10 ล่าสุด)
+  - Verify: `tests/Feature/Ordering/OrderTest.php`
+  - Files: `OrderController`, `OrderPolicy`, `app/Actions/CancelOrder.php`, `orders/show.blade.php`, `profile/edit.blade.php`, `components/order-status-badge.blade.php`
 
-- [x] **C7 — หน้า /products/{slug}**
-  - Acceptance: ข้อมูลล็อต, เลือกขนาด (radio chips, หมด = disabled), ปุ่มใส่ตะกร้าแบบชั่วคราว, แถบ cupping 6 ด้าน + คะแนนรวม, เมล็ดที่คล้ายกัน 4 ตัว; 404 เมื่อไม่พบ/inactive
-  - Verify: `tests/Feature/Catalog/ProductShowTest.php`
-  - Files: `ProductController@show`, `resources/views/products/show.blade.php`, `resources/views/components/cupping-bars.blade.php`
+- [ ] **O7 — ออเดอร์ตัวอย่าง + ขายดี**
+  - Acceptance: `OrderSeeder` ~60 ออเดอร์ 90 วันของ member1–3, deterministic, ไม่แตะสต็อก; หน้าแรกส่วน "ขายดี" 4 อันดับ (ไม่นับ cancelled, ซ่อนถ้าไม่มี)
+  - Verify: `tests/Feature/Ordering/OrderSeederTest.php`, `tests/Feature/Ordering/BestSellersTest.php`
+  - Files: `database/seeders/OrderSeeder.php`, `DatabaseSeeder.php`, `HomeController`, `home.blade.php`
 
-- [x] **C8 — หน้าแรก "เมล็ดล็อตใหม่"**
-  - Acceptance: 4 การ์ด roast_date ล่าสุด (active) + "ดูทั้งหมด →"
-  - Verify: `tests/Feature/Catalog/HomeNewLotsTest.php`
-  - Files: `app/Http/Controllers/HomeController.php`, `routes/web.php`, `resources/views/home.blade.php`
-
-- [x] **C9 — Checkpoint**
-  - Acceptance: Success Criteria 1–7 ครบ, screenshot desktop/มือถือ, `pint --test` สะอาด, อัปเดต CAPABILITY-MAP + ภาพใน `docs/design/`
+- [ ] **O8 — Checkpoint**
+  - Acceptance: Success Criteria 1–7, screenshot desktop/มือถือ, pint สะอาด, อัปเดต CAPABILITY-MAP
   - Verify: ไล่ทีละข้อ + `sail artisan test`
