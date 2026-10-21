@@ -17,7 +17,7 @@
   - Verify: SchemaTest + เทส relation พื้นฐาน
   - Files: `app/Models/*.php`, `database/factories/*.php`
 
-- [ ] **C4 — DemoDataRules**
+- [x] **C4 — DemoDataRules**
   - Acceptance: คลาสเดียวคำนวณ โน้ต (ตามตารางน้ำหนัก + จำนวนตาม tier), ระดับคั่ว (ratio), ราคา (hedonic), อายุคั่ว (normal 15±6, clamp 7–60); deterministic ต่อ `cqi_ref`
   - Verify: `tests/Unit/Catalog/DemoDataRulesTest.php`
   - Files: `app/Support/Catalog/DemoDataRules.php`, test
