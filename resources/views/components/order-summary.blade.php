@@ -6,6 +6,10 @@
 <aside {{ $attributes->merge(['class' => 'rounded-card border-2 border-cobalt bg-paper p-6']) }}>
     <h2 class="text-xl font-semibold">{{ $title ?? __('Summary') }}</h2>
 
+    @if ($slot->isNotEmpty())
+        <div class="mt-4">{{ $slot }}</div>
+    @endif
+
     <dl class="mt-4 space-y-2.5 text-sm">
         <div class="flex justify-between">
             <dt>{{ __('Items (:count)', ['count' => $quote->itemCount()]) }}</dt>

@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
     Route::get('/member', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/member', [ProfileController::class, 'update'])->name('profile.update');

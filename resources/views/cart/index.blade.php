@@ -7,6 +7,17 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @if ($errors->has('cart'))
+            <div class="mb-6 rounded-[14px] border-2 border-brick bg-paper px-5 py-3 text-brick" role="alert">
+                <p class="font-semibold">{{ __('We could not place your order:') }}</p>
+                <ul class="mt-1 list-disc ps-5 text-sm">
+                    @foreach ($errors->get('cart') as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         @if ($quote->isEmpty())
             <x-empty-state>
                 {{ __('Your cart is empty.') }}

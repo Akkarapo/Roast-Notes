@@ -22,12 +22,12 @@
   - Verify: `tests/Feature/Ordering/CartTest.php`
   - Files: `CartController`, `CartItemController@update/destroy`, `CartItemPolicy`, `cart/index.blade.php`, `components/order-summary.blade.php`
 
-- [ ] **O5 — Checkout**
+- [x] **O5 — Checkout**
   - Acceptance: GET เติมที่อยู่จากโปรไฟล์; POST ผ่าน `PlaceOrder` (transaction, lock, คำนวณใหม่, snapshot, discounts, ตัดสต็อก, ล้างตะกร้า, เลขออเดอร์); สต็อกไม่พอ → กลับตะกร้าพร้อมรายละเอียด ไม่สร้างอะไร
   - Verify: `tests/Feature/Ordering/CheckoutTest.php`
-  - Files: `app/Actions/PlaceOrder.php`, `app/Exceptions/OutOfStock.php`, `CheckoutController`, `CheckoutRequest`, `checkout/index.blade.php`
+  - Files: `app/Actions/PlaceOrder.php` (ใช้ ValidationException แทนคลาส OutOfStock แยก), `CheckoutController`, `CheckoutRequest`, `checkout/index.blade.php`
 
-- [ ] **O6 — หน้าออเดอร์ + ยกเลิก + ประวัติ**
+- [x] **O6 — หน้าออเดอร์ + ยกเลิก + ประวัติ**
   - Acceptance: `/orders/{order_number}` ใบสรุป; คนอื่น 404; ยกเลิก pending คืนสต็อก; การ์ดประวัติในหน้าสมาชิก (10 ล่าสุด)
   - Verify: `tests/Feature/Ordering/OrderTest.php`
   - Files: `OrderController`, `OrderPolicy`, `app/Actions/CancelOrder.php`, `orders/show.blade.php`, `profile/edit.blade.php`, `components/order-status-badge.blade.php`
