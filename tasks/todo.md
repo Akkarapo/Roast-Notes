@@ -1,42 +1,21 @@
-# Todo: ordering
+# Todo: taste-profile
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [x] **O1 — Schema, enums, models, factories**
-  - Acceptance: migrations carts, cart_items, orders, order_items, order_discounts ตาม spec; enums `Grind` (label ไทย), `OrderStatus` (6 สถานะ, label ไทย, `next()`, `canTransitionTo()`, `allowsReview()`, `isCancellableByMember()`); models + relations (`User::cart()`, `User::orders()`); factories
-  - Verify: `tests/Feature/Ordering/SchemaTest.php`, `tests/Unit/Ordering/OrderStatusTest.php`
-  - Files: migration, `app/Enums/Grind.php`, `app/Enums/OrderStatus.php`, `app/Models/{Cart,CartItem,Order,OrderItem,OrderDiscount}.php`, factories
-
-- [x] **O2 — Pricing pipeline**
-  - Acceptance: `DiscountRule`, `PricingContext`, `DiscountLine`, `Quote`, `PriceCalculator` (ค่าส่ง ฿50 / ฟรี ≥ ฿1,000 จาก config, ส่วนลดรวมไม่เกิน subtotal, กฎเรียงตาม config)
-  - Verify: `tests/Unit/Ordering/PriceCalculatorTest.php` (กฎปลอม 2 ตัว)
-  - Files: `app/Support/Pricing/*.php`, `app/Support/Money.php`, `config/roastnotes.php`
-
-- [x] **O3 — ใส่ตะกร้า**
-  - Acceptance: `AddToCart` action (รวมบรรทัดซ้ำ, ดริปแบ็ก grind `none`, จำนวน 1–20, ≤ สต็อก, inactive ปฏิเสธ); ฟอร์มในหน้าสินค้า (ขนาด/การบด/จำนวน); guest ไป login แล้วกลับหน้าเดิม; flash "ใส่ตะกร้าแล้ว"; badge ใน navbar
-  - Verify: `tests/Feature/Ordering/AddToCartTest.php`
-  - Files: `app/Actions/AddToCart.php`, `CartItemController@store`, `AddToCartRequest`, `products/show.blade.php`, navigation + view composer
-
-- [x] **O4 — หน้าตะกร้า**
-  - Acceptance: รายการ + แก้การบด/จำนวน/ลบ (Policy), กล่องสรุปจาก `Quote`, แจ้งเกินสต็อก + ปิดปุ่มชำระเงิน, ข้อความ "อีก ฿x ส่งฟรี"
-  - Verify: `tests/Feature/Ordering/CartTest.php`
-  - Files: `CartController`, `CartItemController@update/destroy`, `CartItemPolicy`, `cart/index.blade.php`, `components/order-summary.blade.php`
-
-- [x] **O5 — Checkout**
-  - Acceptance: GET เติมที่อยู่จากโปรไฟล์; POST ผ่าน `PlaceOrder` (transaction, lock, คำนวณใหม่, snapshot, discounts, ตัดสต็อก, ล้างตะกร้า, เลขออเดอร์); สต็อกไม่พอ → กลับตะกร้าพร้อมรายละเอียด ไม่สร้างอะไร
-  - Verify: `tests/Feature/Ordering/CheckoutTest.php`
-  - Files: `app/Actions/PlaceOrder.php` (ใช้ ValidationException แทนคลาส OutOfStock แยก), `CheckoutController`, `CheckoutRequest`, `checkout/index.blade.php`
-
-- [x] **O6 — หน้าออเดอร์ + ยกเลิก + ประวัติ**
-  - Acceptance: `/orders/{order_number}` ใบสรุป; คนอื่น 404; ยกเลิก pending คืนสต็อก; การ์ดประวัติในหน้าสมาชิก (10 ล่าสุด)
-  - Verify: `tests/Feature/Ordering/OrderTest.php`
-  - Files: `OrderController`, `OrderPolicy`, `app/Actions/CancelOrder.php`, `orders/show.blade.php`, `profile/edit.blade.php`, `components/order-status-badge.blade.php`
-
-- [x] **O7 — ออเดอร์ตัวอย่าง + ขายดี**
-  - Acceptance: `OrderSeeder` ~60 ออเดอร์ 90 วันของ member1–3, deterministic, ไม่แตะสต็อก; หน้าแรกส่วน "ขายดี" 4 อันดับ (ไม่นับ cancelled, ซ่อนถ้าไม่มี)
-  - Verify: `tests/Feature/Ordering/OrderSeederTest.php`, `tests/Feature/Ordering/BestSellersTest.php`
-  - Files: `database/seeders/OrderSeeder.php`, `DatabaseSeeder.php`, `HomeController`, `home.blade.php`
-
-- [x] **O8 — Checkpoint**
-  - Acceptance: Success Criteria 1–7, screenshot desktop/มือถือ, pint สะอาด, อัปเดต CAPABILITY-MAP
-  - Verify: ไล่ทีละข้อ + `sail artisan test`
+- [ ] **T1 — Schema + BrewMethod + TasteProfile helper**
+  - Acceptance: migration `user_taste_preferences` + คอลัมน์ users 3 ตัว; enum `BrewMethod` (label, `defaultGrind()`); `User::tastePreferences()`; `TasteProfile` (exists, likedCategoryIds, roast, brew)
+  - Verify: `tests/Feature/TasteProfile/SchemaTest.php`, `tests/Unit/TasteProfile/DefaultGrindTest.php`
+- [ ] **T2 — Taste Quiz**
+  - Acceptance: GET/PUT `/taste-quiz` (3 ขั้น Alpine, ปิด JS ได้, เติมคำตอบเดิม, ข้ามได้); validate 1–3 หมวดหลัก; หลังสมัคร redirect มาที่นี่; `TasteProfileSeeder`
+  - Verify: `tests/Feature/TasteProfile/TasteQuizTest.php`
+- [ ] **T3 — Match % + sort**
+  - Acceptance: `scopeWithTasteMatch`, `matchPercent()`; badge บนการ์ดทุกหน้าที่มีการ์ด; sort `match` ใน Products (เฉพาะมี profile); query คงที่
+  - Verify: `tests/Feature/TasteProfile/TasteMatchTest.php`, `ProductMatchDisplayTest.php`
+- [ ] **T4 — หน้าสินค้า**
+  - Acceptance: badge ใหญ่ + "ตรงกับที่คุณชอบ: …" + "คั่วระดับที่คุณชอบ"; ไม่มี profile → ลิงก์ไป quiz; การบดเริ่มต้นตามวิธีชง
+  - Verify: เพิ่มใน `ProductMatchDisplayTest.php`
+- [ ] **T5 — แนะนำสำหรับคุณ + ทางกลับมาทำ quiz**
+  - Acceptance: หน้าแรก 4 อันดับ (ตัด 0%/inactive/หมด) หรือการ์ดชวนทำ quiz; เมนูผู้ใช้ "Taste Profile" + จุดเตือน; การ์ด Taste Profile ในหน้าสมาชิก
+  - Verify: `tests/Feature/TasteProfile/RecommendationsTest.php`
+- [ ] **T6 — Checkpoint**
+  - Acceptance: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP
