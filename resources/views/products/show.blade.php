@@ -4,6 +4,9 @@
 @php
     $isDrip = $product->type === ProductType::DripBag;
     $firstInStock = $product->variants->first(fn ($v) => $v->inStock());
+    $match = $taster ? $product->matchPercentFor($taster) : null;
+    $likedByCategory = $taster ? $product->likedNotesFor($taster)->groupBy(fn ($note) => $note->category->parent->name) : collect();
+    $defaultGrind = auth()->user()?->defaultGrind()->value ?? 'whole_bean';
 @endphp
 
 <x-app-layout>
@@ -11,7 +14,14 @@
         <a href="{{ route('products.index') }}" class="text-sm font-semibold underline-offset-4 hover:underline">‹ {{ __('All products') }}</a>
 
         <div class="mt-5 grid gap-8 lg:grid-cols-2">
-            <div class="grid min-h-72 place-items-center rounded-hero bg-cobalt p-10 text-paper">
+            <div class="relative grid min-h-72 place-items-center rounded-hero bg-cobalt p-10 text-paper">
+                @if ($match !== null)
+                    <span class="absolute right-6 top-6 grid h-28 w-28 rotate-[8deg] place-items-center rounded-full border-[3px] border-paper text-center leading-none" data-match="{{ $match }}">
+                        <span><span class="block font-script text-4xl">{{ $match }}%</span><span class="mt-1 block text-xs">{{ __('match') }}</span></span>
+                    </span>
+                @elseif (auth()->check())
+                    <a href="{{ route('taste-quiz.edit') }}" class="absolute right-6 top-6 rounded-full border-2 border-paper px-4 py-2 text-sm font-semibold hover:bg-paper hover:text-cobalt">{{ __('Does it match your taste?') }} →</a>
+                @endif
                 <x-dynamic-component :component="$isDrip ? 'illustrations.drip-bag' : 'illustrations.bean-bag'" class="h-64 w-auto sm:h-80" />
             </div>
 
@@ -25,6 +35,9 @@
                 <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
                     <span class="rounded-full border-[1.5px] border-cobalt px-3 py-1 font-semibold">{{ $product->roast_level->label() }} · {{ $product->roast_level->thaiLabel() }}</span>
                     <span>{{ __('Roasted on :date', ['date' => $product->roast_date->translatedFormat('j M Y')]) }}</span>
+                    @if ($taster?->preferred_roast_level === $product->roast_level)
+                        <span class="rounded-full bg-cobalt px-3 py-1 font-semibold text-paper">{{ __('Your favourite roast') }}</span>
+                    @endif
                 </div>
 
                 <div class="mt-5">
@@ -37,6 +50,17 @@
                         @endforeach
                     </ul>
                 </div>
+
+                @if ($taster)
+                    <p class="mt-4 text-sm" data-liked-notes>
+                        @if ($likedByCategory->isEmpty())
+                            {{ __('None of these notes are in the flavors you picked.') }}
+                        @else
+                            <span class="font-semibold">{{ __('Matches what you like:') }}</span>
+                            {{ $likedByCategory->map(fn ($notes, $category) => $category.' ('.$notes->pluck('name')->join(', ').')')->join(' · ') }}
+                        @endif
+                    </p>
+                @endif
 
                 @if ($product->description)
                     <p class="mt-5 leading-relaxed text-cobalt/90">{{ $product->description }}</p>
@@ -64,7 +88,7 @@
                             <h2 class="text-sm font-semibold">{{ __('Grind') }}</h2>
                             <div class="mt-2 flex flex-wrap gap-2">
                                 @foreach (\App\Enums\Grind::forBeans() as $grind)
-                                    <x-filter-chip type="radio" name="grind" :value="$grind->value" :checked="old('grind', 'whole_bean') === $grind->value">{{ $grind->label() }}</x-filter-chip>
+                                    <x-filter-chip type="radio" name="grind" :value="$grind->value" :checked="old('grind', $defaultGrind) === $grind->value">{{ $grind->label() }}</x-filter-chip>
                                 @endforeach
                             </div>
                         </div>

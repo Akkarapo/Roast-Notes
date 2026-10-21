@@ -157,5 +157,10 @@
     "Back": "ย้อนกลับ",
     "Next": "ถัดไป",
     "Save my taste profile": "บันทึก Taste Profile",
-    "Skip for now": "ข้ามไปก่อน"
+    "Skip for now": "ข้ามไปก่อน",
+    "Matches your taste": "เข้ากับลิ้นคุณ",
+    "Does it match your taste?": "ดูว่าเข้ากับลิ้นคุณไหม",
+    "Your favourite roast": "คั่วระดับที่คุณชอบ",
+    "None of these notes are in the flavors you picked.": "โน้ตของเมล็ดนี้ยังไม่ตรงกับรสที่คุณเลือก",
+    "Matches what you like:": "ตรงกับที่คุณชอบ:"
 }

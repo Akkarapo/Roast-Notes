@@ -8,10 +8,10 @@
 - [x] **T2 — Taste Quiz**
   - Acceptance: GET/PUT `/taste-quiz` (3 ขั้น Alpine, ปิด JS ได้, เติมคำตอบเดิม, ข้ามได้); validate 1–3 หมวดหลัก; หลังสมัคร redirect มาที่นี่; `TasteProfileSeeder`
   - Verify: `tests/Feature/TasteProfile/TasteQuizTest.php`
-- [ ] **T3 — Match % + sort**
+- [x] **T3 — Match % + sort**
   - Acceptance: `scopeWithTasteMatch`, `matchPercent()`; badge บนการ์ดทุกหน้าที่มีการ์ด; sort `match` ใน Products (เฉพาะมี profile); query คงที่
   - Verify: `tests/Feature/TasteProfile/TasteMatchTest.php`, `ProductMatchDisplayTest.php`
-- [ ] **T4 — หน้าสินค้า**
+- [x] **T4 — หน้าสินค้า**
   - Acceptance: badge ใหญ่ + "ตรงกับที่คุณชอบ: …" + "คั่วระดับที่คุณชอบ"; ไม่มี profile → ลิงก์ไป quiz; การบดเริ่มต้นตามวิธีชง
   - Verify: เพิ่มใน `ProductMatchDisplayTest.php`
 - [ ] **T5 — แนะนำสำหรับคุณ + ทางกลับมาทำ quiz**

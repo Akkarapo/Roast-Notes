@@ -14,12 +14,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 class Product extends Model
 {
     use HasFactory;
 
-    public const SORTS = ['newest', 'price_asc', 'price_desc', 'score'];
+    public const SORTS = ['newest', 'price_asc', 'price_desc', 'score', 'match'];
 
     protected $fillable = [
         'origin_id', 'name', 'slug', 'nickname', 'type', 'farm_name', 'variety', 'process',
@@ -79,6 +80,60 @@ class Product extends Model
     public function isSoldOut(): bool
     {
         return $this->variants->every(fn (ProductVariant $variant) => ! $variant->inStock());
+    }
+
+    // ---- Taste match: "เข้ากับลิ้นคุณ X%" ----
+
+    /**
+     * Adds notes_total and notes_liked counts: a note is "liked" when its top-level
+     * category is one the member picked in the Taste Quiz.
+     */
+    public function scopeWithTasteMatch(Builder $query, User $user): void
+    {
+        $liked = $user->likedCategoryIds();
+
+        $query->withCount([
+            'flavorNotes as notes_total',
+            'flavorNotes as notes_liked' => fn (Builder $q) => $q->whereHas(
+                'category', fn (Builder $c) => $c->whereIn('parent_id', $liked)
+            ),
+        ]);
+    }
+
+    /** Best match first, then the member's favourite roast, then freshest. Needs withTasteMatch(). */
+    public function scopeSortedByMatch(Builder $query, User $user): void
+    {
+        $query->orderByRaw('notes_liked / NULLIF(notes_total, 0) DESC');
+        if ($user->preferred_roast_level) {
+            $query->orderByRaw('roast_level = ? DESC', [$user->preferred_roast_level->value]);
+        }
+        $query->orderByDesc('roast_date')->orderBy('products.id');
+    }
+
+    /** Match % from withTasteMatch() counts; null when the scope was not applied. */
+    public function matchPercent(): ?int
+    {
+        $total = $this->getAttribute('notes_total');
+
+        return $total ? (int) round($this->getAttribute('notes_liked') / $total * 100) : null;
+    }
+
+    /** Same number computed from loaded notes (detail page). Needs flavorNotes.category. */
+    public function matchPercentFor(User $user): ?int
+    {
+        if (! $user->hasTasteProfile() || $this->flavorNotes->isEmpty()) {
+            return null;
+        }
+
+        return (int) round($this->likedNotesFor($user)->count() / $this->flavorNotes->count() * 100);
+    }
+
+    /** @return Collection<int, FlavorNote> */
+    public function likedNotesFor(User $user)
+    {
+        $liked = $user->likedCategoryIds();
+
+        return $this->flavorNotes->filter(fn (FlavorNote $note) => $liked->contains($note->category->parent_id))->values();
     }
 
     // ---- Query scopes (reused by taste-profile and admin) ----

@@ -4,6 +4,7 @@
 @use('App\Support\Money')
 
 @php
+    $match ??= $product->matchPercent(); // set when the query used withTasteMatch()
     $soldOut = $product->isSoldOut();
     $isDrip = $product->type === ProductType::DripBag;
     $fromPrice = $product->variants_min_price ?? $product->variants->min('price');
