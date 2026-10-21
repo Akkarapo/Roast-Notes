@@ -37,6 +37,6 @@
   - Verify: `tests/Feature/Ordering/OrderSeederTest.php`, `tests/Feature/Ordering/BestSellersTest.php`
   - Files: `database/seeders/OrderSeeder.php`, `DatabaseSeeder.php`, `HomeController`, `home.blade.php`
 
-- [ ] **O8 — Checkpoint**
+- [x] **O8 — Checkpoint**
   - Acceptance: Success Criteria 1–7, screenshot desktop/มือถือ, pint สะอาด, อัปเดต CAPABILITY-MAP
   - Verify: ไล่ทีละข้อ + `sail artisan test`

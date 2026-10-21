@@ -1,6 +1,6 @@
 # Plan: ordering
 
-> อ้างอิง [docs/specs/SPEC-ordering.md](../docs/specs/SPEC-ordering.md) · หน้าตา [DESIGN.md](../docs/specs/DESIGN.md) · สถานะ: **รอรีวิว**
+> อ้างอิง [docs/specs/SPEC-ordering.md](../docs/specs/SPEC-ordering.md) · หน้าตา [DESIGN.md](../docs/specs/DESIGN.md) · สถานะ: **เสร็จแล้ว (2026-10-21)**
 > งานโมดูลก่อนหน้าอยู่ที่ `tasks/archive/`
 
 ## องค์ประกอบและลำดับ
