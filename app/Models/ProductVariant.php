@@ -28,6 +28,12 @@ class ProductVariant extends Model
         return $this->belongsTo(Product::class);
     }
 
+    /** "Guji-Hambela Washed · 250g" */
+    public function displayName(): string
+    {
+        return $this->product->name.' · '.$this->size->label();
+    }
+
     public function inStock(): bool
     {
         return $this->stock > 0;

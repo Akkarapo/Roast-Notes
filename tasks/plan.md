@@ -22,7 +22,7 @@ O1 Schema + enums (Grind, OrderStatus) + models + factories
 
 | เรื่อง | เลือก | เหตุผล |
 |---|---|---|
-| เงิน | เก็บ `decimal(10,2)`, คำนวณด้วย `bcadd`/`bcmul` scale 2 (ext-bcmath มีใน image Sail) | ไม่มีปัญหา float |
+| เงิน | เก็บ `decimal(10,2)`, คำนวณเป็นจำนวนเต็มหน่วยสตางค์ (`Money::toSatang` / `fromSatang`) | ไม่มีปัญหา float และไม่ต้องพึ่ง ext-bcmath |
 | ลำดับกฎส่วนลด | class list ใน `config('roastnotes.discount_rules')` resolve ผ่าน container | promotions/loyalty แค่เพิ่มชื่อคลาส |
 | เลขออเดอร์ | `RN-YYYYMMDD-NNNN` นับจากออเดอร์ของวันนั้น ภายใน transaction + unique index (retry 1 ครั้งถ้าชน) | อ่านง่าย ไม่ซ้ำ |
 | กันสต็อกติดลบ | `lockForUpdate()` แถว variant ที่อยู่ในตะกร้า แล้วเช็กก่อน decrement | สั่งพร้อมกันได้ถูกต้อง |
@@ -37,7 +37,7 @@ O1 Schema + enums (Grind, OrderStatus) + models + factories
 
 | ความเสี่ยง | วิธีลด |
 |---|---|
-| ไม่มี bcmath ในเครื่องบางเครื่อง | Sail image มี; เพิ่ม `ext-bcmath` ใน composer.json `require` ให้ composer เตือน |
+| ปัดเศษส่วนลด % | ปัดลงเป็นสตางค์ในกฎแต่ละตัว (ไม่ลดเกินจริง) |
 | ตัวเลข Cart กับ Checkout ไม่ตรงกัน | ทั้งสองหน้าใช้ `Quote` เดียวกัน + เทสเทียบ |
 | ราคาเปลี่ยนระหว่างอยู่ในตะกร้า | Checkout คำนวณใหม่เสมอ; หน้า checkout แสดงราคาล่าสุดก่อนยืนยัน |
 | `lockForUpdate` บน SQLite ไม่มีผล | เทสรันบน MySQL ของ Sail ตามเดิม |

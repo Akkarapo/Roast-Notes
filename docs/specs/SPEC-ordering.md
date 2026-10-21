@@ -105,19 +105,19 @@ interface DiscountRule
 final class PricingContext  // อ่านอย่างเดียว
 {
     public User $user;
-    public Collection $lines;        // CartLine: variant, product, grind, quantity, unitPrice, lineTotal
-    public string $subtotal;
-    public string $discountedSoFar;  // ยอดลดจากกฎก่อนหน้า (ให้ loyalty คิดจากยอดที่เหลือ)
+    public Collection $lines;        // CartLine: variant, product, grind, quantity, unitPrice, lineTotal (สตางค์)
+    public int $subtotal;            // หน่วยสตางค์ทั้งหมด
+    public int $discountedSoFar;     // ยอดลดจากกฎก่อนหน้า (ให้ loyalty คิดจากยอดที่เหลือ)
     public ?string $couponCode;      // promotions ใช้
 }
 
-final class DiscountLine { string $source; string $label; string $amount; }
+final class DiscountLine { string $source; string $label; int $amount; }  // amount เป็นสตางค์
 
 final class Quote { lines, subtotal, discounts (list<DiscountLine>), discountTotal, shippingFee, total }
 ```
 
 - `PriceCalculator::quote(Cart $cart, ?string $couponCode = null): Quote` เรียกกฎตามลำดับใน `config('roastnotes.discount_rules')` (ตอนนี้ว่าง) — ลำดับตามที่ตกลงไว้: Buy X Get Y → คูปอง → ระดับสมาชิก
-- ส่วนลดรวมไม่เกิน subtotal, เงินคิดด้วย `bcmath`/สตริงทศนิยม 2 ตำแหน่ง ไม่ใช้ float
+- ส่วนลดรวมไม่เกิน subtotal, เงินคิดเป็นจำนวนเต็มหน่วยสตางค์ ไม่ใช้ float
 - หน้า Cart และ Checkout ใช้ `Quote` ตัวเดียวกัน ตัวเลขจึงตรงกันเสมอ
 
 **ค่าส่ง**: ฿50 ต่อออเดอร์ · ส่งฟรีเมื่อยอดหลังหักส่วนลด ≥ ฿1,000 — ค่าอยู่ใน `config/roastnotes.php`

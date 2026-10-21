@@ -2,7 +2,7 @@
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [ ] **O1 — Schema, enums, models, factories**
+- [x] **O1 — Schema, enums, models, factories**
   - Acceptance: migrations carts, cart_items, orders, order_items, order_discounts ตาม spec; enums `Grind` (label ไทย), `OrderStatus` (6 สถานะ, label ไทย, `next()`, `canTransitionTo()`, `allowsReview()`, `isCancellableByMember()`); models + relations (`User::cart()`, `User::orders()`); factories
   - Verify: `tests/Feature/Ordering/SchemaTest.php`, `tests/Unit/Ordering/OrderStatusTest.php`
   - Files: migration, `app/Enums/Grind.php`, `app/Enums/OrderStatus.php`, `app/Models/{Cart,CartItem,Order,OrderItem,OrderDiscount}.php`, factories
@@ -10,7 +10,7 @@
 - [ ] **O2 — Pricing pipeline**
   - Acceptance: `DiscountRule`, `PricingContext`, `DiscountLine`, `Quote`, `PriceCalculator` (ค่าส่ง ฿50 / ฟรี ≥ ฿1,000 จาก config, ส่วนลดรวมไม่เกิน subtotal, กฎเรียงตาม config)
   - Verify: `tests/Unit/Ordering/PriceCalculatorTest.php` (กฎปลอม 2 ตัว)
-  - Files: `app/Support/Pricing/*.php`, `config/roastnotes.php`, `composer.json` (ext-bcmath)
+  - Files: `app/Support/Pricing/*.php`, `app/Support/Money.php`, `config/roastnotes.php`
 
 - [ ] **O3 — ใส่ตะกร้า**
   - Acceptance: `AddToCart` action (รวมบรรทัดซ้ำ, ดริปแบ็ก grind `none`, จำนวน 1–20, ≤ สต็อก, inactive ปฏิเสธ); ฟอร์มในหน้าสินค้า (ขนาด/การบด/จำนวน); guest ไป login แล้วกลับหน้าเดิม; flash "ใส่ตะกร้าแล้ว"; badge ใน navbar
