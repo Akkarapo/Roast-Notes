@@ -11,7 +11,7 @@
 |---|---|---|---|
 | foundation | โปรเจค Laravel + Sail + MySQL, layout หลัก, Register/Login, role member/admin, middleware admin | users | — |
 | catalog | สินค้า + variant (ขนาดถุง/ราคา/สต็อก), โน้ตรสชาติ, หน้า Products (กรองโน้ต/ระดับคั่ว/แหล่งปลูก/ประเภท), หน้ารายละเอียดสินค้า, Home ส่วน "ล็อตใหม่" | origins, products, cupping_scores (1:1), product_variants, flavor_notes, product_flavor_notes | foundation |
-| taste-profile | Taste Quiz 3 ข้อหลังสมัคร, แก้ Taste Profile, คำนวณ "เข้ากับลิ้นคุณ X%", Home ส่วน "แนะนำสำหรับคุณ" | user_taste_preferences (+ ระดับคั่วที่ชอบใน users) | foundation, catalog |
+| taste-profile | Taste Quiz 3 ข้อหลังสมัคร, แก้ Taste Profile, คำนวณ "เข้ากับลิ้นคุณ X%", Home ส่วน "แนะนำสำหรับคุณ" | user_taste_preferences (+ ระดับคั่ว/วิธีชงที่ชอบใน users) | foundation, catalog |
 | ordering | Cart (เลือกขนาด/การบด), Checkout, ยืนยันออเดอร์, ตัดสต็อก, Member Info + ประวัติสั่งซื้อ, Home ส่วน "ขายดี"; เป็นเจ้าของ **pricing pipeline** ที่โมดูลส่วนลดมาเสียบ | carts, cart_items, orders, order_items, order_discounts | catalog |
 | promotions | Coupon % (เฉพาะสินค้าร่วมรายการ), Buy X Get Y, สรุปส่วนลดใน checkout | promotions (supertype), coupons, buy_x_get_y, promotion_products | ordering |
 | loyalty | ระดับ Bean / Barista / Roaster Master ตามยอดซื้อสะสม, ส่วนลดตามระดับ, สิทธิ์ซื้อล็อตหายากก่อน | member_tiers | ordering |
@@ -51,7 +51,7 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | foundation | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (51 tests ผ่าน) |
 | catalog | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (40 เมล็ด + 8 ดริปแบ็กจาก CQI) |
 | ordering | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Core features ของโจทย์ครบ) |
-| taste-profile | ⏭️ ถัดไป | — | — |
+| taste-profile | 📝 รอรีวิว | — | — |
 | promotions … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
