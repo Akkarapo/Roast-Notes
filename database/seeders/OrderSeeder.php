@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Enums\Grind;
 use App\Enums\OrderStatus;
 use App\Enums\ProductType;
+use App\Enums\PromotionType;
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Models\Promotion;
 use App\Models\User;
 use App\Support\Money;
 use Illuminate\Database\Seeder;
@@ -64,7 +66,76 @@ class OrderSeeder extends Seeder
             $this->placeOrder($user, $placedAt, $variants, maxLines: 2, dripQuantities: [1, 2, 5, 10], maxBeanBags: 1);
         }
 
+        $this->promotionsUsed($community->pluck('id')->all());
         $this->histories();
+    }
+
+    /**
+     * Community customers sometimes used a promotion that was running when they ordered: a coupon (within its
+     * dates, min spend and per-member limit) or "buy 10 get 2" on drip bags. Own random stream; member1–3 untouched.
+     *
+     * @param  list<int>  $customerIds
+     */
+    private function promotionsUsed(array $customerIds): void
+    {
+        $random = new Randomizer(new Mt19937(20261027));
+        $coupons = Promotion::with(['coupon', 'products:id'])->where('type', PromotionType::Coupon)->orderBy('id')->get();
+        $deal = Promotion::with(['buyXGetY', 'products:id'])->where('type', PromotionType::BuyXGetY)->first();
+        $used = []; // promotion_id => [user_id => times]
+
+        Order::whereIn('user_id', $customerIds)->with('items.variant.product')->orderBy('id')->each(function (Order $order) use ($random, $coupons, $deal, &$used) {
+            $at = $order->placed_at;
+            $discounts = [];
+            $freeOnLine = [];
+
+            // buy 10 get 2: a customer who took 10 sachets of a participating drip bag often grabbed the 2 free ones
+            if ($deal && $this->running($deal, $at)) {
+                foreach ($order->items as $item) {
+                    if ($item->quantity === $deal->buyXGetY->buy_quantity && $deal->products->contains('id', $item->variant->product_id) && $random->getInt(1, 100) <= 60) {
+                        $unit = Money::toSatang($item->unit_price);
+                        $item->update(['quantity' => $deal->buyXGetY->groupSize(), 'line_total' => Money::fromSatang($unit * $deal->buyXGetY->groupSize())]);
+                        $freeOnLine[$item->id] = $unit * $deal->buyXGetY->free_quantity;
+                        $discounts[] = ['promotion_id' => $deal->id, 'source' => 'buy_x_get_y', 'label' => $deal->name, 'amount' => $freeOnLine[$item->id]];
+                    }
+                }
+            }
+
+            // one coupon at most
+            foreach ($coupons as $promotion) {
+                $coupon = $promotion->coupon;
+                $eligible = $order->items->filter(fn ($item) => $promotion->products->contains('id', $item->variant->product_id));
+                $base = $eligible->sum(fn ($item) => Money::toSatang($item->line_total) - ($freeOnLine[$item->id] ?? 0));
+                $times = $used[$promotion->id][$order->user_id] ?? 0;
+                if (! $this->running($promotion, $at) || $base <= 0
+                    || ($coupon->min_subtotal && $base < Money::toSatang($coupon->min_subtotal))
+                    || ($coupon->per_user_limit && $times >= $coupon->per_user_limit)
+                    || $random->getInt(1, 100) > 45) {
+                    continue;
+                }
+                $used[$promotion->id][$order->user_id] = $times + 1;
+                $discounts[] = ['promotion_id' => $promotion->id, 'source' => 'coupon', 'label' => __(':code :percent% off', ['code' => $coupon->code, 'percent' => $coupon->percent_off]), 'amount' => intdiv($base * $coupon->percent_off, 100)];
+                break;
+            }
+
+            if (! $discounts) {
+                return;
+            }
+            $subtotal = $order->items->sum(fn ($item) => Money::toSatang($item->line_total));
+            $discount = array_sum(array_column($discounts, 'amount'));
+            $shipping = $subtotal - $discount >= Money::toSatang(config('roastnotes.free_shipping_threshold')) ? 0 : Money::toSatang(config('roastnotes.shipping_fee'));
+            $order->update([
+                'subtotal' => Money::fromSatang($subtotal),
+                'discount_total' => Money::fromSatang($discount),
+                'shipping_fee' => Money::fromSatang($shipping),
+                'total' => Money::fromSatang($subtotal - $discount + $shipping),
+            ]);
+            $order->discounts()->createMany(array_map(fn ($d) => ['amount' => Money::fromSatang($d['amount'])] + $d, $discounts));
+        });
+    }
+
+    private function running(Promotion $promotion, Carbon $at): bool
+    {
+        return $promotion->starts_at->lte($at) && ($promotion->ends_at === null || $promotion->ends_at->gte($at));
     }
 
     /**

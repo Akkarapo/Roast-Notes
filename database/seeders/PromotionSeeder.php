@@ -10,7 +10,8 @@ use App\Models\Promotion;
 use Illuminate\Database\Seeder;
 
 /**
- * Demo promotions agreed in docs/specs/SPEC-promotions.md.
+ * Demo promotions agreed in docs/specs/SPEC-promotions.md. They started in the past (LIGHTROAST15 a 60-day
+ * campaign half way through) so OrderSeeder can give some demo orders a discount for the sales report.
  */
 class PromotionSeeder extends Seeder
 {
@@ -22,15 +23,15 @@ class PromotionSeeder extends Seeder
         $darkBeans = Product::ofType(ProductType::Bean)->roastLevels([RoastLevel::Dark])->pluck('id');
         $dripBags = $this->half(Product::ofType(ProductType::DripBag)->orderBy('id')->pluck('id'));
 
-        $this->coupon('คั่วอ่อนลด 15%', 'LIGHTROAST15', 15, $lightBeans, ['usage_limit' => 100, 'per_user_limit' => 1], now()->startOfDay(), now()->addDays(60)->endOfDay());
-        $this->coupon('คั่วเข้มลด 10% เมื่อซื้อครบ ฿500', 'ROASTER50', 10, $darkBeans, ['min_subtotal' => 500, 'per_user_limit' => 3], now()->startOfDay(), null);
+        $this->coupon('คั่วอ่อนลด 15%', 'LIGHTROAST15', 15, $lightBeans, ['usage_limit' => 100, 'per_user_limit' => 1], now()->subDays(30)->startOfDay(), now()->addDays(30)->endOfDay());
+        $this->coupon('คั่วเข้มลด 10% เมื่อซื้อครบ ฿500', 'ROASTER50', 10, $darkBeans, ['min_subtotal' => 500, 'per_user_limit' => 3], now()->subDays(75)->startOfDay(), null);
         $this->coupon('Summer sale (หมดอายุแล้ว)', 'SUMMER20', 20, $beans, [], now()->subMonths(4), now()->subMonths(1));
 
         $deal = Promotion::create([
             'type' => PromotionType::BuyXGetY,
             'name' => 'ดริปแบ็กซื้อ 10 แถม 2',
             'description' => 'ใส่ดริปแบ็กที่ร่วมรายการครบ 12 ซอง จ่ายแค่ 10',
-            'starts_at' => now()->startOfDay(),
+            'starts_at' => now()->subDays(90)->startOfDay(),
         ]);
         $deal->buyXGetY()->create(['buy_quantity' => 10, 'free_quantity' => 2]);
         $deal->products()->attach($dripBags);
