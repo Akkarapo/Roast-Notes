@@ -1,6 +1,6 @@
 # Plan: loyalty
 
-> อ้างอิง [docs/specs/SPEC-loyalty.md](../docs/specs/SPEC-loyalty.md) · สถานะ: **อนุมัติแล้ว**
+> อ้างอิง [docs/specs/SPEC-loyalty.md](../docs/specs/SPEC-loyalty.md) · สถานะ: **เสร็จแล้ว**
 
 ## ลำดับ
 
