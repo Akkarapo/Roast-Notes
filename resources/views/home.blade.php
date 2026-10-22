@@ -15,7 +15,7 @@
                 </div>
                 <p class="mt-10 text-sm text-paper/80">{{ __('Fresh roasted every week · Shipping nationwide') }}<br>{{ __('Whole beans · Drip bags · Single origin') }}</p>
             </div>
-            <x-illustrations.pour-over class="w-full max-w-md self-end justify-self-center text-paper" />
+            <x-mascot pose="pour" class="w-full max-w-sm self-end justify-self-center text-paper" />
         </section>
 
         @if ($taster && $forYou->isNotEmpty())
@@ -34,7 +34,7 @@
             </section>
         @elseif (! $taster)
             <section id="taste-quiz-prompt" class="mt-14 grid items-center gap-6 rounded-card border-2 border-dashed border-cobalt bg-paper p-6 sm:grid-cols-[auto_1fr_auto] sm:p-8">
-                <x-illustrations.empty-cup class="h-20 w-auto" />
+                <x-mascot pose="search" class="h-24 w-24 text-cobalt" />
                 <div>
                     <p class="font-script text-3xl">what's your taste?</p>
                     <p class="mt-1">{{ __('Take the 3-question Taste Quiz and we will tell you which beans match your taste.') }}</p>
@@ -67,7 +67,7 @@
             </div>
 
             @if ($newLots->isEmpty())
-                <x-empty-state illustration="bean-bag" class="mt-6">{{ __('No beans yet.') }}</x-empty-state>
+                <x-empty-state mascot="bag" class="mt-6">{{ __('No beans yet.') }}</x-empty-state>
             @else
                 <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($newLots as $product)

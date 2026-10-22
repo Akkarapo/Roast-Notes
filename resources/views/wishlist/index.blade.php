@@ -5,7 +5,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         @if ($products->isEmpty())
-            <x-empty-state>
+            <x-empty-state mascot="search">
                 {{ __('Nothing saved yet. Tap the heart on any bean to keep it here.') }}
                 <x-slot name="action">
                     <a href="{{ route('products.index') }}" class="inline-flex px-6 py-2.5 rounded-full border-2 border-cobalt bg-cobalt text-paper font-semibold hover:bg-cobalt-ink">{{ __('Shop beans') }} →</a>

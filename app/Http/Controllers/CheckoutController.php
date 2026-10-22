@@ -41,6 +41,6 @@ class CheckoutController extends Controller
 
         $request->session()->forget('coupon_code');
 
-        return to_route('orders.show', $order)->with('flash', __('Order placed! Thank you.'));
+        return to_route('orders.show', $order)->with('flash', __('Order placed! Thank you.'))->with('order_placed', true);
     }
 }

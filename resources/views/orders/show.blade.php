@@ -5,6 +5,16 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <a href="{{ route('orders.index') }}" class="text-sm font-semibold underline-offset-4 hover:underline">‹ {{ __('My orders') }}</a>
 
+        @if (session('order_placed'))
+            <section class="mt-5 flex items-center gap-5 rounded-card bg-cobalt p-6 text-paper" data-order-placed>
+                <x-mascot pose="cheer" class="h-28 w-28 shrink-0" />
+                <div>
+                    <p class="font-script text-4xl">thank you!</p>
+                    <p class="mt-1">{{ __('We got your order and will roast-pack it soon. You can follow every step right here.') }}</p>
+                </div>
+            </section>
+        @endif
+
         <article class="mt-5 rounded-card border-2 border-cobalt bg-paper p-6 sm:p-8">
             <header class="flex flex-wrap items-start justify-between gap-4 border-b-2 border-dashed border-cobalt pb-5">
                 <div>

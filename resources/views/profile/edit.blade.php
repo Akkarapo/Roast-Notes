@@ -37,7 +37,7 @@
                 @endif
             </div>
             @if ($orders->isEmpty())
-                <x-empty-state>
+                <x-empty-state mascot="bag">
                     {{ __('No orders yet.') }}
                     <x-slot name="action">
                         <a href="{{ route('products.index') }}" class="inline-flex px-6 py-2.5 rounded-full border-2 border-cobalt bg-cobalt text-paper font-semibold hover:bg-cobalt-ink">{{ __('Shop beans') }} →</a>

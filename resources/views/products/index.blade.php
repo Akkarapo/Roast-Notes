@@ -63,7 +63,7 @@
         </p>
 
         @if ($products->isEmpty())
-            <x-empty-state illustration="bean-bag">
+            <x-empty-state mascot="search">
                 {{ __('No beans match these filters.') }}
                 <x-slot name="action">
                     <a href="{{ route('products.index') }}" class="inline-flex px-6 py-2.5 rounded-full border-2 border-cobalt bg-cobalt text-paper font-semibold hover:bg-cobalt-ink">{{ __('Clear filters') }}</a>

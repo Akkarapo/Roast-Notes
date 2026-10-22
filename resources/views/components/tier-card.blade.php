@@ -11,12 +11,8 @@
 @endphp
 <section id="member-tier" {{ $attributes->merge(['class' => 'rounded-card border-2 border-cobalt bg-paper p-6 sm:p-8']) }}>
     <div class="flex flex-wrap items-center gap-6">
-        <div class="grid h-24 w-24 shrink-0 place-items-center rounded-[22px] {{ $tier->slug === 'bean' ? 'border-2 border-cobalt text-cobalt' : 'bg-cobalt text-paper' }}">
-            @if ($tier->slug === 'roaster-master')
-                <x-illustrations.pour-over class="h-16 w-16" />
-            @else
-                <x-illustrations.bean-bag class="h-16 w-16" />
-            @endif
+        <div class="grid h-28 w-28 shrink-0 place-items-center rounded-[22px] {{ $tier->slug === 'bean' ? 'border-2 border-cobalt text-cobalt' : 'bg-cobalt text-paper' }}">
+            <x-mascot :pose="match ($tier->slug) { 'roaster-master' => 'cheer', 'barista' => 'pour', default => 'wave' }" class="h-24 w-24" />
         </div>
         <div class="min-w-0 flex-1">
             <p class="text-sm text-cobalt/70">{{ __('Member tier') }}</p>

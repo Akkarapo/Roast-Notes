@@ -54,3 +54,25 @@
 - ปรับ Blade components ของ Breeze (`primary-button`, `text-input`, `nav-link` ฯลฯ) ให้ใช้ tokens — หน้าเดิมทั้งหมดเปลี่ยนตามอัตโนมัติ
 - ภาพวาดเก็บเป็น Blade components ที่ `resources/views/components/illustrations/`
 - Low-fidelity prototype สำหรับส่งอาจารย์ ทำจาก mock ชุดนี้ (wireframe ขาวดำทุกหน้า) — ทำเมื่อผู้ใช้ขอ
+
+## Mascot: "Bean" (2026-10-23)
+
+ตัวละครที่เจ้าของโปรเจคออกแบบเอง (ภาพต้นฉบับใน `docs/design/mascot/reference-*.png`) วาดใหม่เป็น SVG ลายเส้นใน `<x-mascot pose="…">`
+
+- รูปร่าง: เมล็ดกาแฟสีครีม `#F3EEE3` มีรอยผ่ากลาง, ตาจุด 2 จุด, แขนขาสั้น, เส้นขอบเข้ม `#1B1F3B` 3.5px
+- ของประกอบ (ไอน้ำ, ประกาย, หยดน้ำ, zZ) ใช้ `currentColor` → ขาวบนพื้นน้ำเงิน, น้ำเงินบนพื้นครีม
+- ท่า: `idle` `wave` `pour` `sip` `cheer` `bag` `search` `sleep` (ดู `docs/design/mascot/poses.png`)
+
+| ที่ใช้ | ท่า |
+|---|---|
+| Hero หน้าแรก | pour |
+| หน้า Login / Register | wave |
+| ชวนทำ Taste Quiz (หน้าแรก) | search |
+| หน้า Taste Quiz | sip |
+| Empty state ทั่วไป / ตะกร้าว่าง | sleep |
+| ไม่พบสินค้า / Wish List ว่าง / 404 | search |
+| ยังไม่มีออเดอร์ | bag |
+| สั่งซื้อสำเร็จ | cheer |
+| การ์ดระดับสมาชิก | Bean = wave, Barista = pour, Roaster Master = cheer |
+
+ไอคอนแท็บเบราว์เซอร์ (`public/favicon.svg`, `.ico`, `-32.png`, `apple-touch-icon.png`) = หน้าเมล็ด Bean บนพื้น cobalt

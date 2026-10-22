@@ -6,6 +6,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,7 +29,7 @@
                     <p class="font-script text-6xl leading-tight">sip your notes!</p>
                     <p class="mt-4 max-w-sm text-paper/80">{{ __('Tell us the flavor notes you love and every bean shows how well it matches you.') }}</p>
                 </div>
-                <x-illustrations.pour-over class="w-full max-w-md self-end" />
+                <x-mascot pose="wave" class="h-80 w-80 self-end text-paper" />
             </aside>
 
             <!-- Form -->

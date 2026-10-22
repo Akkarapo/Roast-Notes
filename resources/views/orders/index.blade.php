@@ -5,7 +5,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         @if ($orders->isEmpty())
-            <x-empty-state>{{ __('No orders yet.') }}</x-empty-state>
+            <x-empty-state mascot="bag">{{ __('No orders yet.') }}</x-empty-state>
         @else
             <x-order-history :orders="$orders" />
             <div class="mt-8">{{ $orders->links('pagination.roast') }}</div>
