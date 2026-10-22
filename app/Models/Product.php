@@ -24,7 +24,7 @@ class Product extends Model
 
     protected $fillable = [
         'origin_id', 'name', 'slug', 'nickname', 'type', 'farm_name', 'variety', 'process',
-        'altitude_m', 'roast_level', 'roast_date', 'description', 'is_active', 'cqi_ref',
+        'altitude_m', 'roast_level', 'roast_date', 'description', 'is_active', 'cqi_ref', 'exclusive_until',
     ];
 
     protected function casts(): array
@@ -35,6 +35,7 @@ class Product extends Model
             'roast_level' => RoastLevel::class,
             'roast_date' => 'date',
             'is_active' => 'boolean',
+            'exclusive_until' => 'datetime',
             'altitude_m' => 'integer',
         ];
     }
@@ -86,6 +87,17 @@ class Product extends Model
     public function cupping(): HasOne
     {
         return $this->hasOne(CuppingScore::class);
+    }
+
+    /** Rare lot still in its early-access window (only tiers with early_access may buy it). */
+    public function isExclusiveNow(): bool
+    {
+        return $this->exclusive_until !== null && $this->exclusive_until->isFuture();
+    }
+
+    public function scopeExclusiveNow(Builder $query): void
+    {
+        $query->where('exclusive_until', '>', now());
     }
 
     public function isSoldOut(): bool

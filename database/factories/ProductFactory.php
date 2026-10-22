@@ -42,6 +42,12 @@ class ProductFactory extends Factory
         return $this->state(fn () => ['type' => ProductType::DripBag]);
     }
 
+    /** Rare lot: only early-access tiers may buy it until $until (default: two weeks from now). */
+    public function exclusive($until = null): static
+    {
+        return $this->state(fn (array $attributes) => ['exclusive_until' => $until ?? now()->addDays(14)]);
+    }
+
     public function inactive(): static
     {
         return $this->state(fn () => ['is_active' => false]);

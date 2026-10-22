@@ -53,7 +53,7 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | ordering | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Core features ของโจทย์ครบ) |
 | taste-profile | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ |
 | promotions | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (คูปอง % + ซื้อ X แถม Y) |
-| loyalty | ✅ อนุมัติ | 📝 รอรีวิว | — |
+| loyalty | ✅ อนุมัติ | ✅ อนุมัติ | 🚧 กำลังทำ |
 | community … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)

@@ -8,6 +8,7 @@ use App\Enums\RoastLevel;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -40,6 +41,7 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'role' => 'member',
+        'member_tier_id' => MemberTier::BEAN,
     ];
 
     /**
@@ -95,6 +97,11 @@ class User extends Authenticatable
     public function defaultGrind(): Grind
     {
         return $this->preferred_brew_method?->defaultGrind() ?? Grind::WholeBean;
+    }
+
+    public function memberTier(): BelongsTo
+    {
+        return $this->belongsTo(MemberTier::class);
     }
 
     public function cart(): HasOne
