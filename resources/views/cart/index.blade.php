@@ -26,6 +26,13 @@
                 </x-slot>
             </x-empty-state>
         @else
+            @foreach ($dealHints as $hint)
+                <p class="mb-4 flex flex-wrap items-center gap-2 rounded-[14px] border-2 border-dashed border-cobalt bg-paper px-5 py-3" data-deal-hint>
+                    <span class="font-script text-2xl">almost!</span>
+                    {{ __(':promotion — add :add more and get :free free!', $hint) }}
+                </p>
+            @endforeach
+
             <div class="grid items-start gap-8 lg:grid-cols-[1fr_360px]">
                 <ul class="divide-y-2 divide-dashed divide-cobalt/40 rounded-card border-2 border-cobalt bg-paper">
                     @foreach ($quote->lines as $line)
@@ -81,7 +88,8 @@
                     @endforeach
                 </ul>
 
-                <x-order-summary :quote="$quote" class="lg:sticky lg:top-6">
+                <div class="space-y-4 lg:sticky lg:top-6">
+                <x-order-summary :quote="$quote">
                     <x-slot name="action">
                         @if ($canCheckout)
                             <a href="{{ route('checkout.create') }}" class="flex w-full justify-center rounded-full border-2 border-cobalt bg-cobalt px-6 py-2.5 font-semibold text-paper hover:bg-cobalt-ink">{{ __('Go to checkout') }} →</a>
@@ -91,6 +99,29 @@
                         @endif
                     </x-slot>
                 </x-order-summary>
+
+                <section class="rounded-card border-2 border-cobalt bg-paper p-5" id="coupon">
+                    <h2 class="text-sm font-semibold">{{ __('Discount code') }}</h2>
+                    @if ($couponCode && ! $couponProblem)
+                        <form method="POST" action="{{ route('cart.coupon.destroy') }}" class="mt-2 flex items-center gap-2">
+                            @csrf
+                            @method('DELETE')
+                            <span class="inline-flex items-center gap-2 rounded-full bg-cobalt px-4 py-1.5 text-sm font-semibold text-paper" data-coupon-applied>
+                                {{ $couponCode }}
+                                <button type="submit" class="text-paper/80 hover:text-paper" aria-label="{{ __('Remove coupon') }}">✕</button>
+                            </span>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('cart.coupon.store') }}" class="mt-2 flex gap-2">
+                            @csrf
+                            <x-text-input name="code" :value="old('code', $couponCode)" placeholder="เช่น LIGHTROAST15" class="w-full uppercase" maxlength="30" aria-label="{{ __('Discount code') }}" />
+                            <x-secondary-button type="submit" class="shrink-0">{{ __('Apply') }}</x-secondary-button>
+                        </form>
+                    @endif
+                    <x-input-error :messages="$errors->get('coupon') ?: ($couponProblem ? [$couponProblem] : [])" class="mt-2" />
+                    <x-input-error :messages="$errors->get('code')" class="mt-2" />
+                </section>
+                </div>
             </div>
         @endif
     </div>

@@ -49,6 +49,9 @@
                 </ul>
 
                 <x-slot name="action">
+                    @if ($couponCode)
+                        <p class="mb-3 text-sm" data-coupon-applied>{{ __('Coupon :code applied', ['code' => $couponCode]) }} · <a href="{{ route('cart.index') }}#coupon" class="underline underline-offset-4">{{ __('change in cart') }}</a></p>
+                    @endif
                     <x-primary-button form="checkout-form" class="w-full">{{ __('Place order') }}</x-primary-button>
                     <a href="{{ route('cart.index') }}" class="mt-3 block text-center text-sm underline underline-offset-4">‹ {{ __('Back to cart') }}</a>
                 </x-slot>

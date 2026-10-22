@@ -8,14 +8,16 @@ use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Models\User;
 use App\Support\Money;
+use App\Support\Pricing\CartLine;
 use App\Support\Pricing\DiscountLine;
 use App\Support\Pricing\PriceCalculator;
+use App\Support\Promotions\CouponValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class PlaceOrder
 {
-    public function __construct(private PriceCalculator $calculator) {}
+    public function __construct(private PriceCalculator $calculator, private CouponValidator $coupons) {}
 
     /**
      * Turn the member's cart into a pending order: lock stock, re-price on the server,
@@ -50,6 +52,15 @@ class PlaceOrder
                 ->values()->all();
             if ($problems) {
                 throw ValidationException::withMessages(['cart' => $problems]);
+            }
+
+            // re-check the coupon with its promotion row locked (usage limits under concurrency)
+            if ($couponCode !== null) {
+                $lines = $items->map(fn (CartItem $item) => new CartLine($item));
+                $reason = $this->coupons->check($couponCode, $user, $lines)->reason;
+                if ($reason !== null) {
+                    throw ValidationException::withMessages(['coupon' => $reason]);
+                }
             }
 
             $quote = $this->calculator->quoteItems($user, $items, $couponCode);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -21,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/items', [CartItemController::class, 'store'])->name('cart.items.store');
     Route::patch('/cart/items/{item}', [CartItemController::class, 'update'])->name('cart.items.update');
     Route::delete('/cart/items/{item}', [CartItemController::class, 'destroy'])->name('cart.items.destroy');
+    Route::post('/cart/coupon', [CouponController::class, 'store'])->name('cart.coupon.store');
+    Route::delete('/cart/coupon', [CouponController::class, 'destroy'])->name('cart.coupon.destroy');
 
     Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout.create');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');

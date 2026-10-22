@@ -179,5 +179,12 @@
     "You have already used this coupon.": "คุณใช้คูปองนี้ครบสิทธิ์แล้ว",
     "Your cart has no products in this promotion yet.": "ยังไม่มีสินค้าที่ร่วมรายการในตะกร้า",
     "Add :amount more of the participating products to use this coupon.": "ซื้อสินค้าร่วมรายการเพิ่มอีก :amount เพื่อใช้คูปอง",
-    ":code :percent% off": ":code ลด :percent%"
+    ":code :percent% off": ":code ลด :percent%",
+    ":promotion — add :add more and get :free free!": ":promotion — เพิ่มอีก :add ชิ้น รับฟรี :free ชิ้น!",
+    "Discount code": "โค้ดส่วนลด",
+    "Remove coupon": "เอาคูปองออก",
+    "Apply": "ใช้โค้ด",
+    "Coupon :code applied.": "ใช้คูปอง :code แล้ว",
+    "Coupon :code applied": "ใช้คูปอง :code",
+    "change in cart": "แก้ไขที่ตะกร้า"
 }
