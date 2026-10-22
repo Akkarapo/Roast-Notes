@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PromotionSeeder::class,
             OrderSeeder::class,
             LoyaltySeeder::class,
+            CommunitySeeder::class,
         ]);
     }
 }
