@@ -247,5 +247,22 @@
     "Order placed": "สั่งซื้อแล้ว",
     "by :name": "โดย :name",
     "by customer": "โดยลูกค้า",
-    "Order status": "สถานะคำสั่งซื้อ"
+    "Order status": "สถานะคำสั่งซื้อ",
+    "Order no., name, phone": "เลขออเดอร์ ชื่อ เบอร์",
+    "Search": "ค้นหา",
+    "No orders match.": "ไม่พบออเดอร์",
+    "Customer": "ลูกค้า",
+    "Confirm order": "ยืนยันออเดอร์",
+    "Mark as shipped": "ส่งพัสดุแล้ว",
+    "Mark as in transit": "อยู่ระหว่างจัดส่ง",
+    "Mark as delivered": "ได้รับแล้ว",
+    "Next step": "ขั้นถัดไป",
+    "Tracking number (optional)": "เลขพัสดุ (ไม่บังคับ)",
+    "Note (optional)": "หมายเหตุ (ไม่บังคับ)",
+    "Cancel this order and return the stock?": "ยกเลิกออเดอร์นี้และคืนสต็อก?",
+    "Reason (shown to the customer)": "เหตุผล (ลูกค้าจะเห็น)",
+    "Cancel and return stock": "ยกเลิกและคืนสต็อก",
+    "History": "ประวัติ",
+    "This order cannot move to :status.": "ออเดอร์นี้เปลี่ยนเป็น \":status\" ไม่ได้",
+    "Order :number is now :status.": "ออเดอร์ :number เป็น \":status\" แล้ว"
 }

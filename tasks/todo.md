@@ -4,7 +4,7 @@
 
 - [x] **A1 — Admin layout**: `<x-admin-layout>` + เมนูย่อย 6 หน้า, components ร่วม · Verify: `tests/Feature/Admin/AccessTest.php` (guest → login, member → 403 ทุก route `admin.*`)
 - [x] **A2 — ประวัติสถานะ**: ตาราง `order_status_changes`, `Order::recordStatus`, บันทึกใน PlaceOrder/CancelOrder, `x-order-timeline` ในหน้าออเดอร์สมาชิก, ประวัติใน OrderSeeder · Verify: `OrderStatusHistoryTest.php`
-- [ ] **A3 — ออเดอร์**: รายการ (แท็บสถานะ + ค้นหา), รายละเอียด, `AdvanceOrderStatus`, ยกเลิก + เหตุผล · Verify: `OrderStatusTest.php`
+- [x] **A3 — ออเดอร์**: รายการ (แท็บสถานะ + ค้นหา), รายละเอียด, `AdvanceOrderStatus`, ยกเลิก + เหตุผล · Verify: `OrderStatusTest.php`
 - [ ] **A4 — สินค้า**: รายการ/กรอง, ฟอร์มสร้าง/แก้ + ขนาดถุง + โน้ต + ล็อตหายาก, ปิดขาย/ลบ · Verify: `ProductAdminTest.php`
 - [ ] **A5 — โปรโมชั่น**: รายการ + สถานะ + จำนวนครั้งที่ใช้, สร้าง/แก้ตามชนิด, เลือกสินค้า, เปิด/ปิด/ลบ · Verify: `PromotionAdminTest.php`
 - [ ] **A6 — สมาชิก**: รายการ/ค้นหา/กรอง, รายละเอียด, ปรับระดับ, ตั้ง/ถอดแอดมิน · Verify: `UserAdminTest.php`
