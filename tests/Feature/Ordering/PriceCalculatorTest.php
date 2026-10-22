@@ -9,6 +9,8 @@ use App\Support\Pricing\DiscountLine;
 use App\Support\Pricing\DiscountRule;
 use App\Support\Pricing\PriceCalculator;
 use App\Support\Pricing\PricingContext;
+use App\Support\Pricing\Rules\BuyXGetYRule;
+use App\Support\Pricing\Rules\CouponRule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -100,7 +102,10 @@ class PriceCalculatorTest extends TestCase
 
     public function test_rules_come_from_config_by_default(): void
     {
-        $this->assertSame([], config('roastnotes.discount_rules'));
-        $this->assertSame(0, (new PriceCalculator)->quote($this->cartWith([['100.00', 1]]))->discountTotal);
+        $this->assertSame([
+            BuyXGetYRule::class,
+            CouponRule::class,
+        ], config('roastnotes.discount_rules'));
+        $this->assertSame(0, (new PriceCalculator)->quote($this->cartWith([['100.00', 1]]))->discountTotal); // no promotions exist
     }
 }

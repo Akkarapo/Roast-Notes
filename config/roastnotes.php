@@ -1,5 +1,8 @@
 <?php
 
+use App\Support\Pricing\Rules\BuyXGetYRule;
+use App\Support\Pricing\Rules\CouponRule;
+
 return [
 
     /*
@@ -33,6 +36,10 @@ return [
     |
     */
 
-    'discount_rules' => [],
+    'discount_rules' => [
+        BuyXGetYRule::class,
+        CouponRule::class,
+        // loyalty: member tier rule goes here
+    ],
 
 ];

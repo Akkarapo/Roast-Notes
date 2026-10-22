@@ -171,5 +171,13 @@
     "Sign up & take the quiz": "สมัครสมาชิกแล้วทำ quiz",
     "Taste Profile": "Taste Profile",
     "Not done yet": "ยังไม่ได้ทำ",
-    "Brew method": "วิธีชง"
+    "Brew method": "วิธีชง",
+    "Coupon not found.": "ไม่พบคูปองนี้",
+    "This coupon is not active yet.": "คูปองนี้ยังไม่เริ่มใช้",
+    "This coupon has expired.": "คูปองนี้หมดอายุแล้ว",
+    "This coupon has been fully redeemed.": "คูปองนี้ถูกใช้ครบแล้ว",
+    "You have already used this coupon.": "คุณใช้คูปองนี้ครบสิทธิ์แล้ว",
+    "Your cart has no products in this promotion yet.": "ยังไม่มีสินค้าที่ร่วมรายการในตะกร้า",
+    "Add :amount more of the participating products to use this coupon.": "ซื้อสินค้าร่วมรายการเพิ่มอีก :amount เพื่อใช้คูปอง",
+    ":code :percent% off": ":code ลด :percent%"
 }
