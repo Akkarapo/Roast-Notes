@@ -132,6 +132,12 @@ class Product extends Model
         $query->where('exclusive_until', '>', now());
     }
 
+    /** Ordered at least once → can only be deactivated, never deleted (order_items restrict). */
+    public function hasBeenOrdered(): bool
+    {
+        return OrderItem::whereIn('product_variant_id', $this->variants()->select('id'))->exists();
+    }
+
     public function isSoldOut(): bool
     {
         return $this->variants->every(fn (ProductVariant $variant) => ! $variant->inStock());

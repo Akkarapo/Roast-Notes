@@ -34,6 +34,11 @@ class ProductVariant extends Model
         return $this->product->name.' · '.$this->size->label();
     }
 
+    public function hasBeenOrdered(): bool
+    {
+        return OrderItem::where('product_variant_id', $this->id)->exists();
+    }
+
     public function inStock(): bool
     {
         return $this->stock > 0;
