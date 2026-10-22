@@ -5,14 +5,19 @@ namespace App\Http\Requests;
 use App\Enums\Grind;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class AddToCartRequest extends FormRequest
 {
-    public function authorize(): bool
+    /** Rare lots in early access: 403 with the reason for anyone without the tier. */
+    public function authorize(): Response
     {
-        return true;
+        $product = ProductVariant::with('product')->find($this->integer('variant_id'))?->product;
+
+        return $product ? Gate::forUser($this->user())->inspect('purchase', $product) : Response::allow();
     }
 
     public function rules(): array

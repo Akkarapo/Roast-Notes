@@ -13,6 +13,7 @@ use App\Support\Pricing\DiscountLine;
 use App\Support\Pricing\PriceCalculator;
 use App\Support\Promotions\CouponValidator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class PlaceOrder
@@ -46,11 +47,14 @@ class PlaceOrder
                 ->keyBy('id');
             $items->each(fn (CartItem $item) => $item->setRelation('variant', $variants[$item->product_variant_id]));
 
-            $problems = $items->reject(fn (CartItem $item) => $item->isPurchasable())
+            $problems = $items->toBase()->reject(fn (CartItem $item) => $item->isPurchasable())
                 ->map(fn (CartItem $item) => ! $item->variant->product->is_active
                     ? __(':item is no longer available.', ['item' => $item->variant->displayName()])
                     : __(':item: only :stock left.', ['item' => $item->variant->displayName(), 'stock' => $item->variant->stock]))
-                ->values()->all();
+                ->values()
+                ->merge($items->toBase()->map(fn (CartItem $item) => Gate::forUser($user)->inspect('purchase', $item->variant->product))
+                    ->filter->denied()->map->message()->unique()->values())
+                ->all();
             if ($problems) {
                 throw ValidationException::withMessages(['cart' => $problems]);
             }

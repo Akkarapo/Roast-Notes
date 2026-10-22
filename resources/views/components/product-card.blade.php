@@ -27,6 +27,9 @@
         </span>
     @endif
 
+    @if ($product->isExclusiveNow())
+        <span class="mb-1.5 self-start rounded-full bg-cobalt-ink px-2.5 py-0.5 text-xs font-semibold text-paper {{ $match !== null ? 'mr-16' : '' }}" data-early-access>✦ {{ __(':tier first', ['tier' => \App\Models\MemberTier::earlyAccessName()]) }}</span>
+    @endif
     @foreach ($promotionBadges->for($product) as $badge)
         <span class="mb-1.5 self-start rounded-full border-[1.5px] border-dashed border-current px-2.5 py-0.5 text-xs font-semibold {{ $match !== null ? 'mr-16' : '' }}" data-promo-badge>{{ $badge }}</span>
     @endforeach

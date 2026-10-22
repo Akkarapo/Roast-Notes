@@ -203,7 +203,7 @@ class Product extends Model
     /**
      * Apply validated filters from ProductFilterRequest::filters().
      *
-     * @param  array{flavor?: list<string>, roast?: list<RoastLevel>, type?: ?ProductType, country?: ?string, promo?: bool}  $filters
+     * @param  array{flavor?: list<string>, roast?: list<RoastLevel>, type?: ?ProductType, country?: ?string, promo?: bool, rare?: bool}  $filters
      */
     public function scopeFilter(Builder $query, array $filters): void
     {
@@ -212,6 +212,7 @@ class Product extends Model
             ->when($filters['roast'] ?? [], fn (Builder $q, array $levels) => $q->roastLevels($levels))
             ->when($filters['type'] ?? null, fn (Builder $q, ProductType $type) => $q->ofType($type))
             ->when($filters['country'] ?? null, fn (Builder $q, string $country) => $q->fromCountry($country))
-            ->when($filters['promo'] ?? false, fn (Builder $q) => $q->onPromotion());
+            ->when($filters['promo'] ?? false, fn (Builder $q) => $q->onPromotion())
+            ->when($filters['rare'] ?? false, fn (Builder $q) => $q->exclusiveNow());
     }
 }

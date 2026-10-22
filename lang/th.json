@@ -199,5 +199,10 @@
     ":amount more to :tier (:percent% off)": "อีก :amount ถึงระดับ :tier (ลด :percent%)",
     "You are at the top tier — thank you for roasting with us!": "คุณอยู่ระดับสูงสุดแล้ว ขอบคุณที่คั่วไปด้วยกัน!",
     "Counts delivered orders only": "นับเฉพาะออเดอร์ที่ได้รับแล้ว",
-    "Spend :amount more to become :tier and get :percent% off": "ซื้ออีก :amount เพื่อเป็น :tier รับส่วนลด :percent%"
+    "Spend :amount more to become :tier and get :percent% off": "ซื้ออีก :amount เพื่อเป็น :tier รับส่วนลด :percent%",
+    "Only :tier members can buy this lot until :date.": "ล็อตนี้ซื้อได้เฉพาะสมาชิก :tier จนถึง :date",
+    "Rare lots": "ล็อตหายาก",
+    ":tier first · on general sale :date": ":tier ซื้อก่อน · เปิดขายทั่วไป :date",
+    ":tier first": ":tier ซื้อก่อน",
+    "Early access for you": "คุณซื้อก่อนได้"
 }

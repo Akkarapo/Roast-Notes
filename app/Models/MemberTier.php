@@ -43,6 +43,12 @@ class MemberTier extends Model
         return static::where('min_spend', '>', $this->min_spend)->ordered()->first();
     }
 
+    /** Name of the (lowest) tier that gets early access to rare lots, for labels. */
+    public static function earlyAccessName(): string
+    {
+        return once(fn () => static::where('early_access', true)->ordered()->value('name') ?? 'Roaster Master');
+    }
+
     public function isAbove(self $other): bool
     {
         return (float) $this->min_spend > (float) $other->min_spend;

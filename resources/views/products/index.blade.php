@@ -28,6 +28,7 @@
 
                 <span class="ml-4 shrink-0"></span>
                 <x-filter-chip name="promo" value="1" :checked="$filters['promo']">{{ __('On promotion') }}</x-filter-chip>
+                <x-filter-chip name="rare" value="1" :checked="$filters['rare']">{{ __('Rare lots') }}</x-filter-chip>
             </div>
 
             <div class="flex flex-wrap items-center gap-3 pt-1">

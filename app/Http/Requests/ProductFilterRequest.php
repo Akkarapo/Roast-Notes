@@ -27,7 +27,7 @@ class ProductFilterRequest extends FormRequest
     }
 
     /**
-     * @return array{flavor: list<string>, roast: list<RoastLevel>, type: ?ProductType, country: ?string, promo: bool, sort: string}
+     * @return array{flavor: list<string>, roast: list<RoastLevel>, type: ?ProductType, country: ?string, promo: bool, rare: bool, sort: string}
      */
     public function filters(): array
     {
@@ -41,6 +41,7 @@ class ProductFilterRequest extends FormRequest
             'type' => is_string($this->query('type')) ? ProductType::tryFrom($this->query('type')) : null,
             'country' => $country !== null && Origin::where('country', $country)->exists() ? $country : null,
             'promo' => $this->query('promo') === '1',
+            'rare' => $this->query('rare') === '1',
             'sort' => in_array($sort, Product::SORTS, true) ? $sort : 'newest',
         ];
     }

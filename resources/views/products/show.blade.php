@@ -1,6 +1,9 @@
 @use('App\Enums\ProductType')
 @use('App\Support\Money')
 @inject('promotionBadges', 'App\Support\Promotions\PromotionBadges')
+@php
+    $purchase = \Illuminate\Support\Facades\Gate::inspect('purchase', $product);
+@endphp
 
 @php
     $isDrip = $product->type === ProductType::DripBag;
@@ -36,6 +39,11 @@
                 <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
                     <span class="rounded-full border-[1.5px] border-cobalt px-3 py-1 font-semibold">{{ $product->roast_level->label() }} · {{ $product->roast_level->thaiLabel() }}</span>
                     <span>{{ __('Roasted on :date', ['date' => $product->roast_date->translatedFormat('j M Y')]) }}</span>
+                    @if ($product->isExclusiveNow())
+                        <span class="rounded-full bg-cobalt-ink px-3 py-1 font-semibold text-paper" data-early-access>
+                            {{ __(':tier first · on general sale :date', ['tier' => \App\Models\MemberTier::earlyAccessName(), 'date' => $product->exclusive_until->translatedFormat('j M Y')]) }}
+                        </span>
+                    @endif
                     @foreach ($promotionBadges->for($product) as $badge)
                         <span class="rounded-full border-[1.5px] border-dashed border-cobalt px-3 py-1 font-semibold" data-promo-badge>{{ $badge }}</span>
                     @endforeach
@@ -100,13 +108,20 @@
 
                     <div class="flex flex-wrap items-center gap-4">
                         <x-quantity-stepper :value="old('quantity', 1)" :max="\App\Models\CartItem::MAX_QUANTITY" />
-                        <x-primary-button :disabled="! $firstInStock">{{ __('Add to cart') }}</x-primary-button>
+                        <x-primary-button :disabled="! $firstInStock || $purchase->denied()">{{ __('Add to cart') }}</x-primary-button>
                     </div>
+                    @if ($purchase->denied())
+                        <p class="text-sm font-semibold text-brick" data-early-access-locked>{{ $purchase->message() }}</p>
+                    @elseif ($product->isExclusiveNow())
+                        <p class="text-sm font-semibold" data-early-access-open>{{ __('Early access for you') }} ✦</p>
+                    @endif
                     <x-input-error :messages="$errors->get('quantity')" />
 
+                    @if ($purchase->allowed())
                     @guest
                         <p class="text-sm text-cobalt/70">{{ __('You will be asked to log in first, then brought back here.') }}</p>
                     @endguest
+                    @endif
                 </form>
             </div>
         </div>
