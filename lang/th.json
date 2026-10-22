@@ -361,5 +361,13 @@
     ":name is now :tier.": ":name เป็นระดับ :tier แล้ว",
     ":name is now :role.": ":name เป็น:role แล้ว",
     "You cannot remove your own admin rights.": "ถอดสิทธิ์แอดมินของตัวเองไม่ได้",
-    "There must be at least one admin.": "ต้องมีแอดมินอย่างน้อย 1 คน"
+    "There must be at least one admin.": "ต้องมีแอดมินอย่างน้อย 1 คน",
+    "All stars": "ทุกดาว",
+    "Words or product": "ข้อความหรือสินค้า",
+    "Reviewer": "ผู้รีวิว",
+    "Rating": "คะแนน",
+    "Notes": "ความเห็น",
+    "Delete this review?": "ลบรีวิวนี้?",
+    "Delete": "ลบ",
+    "No reviews match.": "ไม่พบรีวิว"
 }

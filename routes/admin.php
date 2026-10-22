@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,6 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 Route::patch('/users/{user}/tier', [UserController::class, 'updateTier'])->name('users.tier');
 Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.role');
+
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
