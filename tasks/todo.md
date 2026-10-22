@@ -1,13 +1,11 @@
-# Todo: admin
+# Todo: sales-report
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [x] **A1 — Admin layout**: `<x-admin-layout>` + เมนูย่อย 6 หน้า, components ร่วม · Verify: `tests/Feature/Admin/AccessTest.php` (guest → login, member → 403 ทุก route `admin.*`)
-- [x] **A2 — ประวัติสถานะ**: ตาราง `order_status_changes`, `Order::recordStatus`, บันทึกใน PlaceOrder/CancelOrder, `x-order-timeline` ในหน้าออเดอร์สมาชิก, ประวัติใน OrderSeeder · Verify: `OrderStatusHistoryTest.php`
-- [x] **A3 — ออเดอร์**: รายการ (แท็บสถานะ + ค้นหา), รายละเอียด, `AdvanceOrderStatus`, ยกเลิก + เหตุผล · Verify: `OrderStatusTest.php`
-- [x] **A4 — สินค้า**: รายการ/กรอง, ฟอร์มสร้าง/แก้ + ขนาดถุง + โน้ต + ล็อตหายาก, ปิดขาย/ลบ · Verify: `ProductAdminTest.php`
-- [x] **A5 — โปรโมชั่น**: รายการ + สถานะ + จำนวนครั้งที่ใช้, สร้าง/แก้ตามชนิด, เลือกสินค้า, เปิด/ปิด/ลบ · Verify: `PromotionAdminTest.php`
-- [x] **A6 — สมาชิก**: รายการ/ค้นหา/กรอง, รายละเอียด, ปรับระดับ, ตั้ง/ถอดแอดมิน · Verify: `UserAdminTest.php`
-- [x] **A7 — รีวิว**: รายการ/กรอง/ค้นหา, ลบ · Verify: `ReviewAdminTest.php`
-- [x] **A8 — ภาพรวม**: การ์ดตัวเลข, ออเดอร์ล่าสุด, ใกล้หมด · Verify: `DashboardTest.php`
-- [x] **A9 — Checkpoint**: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP
+- [ ] **R1 — โครง**: `DateRange`, `Report` interface, `Admin\ReportController` (index, csv), ตัวเลือกช่วงเวลา, แท็บ "รายงาน" · Verify: `tests/Feature/Reports/DateRangeTest.php`, access ใน ReportPageTest
+- [ ] **R2 — กราฟ SVG**: `x-chart.bars`, `x-chart.hbars` + ตารางคู่ · Verify: ตรวจในเบราว์เซอร์ + assert ใน ReportPageTest
+- [ ] **R3 — สรุป + ยอดตามเวลา** · Verify: `SummaryTest.php`, `SalesOverTimeTest.php`
+- [ ] **R4 — ขายดี, ระดับคั่ว, โน้ต** · Verify: `TopProductsTest.php`, `RoastShareTest.php`, `FlavorNotesTest.php`
+- [ ] **R5 — ส่วนลดตามโปร, รสที่ชอบ vs ขายได้** · Verify: `DiscountsTest.php`, `TasteVsSalesTest.php`
+- [ ] **R6 — ดู SQL + CSV** · Verify: `CsvTest.php`, `ReportPageTest.php`
+- [ ] **R7 — Checkpoint**: Success Criteria 1–6, screenshot, pint, CAPABILITY-MAP
