@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\Loyalty\LoyaltyStatus;
 use App\Support\Pricing\PriceCalculator;
 use App\Support\Pricing\Rules\BuyXGetYRule;
 use App\Support\Promotions\CouponValidator;
@@ -22,6 +23,7 @@ class CartController extends Controller
             // the code may have stopped working since it was entered (cart changed, expired, ...)
             'couponProblem' => $code && ! $quote->isEmpty() ? $coupons->check($code, $request->user(), $quote->lines)->reason : null,
             'dealHints' => $deals->hints($quote->lines),
+            'loyalty' => LoyaltyStatus::for($request->user()),
         ]);
     }
 }

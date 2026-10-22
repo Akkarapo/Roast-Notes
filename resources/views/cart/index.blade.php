@@ -100,6 +100,12 @@
                     </x-slot>
                 </x-order-summary>
 
+                @if ($loyalty->next)
+                    <p class="px-2 text-sm text-cobalt/80" data-tier-hint>
+                        {{ __('Spend :amount more to become :tier and get :percent% off', ['amount' => \App\Support\Money::bahtFromSatang($loyalty->remaining()), 'tier' => $loyalty->next->name, 'percent' => $loyalty->next->discount_percent]) }}
+                    </p>
+                @endif
+
                 <section class="rounded-card border-2 border-cobalt bg-paper p-5" id="coupon">
                     <h2 class="text-sm font-semibold">{{ __('Discount code') }}</h2>
                     @if ($couponCode && ! $couponProblem)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Support\Loyalty\LoyaltyStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+            'loyalty' => LoyaltyStatus::for($request->user()),
             'orders' => $request->user()->orders()->withSum('items', 'quantity')->latest('placed_at')->latest('id')->take(10)->get(),
             'orderCount' => $request->user()->orders()->count(),
         ]);

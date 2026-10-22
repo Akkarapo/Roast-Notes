@@ -4,7 +4,7 @@
     </x-slot>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        {{-- Tier (loyalty) is added here later --}}
+        <x-tier-card :status="$loyalty" />
         <section id="taste-profile" class="rounded-card border-2 border-cobalt bg-paper p-6 sm:p-8">
             <div class="flex flex-wrap items-start justify-between gap-4">
                 <div>

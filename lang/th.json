@@ -190,5 +190,14 @@
     ":percent% off · :code": "ลด :percent% · :code",
     "Buy :buy get :free": "ซื้อ :buy แถม :free",
     "On promotion": "มีโปรโมชั่น",
-    ":tier member :percent% off": "สมาชิก :tier ลด :percent%"
+    ":tier member :percent% off": "สมาชิก :tier ลด :percent%",
+    ":percent% off every order + buy rare lots :days days early": "ลด :percent% ทุกออเดอร์ + ซื้อล็อตหายากได้ก่อน :days วัน",
+    ":percent% off every order": "ลด :percent% ทุกออเดอร์",
+    "Collect spend to unlock member discounts": "สะสมยอดซื้อเพื่อปลดล็อกส่วนลดสมาชิก",
+    "Member tier": "ระดับสมาชิก",
+    "Total spend": "ยอดซื้อสะสม",
+    ":amount more to :tier (:percent% off)": "อีก :amount ถึงระดับ :tier (ลด :percent%)",
+    "You are at the top tier — thank you for roasting with us!": "คุณอยู่ระดับสูงสุดแล้ว ขอบคุณที่คั่วไปด้วยกัน!",
+    "Counts delivered orders only": "นับเฉพาะออเดอร์ที่ได้รับแล้ว",
+    "Spend :amount more to become :tier and get :percent% off": "ซื้ออีก :amount เพื่อเป็น :tier รับส่วนลด :percent%"
 }
