@@ -4,7 +4,7 @@
 
 - [x] **L1 — Schema + models**: `member_tiers` (+ Bean/Barista/Roaster Master), `users.member_tier_id`, `products.exclusive_until`; `MemberTier`, relations · Verify: `tests/Feature/Loyalty/SchemaTest.php`
 - [x] **L2 — ยอดสะสม + ขึ้นระดับ**: `RecalculateMemberTier`, `Order::markDelivered()`, `LoyaltyStatus` · Verify: `RecalculateMemberTierTest.php`
-- [ ] **L3 — ส่วนลดระดับ**: `LoyaltyTierRule` ใน config ต่อจาก CouponRule · Verify: `LoyaltyTierRuleTest.php`, `CheckoutLoyaltyTest.php`
+- [x] **L3 — ส่วนลดระดับ**: `LoyaltyTierRule` ใน config ต่อจาก CouponRule · Verify: `LoyaltyTierRuleTest.php`, `CheckoutLoyaltyTest.php`
 - [ ] **L4 — หน้าจอระดับ**: การ์ดใน Member Info (progress bar), ป้ายใน navbar, ข้อความชวนในตะกร้า · Verify: `MemberInfoTierTest.php`
 - [ ] **L5 — ล็อตหายาก**: policy `purchase`, ปฏิเสธใน AddToCart + PlaceOrder, ป้าย "Roaster Master ซื้อก่อน" + ปุ่มปิด · Verify: `EarlyAccessTest.php`
 - [ ] **L6 — LoyaltySeeder**: คำนวณระดับ demo, ล็อตหายาก 3 ตัว · Verify: seed แล้วได้ member1/2/3 = RM/Barista/Bean

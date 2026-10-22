@@ -189,5 +189,6 @@
     "change in cart": "แก้ไขที่ตะกร้า",
     ":percent% off · :code": "ลด :percent% · :code",
     "Buy :buy get :free": "ซื้อ :buy แถม :free",
-    "On promotion": "มีโปรโมชั่น"
+    "On promotion": "มีโปรโมชั่น",
+    ":tier member :percent% off": "สมาชิก :tier ลด :percent%"
 }

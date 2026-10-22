@@ -2,6 +2,7 @@
 
 use App\Support\Pricing\Rules\BuyXGetYRule;
 use App\Support\Pricing\Rules\CouponRule;
+use App\Support\Pricing\Rules\LoyaltyTierRule;
 
 return [
 
@@ -39,7 +40,7 @@ return [
     'discount_rules' => [
         BuyXGetYRule::class,
         CouponRule::class,
-        // loyalty: member tier rule goes here
+        LoyaltyTierRule::class,
     ],
 
 ];

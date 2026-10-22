@@ -30,6 +30,7 @@ class PlaceOrder
     public function __invoke(User $user, array $shipping, ?string $couponCode = null): Order
     {
         return DB::transaction(function () use ($user, $shipping, $couponCode) {
+            $user->load('memberTier'); // tier discount uses the tier as of now
             $cart = $user->cartOrCreate();
             $items = $cart->items()->get();
 
