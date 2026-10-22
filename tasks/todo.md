@@ -8,4 +8,4 @@
 - [x] **R4 — ขายดี, ระดับคั่ว, โน้ต** · Verify: `TopProductsTest.php`, `RoastShareTest.php`, `FlavorNotesTest.php`
 - [x] **R5 — ส่วนลดตามโปร, รสที่ชอบ vs ขายได้** · Verify: `DiscountsTest.php`, `TasteVsSalesTest.php`
 - [x] **R6 — ดู SQL + CSV** · Verify: `CsvTest.php`, `ReportPageTest.php`
-- [ ] **R7 — Checkpoint**: Success Criteria 1–6, screenshot, pint, CAPABILITY-MAP
+- [x] **R7 — Checkpoint**: Success Criteria 1–6, screenshot, pint, CAPABILITY-MAP

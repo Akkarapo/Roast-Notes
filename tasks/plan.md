@@ -1,6 +1,6 @@
 # Plan: sales-report
 
-> อ้างอิง [docs/specs/SPEC-sales-report.md](../docs/specs/SPEC-sales-report.md) · สถานะ: **อนุมัติแล้ว**
+> อ้างอิง [docs/specs/SPEC-sales-report.md](../docs/specs/SPEC-sales-report.md) · สถานะ: **เสร็จแล้ว**
 
 ## ลำดับ
 

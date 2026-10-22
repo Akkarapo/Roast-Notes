@@ -11,6 +11,8 @@ final class SqlFormatter
     {
         $pattern = '/\s+('.implode('|', array_map(fn ($k) => str_replace(' ', '\s+', $k), self::BREAK_BEFORE)).')\s+/i';
 
+        $sql = preg_replace('/\bselect\b/i', 'SELECT', $sql);
+
         return trim(preg_replace_callback($pattern, fn ($m) => "\n".strtoupper(preg_replace('/\s+/', ' ', $m[1])).' ', $sql));
     }
 }
