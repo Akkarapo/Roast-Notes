@@ -52,8 +52,9 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | catalog | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (40 เมล็ด + 8 ดริปแบ็กจาก CQI) |
 | ordering | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Core features ของโจทย์ครบ) |
 | taste-profile | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ |
-| promotions | ✅ อนุมัติ | 📝 รอรีวิว | — |
-| loyalty … sales-report | — | — | — |
+| promotions | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (คูปอง % + ซื้อ X แถม Y) |
+| loyalty | ⏭️ ถัดไป | — | — |
+| community … sales-report | — | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
 

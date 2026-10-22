@@ -1,6 +1,6 @@
 # Plan: promotions
 
-> อ้างอิง [docs/specs/SPEC-promotions.md](../docs/specs/SPEC-promotions.md) · สถานะ: **รอรีวิว**
+> อ้างอิง [docs/specs/SPEC-promotions.md](../docs/specs/SPEC-promotions.md) · สถานะ: **เสร็จแล้ว**
 
 ## ลำดับ
 
