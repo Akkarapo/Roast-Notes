@@ -3,8 +3,13 @@
 use App\Support\Pricing\Rules\BuyXGetYRule;
 use App\Support\Pricing\Rules\CouponRule;
 use App\Support\Pricing\Rules\LoyaltyTierRule;
+use App\Support\Reports\Discounts;
+use App\Support\Reports\FlavorNotes;
+use App\Support\Reports\RoastShare;
 use App\Support\Reports\SalesOverTime;
 use App\Support\Reports\Summary;
+use App\Support\Reports\TasteVsSales;
+use App\Support\Reports\TopProducts;
 
 return [
 
@@ -54,6 +59,11 @@ return [
     'reports' => [
         Summary::class,
         SalesOverTime::class,
+        TopProducts::class,
+        RoastShare::class,
+        FlavorNotes::class,
+        Discounts::class,
+        TasteVsSales::class,
     ],
 
 ];
