@@ -119,12 +119,29 @@ class CommunitySeeder extends Seeder
     private function comment(Product $product, BrewMethod $brew, int $rating): string
     {
         $notes = $product->flavorNotes->pluck('name')->all();
-        $picked = $notes ? $this->random->pickArrayKeys($notes, min(2, count($notes))) : [];
-        $tasted = $picked ? 'ได้กลิ่น '.implode(' กับ ', array_map(fn ($k) => $notes[$k], $picked)).' ชัด' : 'รสชาติสะอาด';
         $openers = self::OPENERS[$brew->value];
+        $opener = $openers[$this->random->getInt(0, count($openers) - 1)];
+        $verdict = self::VERDICTS[$rating][$this->random->getInt(0, count(self::VERDICTS[$rating]) - 1)];
 
-        return $openers[$this->random->getInt(0, count($openers) - 1)].' '.$tasted.' '
-            .self::VERDICTS[$rating][$this->random->getInt(0, count(self::VERDICTS[$rating]) - 1)];
+        if (! $notes || $this->random->getInt(1, 100) <= 25) {
+            $mouth = ['บอดี้กลาง ๆ จบสะอาด', 'ความเปรี้ยวสดชื่น', 'บอดี้หนา นุ่มลิ้น', 'หวานฉ่ำตอนอุ่นลง', 'จบสั้นไปนิด'];
+
+            return $opener.' '.$mouth[$this->random->getInt(0, count($mouth) - 1)].' '.$verdict;
+        }
+
+        $first = $notes[$this->random->getInt(0, count($notes) - 1)];
+        $others = array_values(array_diff($notes, [$first]));
+        $second = $others ? $others[$this->random->getInt(0, count($others) - 1)] : null;
+        $templates = array_filter([
+            "ได้กลิ่น {$first} ชัด",
+            "โน้ต {$first} มาก่อนเลย",
+            $second ? "เปิดมาด้วย {$first} ท้ายคอเป็น {$second}" : null,
+            $second ? "{$first} กับ {$second} ตามที่ร้านเขียนไว้จริง" : null,
+            "พออุ่นลงได้ {$first} ชัดขึ้น",
+        ]);
+        $templates = array_values($templates);
+
+        return $opener.' '.$templates[$this->random->getInt(0, count($templates) - 1)].' '.$verdict;
     }
 
     private function writtenAt(Carbon $placedAt): Carbon

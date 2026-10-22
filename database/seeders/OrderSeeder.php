@@ -30,6 +30,12 @@ class OrderSeeder extends Seeder
 
     private Randomizer $random;
 
+    /** extra demo customers (UserSeeder::COMMUNITY): orders each, so reviews and reports have more voices */
+    public const COMMUNITY_ORDERS = [3, 8];
+
+    /** @var array<string, int> running order number per day */
+    private array $perDay = [];
+
     public function run(): void
     {
         $this->random = new Randomizer(new Mt19937(20261021));
@@ -40,53 +46,73 @@ class OrderSeeder extends Seeder
         }
 
         $dates = collect(range(1, self::ORDERS))
-            ->map(fn () => today()->subDays($this->random->getInt(0, self::DAYS - 1))->setTime($this->random->getInt(8, 21), $this->random->getInt(0, 59)))
+            ->map(fn () => $this->randomDate())
             ->sort()->values();
-        $perDay = [];
 
         foreach ($dates as $placedAt) {
             $user = $buyers[$this->weighted(self::BUYERS)] ?? $buyers->first();
-            $day = $placedAt->format('Ymd');
-            $perDay[$day] = ($perDay[$day] ?? 0) + 1;
-
-            $lines = [];
-            foreach ($this->pick($variants, $this->random->getInt(1, 3)) as $variant) {
-                $isDrip = $variant->product->type === ProductType::DripBag;
-                $quantity = $isDrip ? [1, 2, 5, 10][$this->random->getInt(0, 3)] : $this->random->getInt(1, 3);
-                $unit = Money::toSatang($variant->price);
-                $lines[] = [
-                    'product_variant_id' => $variant->id,
-                    'product_name' => $variant->product->name,
-                    'size' => $variant->size->value,
-                    'grind' => $isDrip ? Grind::None : Grind::forBeans()[$this->random->getInt(0, 2)],
-                    'unit_price' => Money::fromSatang($unit),
-                    'quantity' => $quantity,
-                    'line_total' => Money::fromSatang($unit * $quantity),
-                ];
-            }
-
-            $subtotal = array_sum(array_map(fn ($l) => Money::toSatang($l['line_total']), $lines));
-            $shipping = $subtotal >= Money::toSatang(config('roastnotes.free_shipping_threshold')) ? 0 : Money::toSatang(config('roastnotes.shipping_fee'));
-            $status = $this->status($placedAt);
-
-            $order = Order::create([
-                'order_number' => sprintf('RN-%s-%04d', $day, $perDay[$day]),
-                'user_id' => $user->id,
-                'status' => $status,
-                'subtotal' => Money::fromSatang($subtotal),
-                'discount_total' => '0.00',
-                'shipping_fee' => Money::fromSatang($shipping),
-                'total' => Money::fromSatang($subtotal + $shipping),
-                'recipient_name' => $user->name,
-                'phone' => $user->phone ?? '0800000000',
-                'shipping_address' => $user->address ?? '-',
-                'placed_at' => $placedAt,
-                'cancelled_at' => $status === OrderStatus::Cancelled ? $placedAt->copy()->addHours(2) : null,
-                'created_at' => $placedAt,
-                'updated_at' => $placedAt,
-            ]);
-            $order->items()->createMany($lines);
+            $this->placeOrder($user, $placedAt, $variants, maxLines: 3, dripQuantities: [1, 2, 5, 10], maxBeanBags: 3);
         }
+
+        // Community customers: smaller baskets, own random stream so the 60 orders above never change
+        $this->random = new Randomizer(new Mt19937(20261023));
+        $community = User::whereIn('email', array_column(UserSeeder::COMMUNITY, 'email'))->orderBy('id')->get();
+        $orders = $community->flatMap(fn (User $user) => collect(range(1, $this->random->getInt(...self::COMMUNITY_ORDERS)))
+            ->map(fn () => [$user, $this->randomDate()]))
+            ->sortBy(fn ($pair) => $pair[1]->getTimestamp())->values();
+        foreach ($orders as [$user, $placedAt]) {
+            $this->placeOrder($user, $placedAt, $variants, maxLines: 2, dripQuantities: [1, 2, 5, 10], maxBeanBags: 1);
+        }
+    }
+
+    private function randomDate(): Carbon
+    {
+        return today()->subDays($this->random->getInt(0, self::DAYS - 1))->setTime($this->random->getInt(8, 21), $this->random->getInt(0, 59));
+    }
+
+    /** @param list<int> $dripQuantities */
+    private function placeOrder(User $user, Carbon $placedAt, $variants, int $maxLines, array $dripQuantities, int $maxBeanBags): void
+    {
+        $day = $placedAt->format('Ymd');
+        $this->perDay[$day] = ($this->perDay[$day] ?? 0) + 1;
+
+        $lines = [];
+        foreach ($this->pick($variants, $this->random->getInt(1, $maxLines)) as $variant) {
+            $isDrip = $variant->product->type === ProductType::DripBag;
+            $quantity = $isDrip ? $dripQuantities[$this->random->getInt(0, count($dripQuantities) - 1)] : $this->random->getInt(1, $maxBeanBags);
+            $unit = Money::toSatang($variant->price);
+            $lines[] = [
+                'product_variant_id' => $variant->id,
+                'product_name' => $variant->product->name,
+                'size' => $variant->size->value,
+                'grind' => $isDrip ? Grind::None : Grind::forBeans()[$this->random->getInt(0, 2)],
+                'unit_price' => Money::fromSatang($unit),
+                'quantity' => $quantity,
+                'line_total' => Money::fromSatang($unit * $quantity),
+            ];
+        }
+
+        $subtotal = array_sum(array_map(fn ($l) => Money::toSatang($l['line_total']), $lines));
+        $shipping = $subtotal >= Money::toSatang(config('roastnotes.free_shipping_threshold')) ? 0 : Money::toSatang(config('roastnotes.shipping_fee'));
+        $status = $this->status($placedAt);
+
+        $order = Order::create([
+            'order_number' => sprintf('RN-%s-%04d', $day, $this->perDay[$day]),
+            'user_id' => $user->id,
+            'status' => $status,
+            'subtotal' => Money::fromSatang($subtotal),
+            'discount_total' => '0.00',
+            'shipping_fee' => Money::fromSatang($shipping),
+            'total' => Money::fromSatang($subtotal + $shipping),
+            'recipient_name' => $user->name,
+            'phone' => $user->phone ?? '0800000000',
+            'shipping_address' => $user->address ?? '-',
+            'placed_at' => $placedAt,
+            'cancelled_at' => $status === OrderStatus::Cancelled ? $placedAt->copy()->addHours(2) : null,
+            'created_at' => $placedAt,
+            'updated_at' => $placedAt,
+        ]);
+        $order->items()->createMany($lines);
     }
 
     /** Older than a week: delivered (~5% cancelled). Recent: somewhere along the flow. */

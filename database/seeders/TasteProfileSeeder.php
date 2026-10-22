@@ -18,11 +18,25 @@ class TasteProfileSeeder extends Seeder
         'member2@roastnotes.test' => [['nutty-cocoa', 'sweet'], RoastLevel::Dark, BrewMethod::Espresso],
     ];
 
+    /** member1/2 + the community customers who took the quiz */
+    public static function profiles(): array
+    {
+        $profiles = self::PROFILES;
+        foreach (UserSeeder::COMMUNITY as $customer) {
+            if ($customer['taste']) {
+                [$slugs, $roast, $brew] = $customer['taste'];
+                $profiles[$customer['email']] = [$slugs, RoastLevel::from($roast), BrewMethod::from($brew)];
+            }
+        }
+
+        return $profiles;
+    }
+
     public function run(): void
     {
         $categories = FlavorCategory::topLevel()->pluck('id', 'slug');
 
-        foreach (self::PROFILES as $email => [$slugs, $roast, $brew]) {
+        foreach (self::profiles() as $email => [$slugs, $roast, $brew]) {
             $user = User::where('email', $email)->first();
             if (! $user) {
                 continue;

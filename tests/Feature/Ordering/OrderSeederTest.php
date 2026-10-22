@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\ProductVariant;
 use App\Support\Money;
 use Database\Seeders\OrderSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,14 +21,16 @@ class OrderSeederTest extends TestCase
         $this->seed(); // users + catalog + orders
     }
 
-    public function test_seeds_sixty_orders_over_ninety_days_for_demo_members(): void
+    public function test_seeds_sixty_orders_for_member1_to_3_plus_community_customers(): void
     {
-        $this->assertSame(OrderSeeder::ORDERS, Order::count());
         $this->assertTrue(Order::min('placed_at') >= today()->subDays(OrderSeeder::DAYS)->toDateTimeString());
-        $this->assertSame(
-            ['member1@roastnotes.test', 'member2@roastnotes.test', 'member3@roastnotes.test'],
-            Order::join('users', 'users.id', '=', 'orders.user_id')->distinct()->orderBy('email')->pluck('email')->all()
-        );
+        $this->assertSame(OrderSeeder::ORDERS, Order::whereHas('user', fn ($q) => $q->where('email', 'like', 'member%'))->count());
+
+        $community = array_column(UserSeeder::COMMUNITY, 'email');
+        $counts = Order::join('users', 'users.id', '=', 'orders.user_id')->whereIn('email', $community)
+            ->selectRaw('email, COUNT(*) AS n')->groupBy('email')->pluck('n', 'email');
+        $this->assertCount(count($community), $counts);
+        $counts->each(fn ($n) => $this->assertTrue($n >= OrderSeeder::COMMUNITY_ORDERS[0] && $n <= OrderSeeder::COMMUNITY_ORDERS[1]));
     }
 
     public function test_every_order_adds_up(): void
