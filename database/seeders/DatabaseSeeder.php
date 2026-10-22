@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             FlavorTaxonomySeeder::class,
             CatalogSeeder::class,
             TasteProfileSeeder::class,
+            PromotionSeeder::class,
             OrderSeeder::class,
         ]);
     }

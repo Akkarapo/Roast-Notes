@@ -7,5 +7,5 @@
 - [x] **P3 — BuyXGetYRule**: ทุก X+Y → Y ตัวถูกสุดฟรี, ซ้ำได้, เฉพาะสินค้าร่วมรายการ, ข้อความชวนเพิ่ม · Verify: `BuyXGetYRuleTest.php`
 - [x] **P4 — Coupon**: `CouponValidator` (6 เหตุผล), `CouponRule` (ฐานหักของแถม, ปัดลง) · Verify: `CouponValidatorTest.php`, `CouponRuleTest.php`
 - [x] **P5 — คูปองในตะกร้า + Checkout**: POST/DELETE `/cart/coupon`, ชิปคูปอง, error, Checkout แสดงอย่างเดียว, PlaceOrder ตรวจซ้ำ + lock, ล้าง session หลังสั่ง · Verify: `CartCouponTest.php`, `CheckoutPromotionTest.php`
-- [ ] **P6 — ป้ายโปร + ตัวกรอง + seeder**: ริบบิ้นบนการ์ด/หน้าสินค้า, ตัวกรอง "มีโปรโมชั่น", `PromotionSeeder` 4 โปร · Verify: `PromoBadgeTest.php`
+- [x] **P6 — ป้ายโปร + ตัวกรอง + seeder**: ริบบิ้นบนการ์ด/หน้าสินค้า, ตัวกรอง "มีโปรโมชั่น", `PromotionSeeder` 4 โปร · Verify: `PromoBadgeTest.php`
 - [ ] **P7 — Checkpoint**: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP

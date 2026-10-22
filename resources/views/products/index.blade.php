@@ -25,6 +25,9 @@
                 @foreach (\App\Enums\ProductType::cases() as $type)
                     <x-filter-chip type="radio" name="type" :value="$type->value" :checked="$filters['type'] === $type">{{ $type->label() }}</x-filter-chip>
                 @endforeach
+
+                <span class="ml-4 shrink-0"></span>
+                <x-filter-chip name="promo" value="1" :checked="$filters['promo']">{{ __('On promotion') }}</x-filter-chip>
             </div>
 
             <div class="flex flex-wrap items-center gap-3 pt-1">

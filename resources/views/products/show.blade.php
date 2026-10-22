@@ -1,5 +1,6 @@
 @use('App\Enums\ProductType')
 @use('App\Support\Money')
+@inject('promotionBadges', 'App\Support\Promotions\PromotionBadges')
 
 @php
     $isDrip = $product->type === ProductType::DripBag;
@@ -35,6 +36,9 @@
                 <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
                     <span class="rounded-full border-[1.5px] border-cobalt px-3 py-1 font-semibold">{{ $product->roast_level->label() }} · {{ $product->roast_level->thaiLabel() }}</span>
                     <span>{{ __('Roasted on :date', ['date' => $product->roast_date->translatedFormat('j M Y')]) }}</span>
+                    @foreach ($promotionBadges->for($product) as $badge)
+                        <span class="rounded-full border-[1.5px] border-dashed border-cobalt px-3 py-1 font-semibold" data-promo-badge>{{ $badge }}</span>
+                    @endforeach
                     @if ($taster?->preferred_roast_level === $product->roast_level)
                         <span class="rounded-full bg-cobalt px-3 py-1 font-semibold text-paper">{{ __('Your favourite roast') }}</span>
                     @endif

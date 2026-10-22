@@ -2,6 +2,7 @@
 
 @use('App\Enums\ProductType')
 @use('App\Support\Money')
+@inject('promotionBadges', 'App\Support\Promotions\PromotionBadges')
 
 @php
     $match ??= $product->matchPercent(); // set when the query used withTasteMatch()
@@ -26,6 +27,9 @@
         </span>
     @endif
 
+    @foreach ($promotionBadges->for($product) as $badge)
+        <span class="mb-1.5 self-start rounded-full border-[1.5px] border-dashed border-current px-2.5 py-0.5 text-xs font-semibold {{ $match !== null ? 'mr-16' : '' }}" data-promo-badge>{{ $badge }}</span>
+    @endforeach
     <span class="text-[13px] opacity-75 {{ $match !== null ? 'pr-16' : '' }}">
         {{ $product->origin->country }} · {{ $isDrip ? $product->type->label() : $product->process->label() }}
     </span>
