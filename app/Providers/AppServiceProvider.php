@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
                 ? (int) CartItem::whereHas('cart', fn ($q) => $q->where('user_id', Auth::id()))->sum('quantity')
                 : 0);
             // red dot on the user menu until the Taste Quiz is done
-            $view->with('needsTasteQuiz', Auth::check() && ! Auth::user()->hasTasteProfile());
+            $view->with('needsTasteQuiz', Auth::check() && ! Auth::user()->isAdmin() && ! Auth::user()->hasTasteProfile());
         });
     }
 }

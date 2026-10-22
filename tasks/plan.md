@@ -1,6 +1,6 @@
 # Plan: admin
 
-> อ้างอิง [docs/specs/SPEC-admin.md](../docs/specs/SPEC-admin.md) · สถานะ: **อนุมัติแล้ว**
+> อ้างอิง [docs/specs/SPEC-admin.md](../docs/specs/SPEC-admin.md) · สถานะ: **เสร็จแล้ว**
 
 ## ลำดับ
 

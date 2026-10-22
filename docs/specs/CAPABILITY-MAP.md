@@ -55,8 +55,8 @@ foundation → catalog → ordering → taste-profile → promotions → loyalty
 | promotions | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (คูปอง % + ซื้อ X แถม Y) |
 | loyalty | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Extra features ครบ 3 ข้อขั้นต่ำ) |
 | community | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Extra features 6 ข้อ) |
-| admin | ✅ อนุมัติ | ✅ อนุมัติ | 🚧 กำลังทำ |
-| sales-report | — | — | — |
+| admin | ✅ อนุมัติ | ✅ อนุมัติ | ✅ เสร็จ (Extra features 7 ข้อ) |
+| sales-report | ⏭️ ถัดไป | — | — |
 
 ## สมมติฐาน (แก้ได้ก่อนเขียน spec)
 

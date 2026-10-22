@@ -46,6 +46,7 @@ class AccessTest extends TestCase
     public function test_admin_sees_the_section_menu(): void
     {
         $this->actingAs(User::factory()->admin()->create())->get('/admin')
-            ->assertOk()->assertSee('data-admin-nav', false)->assertSee('ภาพรวม');
+            ->assertOk()->assertSee('data-admin-nav', false)->assertSee('ภาพรวม')
+            ->assertDontSee('data-tier-badge', false)->assertDontSee('data-quiz-dot', false); // tiers and the quiz are for members
     }
 }

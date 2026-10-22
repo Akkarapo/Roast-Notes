@@ -43,7 +43,9 @@
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-5 py-2 border-2 border-cobalt text-sm leading-4 font-semibold rounded-full text-cobalt hover:bg-cobalt hover:text-paper focus:outline-none transition">
                                 <div>{{ Auth::user()->name }}</div>
-                                <x-tier-badge :tier="Auth::user()->memberTier" class="ms-2" />
+                                @unless (Auth::user()->isAdmin())
+                                    <x-tier-badge :tier="Auth::user()->memberTier" class="ms-2" />
+                                @endunless
                                 @if ($needsTasteQuiz)
                                     <span class="ms-1.5 h-2 w-2 rounded-full bg-brick" data-quiz-dot></span>
                                 @endif
@@ -130,7 +132,7 @@
         <div class="pt-4 pb-1 border-t-2 border-cobalt">
             @auth
                 <div class="px-4">
-                    <div class="font-semibold text-base text-cobalt">{{ Auth::user()->name }} <x-tier-badge :tier="Auth::user()->memberTier" class="ms-1" /></div>
+                    <div class="font-semibold text-base text-cobalt">{{ Auth::user()->name }} @unless (Auth::user()->isAdmin())<x-tier-badge :tier="Auth::user()->memberTier" class="ms-1" />@endunless</div>
                     <div class="font-medium text-sm text-cobalt/70">{{ Auth::user()->email }}</div>
                 </div>
 
