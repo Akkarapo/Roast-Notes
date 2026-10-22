@@ -211,5 +211,21 @@
     "Remove from Wish List": "เอาออกจาก Wish List",
     "Save to Wish List": "เก็บไว้ใน Wish List",
     "Nothing saved yet. Tap the heart on any bean to keep it here.": "ยังไม่มีเมล็ดที่เก็บไว้ กดหัวใจบนเมล็ดที่อยากลองแล้วมันจะมาอยู่ตรงนี้",
-    ":count saved": "เก็บไว้ :count รายการ"
+    ":count saved": "เก็บไว้ :count รายการ",
+    "You can review once the order has been delivered.": "รีวิวได้เมื่อได้รับสินค้าแล้ว",
+    "You have already reviewed this item.": "คุณรีวิวรายการนี้ไปแล้ว",
+    "Thanks for your review!": "ขอบคุณสำหรับรีวิว!",
+    "Review updated.": "แก้รีวิวแล้ว",
+    "Review deleted.": "ลบรีวิวแล้ว",
+    ":rating out of 5": ":rating จาก 5 ดาว",
+    "Your rating": "ให้คะแนน",
+    "Edit review": "แก้รีวิว",
+    "Write a review": "เขียนรีวิว",
+    "Bought": "ซื้อแล้ว",
+    "How did you brew it?": "ชงด้วยวิธีไหน?",
+    "Notes (optional)": "ความเห็น (ไม่บังคับ)",
+    "What did you taste? Grind, ratio, water temperature…": "ได้รสอะไรบ้าง? ความละเอียดบด สัดส่วน อุณหภูมิน้ำ…",
+    "Save changes": "บันทึก",
+    "Post review": "ส่งรีวิว",
+    "Delete this review": "ลบรีวิวนี้"
 }

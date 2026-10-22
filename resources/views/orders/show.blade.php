@@ -43,6 +43,15 @@
                             <td class="py-2.5">
                                 <span class="font-semibold">{{ $item->product_name }}</span>
                                 <span class="block text-cobalt/70">{{ \App\Enums\BagSize::from($item->size)->label() }}@if ($item->grind !== Grind::None) · {{ $item->grind->label() }}@endif · {{ Money::baht($item->unit_price) }}</span>
+                                @if ($order->status === \App\Enums\OrderStatus::Delivered)
+                                    @if ($item->review)
+                                        <a href="{{ route('reviews.edit', $item->review) }}" class="mt-1.5 inline-flex items-center gap-2 text-xs font-semibold underline-offset-4 hover:underline" data-review-edit>
+                                            <x-star-rating :rating="$item->review->rating" /> {{ __('Edit review') }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('reviews.create', $item) }}" class="mt-1.5 inline-flex rounded-full border-[1.5px] border-cobalt px-3 py-1 text-xs font-semibold hover:bg-cobalt hover:text-paper" data-review-create>★ {{ __('Write a review') }}</a>
+                                    @endif
+                                @endif
                             </td>
                             <td class="py-2.5 text-right">{{ $item->quantity }}</td>
                             <td class="py-2.5 text-right font-semibold">{{ Money::baht($item->line_total) }}</td>
