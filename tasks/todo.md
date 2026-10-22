@@ -9,5 +9,5 @@
 - [x] **A5 — โปรโมชั่น**: รายการ + สถานะ + จำนวนครั้งที่ใช้, สร้าง/แก้ตามชนิด, เลือกสินค้า, เปิด/ปิด/ลบ · Verify: `PromotionAdminTest.php`
 - [x] **A6 — สมาชิก**: รายการ/ค้นหา/กรอง, รายละเอียด, ปรับระดับ, ตั้ง/ถอดแอดมิน · Verify: `UserAdminTest.php`
 - [x] **A7 — รีวิว**: รายการ/กรอง/ค้นหา, ลบ · Verify: `ReviewAdminTest.php`
-- [ ] **A8 — ภาพรวม**: การ์ดตัวเลข, ออเดอร์ล่าสุด, ใกล้หมด · Verify: `DashboardTest.php`
+- [x] **A8 — ภาพรวม**: การ์ดตัวเลข, ออเดอร์ล่าสุด, ใกล้หมด · Verify: `DashboardTest.php`
 - [ ] **A9 — Checkpoint**: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP

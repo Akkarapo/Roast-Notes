@@ -369,5 +369,18 @@
     "Notes": "ความเห็น",
     "Delete this review?": "ลบรีวิวนี้?",
     "Delete": "ลบ",
-    "No reviews match.": "ไม่พบรีวิว"
+    "No reviews match.": "ไม่พบรีวิว",
+    "Sales report": "รายงานยอดขาย",
+    "Sales today": "ยอดขายวันนี้",
+    "Sales this month": "ยอดขายเดือนนี้",
+    ":count orders": ":count ออเดอร์",
+    "Waiting for confirmation": "รอยืนยัน",
+    "Sizes running low (≤ 5)": "ขนาดถุงใกล้หมด (≤ 5)",
+    "New members this month": "สมาชิกใหม่เดือนนี้",
+    "Sales count every order that was not cancelled, by order date.": "ยอดขายนับทุกออเดอร์ที่ไม่ถูกยกเลิก ตามวันที่สั่ง",
+    "Latest orders": "ออเดอร์ล่าสุด",
+    "All orders": "ออเดอร์ทั้งหมด",
+    "Running low": "ใกล้หมด",
+    ":n left": "เหลือ :n",
+    "Every size is well stocked.": "สต็อกทุกขนาดยังพอ"
 }
