@@ -15,7 +15,7 @@
 <x-app-layout>
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex items-center gap-5">
-            <x-mascot pose="sip" class="hidden h-28 w-28 shrink-0 text-cobalt sm:block" />
+            <x-mascot pose="sip" class="hidden h-32 w-32 shrink-0 sm:block" />
             <div>
                 <p class="font-script text-3xl">taste quiz</p>
                 <h1 class="mt-1 text-3xl font-semibold">{{ $user->taste_quiz_completed_at ? __('Edit your taste profile') : __('3 quick questions about how you like your coffee') }}</h1>

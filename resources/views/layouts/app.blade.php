@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon-64.png" type="image/png" sizes="64x64">
         <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 

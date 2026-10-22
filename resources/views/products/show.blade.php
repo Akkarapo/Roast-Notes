@@ -192,7 +192,10 @@
                             </table>
                         </div>
                     @else
-                        <p class="text-cobalt/80">{{ __('No reviews yet.') }}</p>
+                        <div class="flex items-center gap-3">
+                            <x-mascot pose="stir" class="h-20 w-20 shrink-0" />
+                            <p class="text-cobalt/80">{{ __('No reviews yet.') }}</p>
+                        </div>
                     @endif
 
                     @if ($reviewableItem)

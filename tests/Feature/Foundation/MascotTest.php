@@ -14,9 +14,11 @@ class MascotTest extends TestCase
 
     public function test_tab_icon_and_hero(): void
     {
-        $this->get('/')->assertSee('href="/favicon.svg"', false)->assertSee('data-mascot="pour"', false);
-        $this->get('/login')->assertSee('href="/favicon.svg"', false)->assertSee('data-mascot="wave"', false);
-        $this->assertFileExists(public_path('favicon.svg'));
+        $this->get('/')->assertSee('href="/favicon-32.png"', false)->assertSee('data-mascot="pour"', false)->assertSee('images/mascot/pour.png');
+        $this->get('/login')->assertSee('href="/favicon-32.png"', false)->assertSee('data-mascot="wave"', false);
+        foreach (['pour', 'wave', 'sip', 'search', 'sleep', 'nap', 'bag', 'cheer', 'delivery', 'stir', 'peek', 'carry', 'takeaway', 'bag-up'] as $pose) {
+            $this->assertFileExists(public_path("images/mascot/{$pose}.png"));
+        }
         $this->assertGreaterThan(0, filesize(public_path('favicon.ico')));
     }
 

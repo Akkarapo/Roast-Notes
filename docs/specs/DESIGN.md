@@ -57,22 +57,27 @@
 
 ## Mascot: "Bean" (2026-10-23)
 
-ตัวละครที่เจ้าของโปรเจคออกแบบเอง (ภาพต้นฉบับใน `docs/design/mascot/reference-*.png`) วาดใหม่เป็น SVG ลายเส้นใน `<x-mascot pose="…">`
+ตัวละครที่เจ้าของโปรเจคออกแบบเอง — **ใช้ภาพต้นฉบับของเจ้าของโดยตรง** ไม่วาดใหม่ (ต้นฉบับใน `docs/design/mascot/reference-*.png`)
 
-- รูปร่าง: เมล็ดกาแฟสีครีม `#F3EEE3` มีรอยผ่ากลาง, ตาจุด 2 จุด, แขนขาสั้น, เส้นขอบเข้ม `#1B1F3B` 3.5px
-- ของประกอบ (ไอน้ำ, ประกาย, หยดน้ำ, zZ) ใช้ `currentColor` → ขาวบนพื้นน้ำเงิน, น้ำเงินบนพื้นครีม
-- ท่า: `idle` `wave` `pour` `sip` `cheer` `bag` `search` `sleep` (ดู `docs/design/mascot/poses.png`)
+- แต่ละท่าตัดจาก sticker sheet / ภาพรินกาแฟ แล้วลบพื้นน้ำเงินออก (chroma key + แก้สีขอบ) → `public/images/mascot/<pose>.png` ใช้ได้ทั้งบนพื้น cobalt และพื้นครีม
+- `<x-mascot pose="…">` เรนเดอร์เป็น `<img>` (alt ว่างเพราะเป็นภาพประกอบ)
+- ท่า: wave · pour (ภาพความละเอียดสูง) · sip · carry · delivery · peek · nap · bag-up · bath · bag · stir · search · takeaway · sleep · cheer · wordmark — ดู `docs/design/mascot/poses.png`
 
 | ที่ใช้ | ท่า |
 |---|---|
 | Hero หน้าแรก | pour |
+| หัวข้อ "ขายดี" / "ล็อตใหม่" | takeaway / bag-up |
 | หน้า Login / Register | wave |
-| ชวนทำ Taste Quiz (หน้าแรก) | search |
+| ชวนทำ Taste Quiz / ไม่พบสินค้า / Wish List ว่าง / 404 | search |
 | หน้า Taste Quiz | sip |
-| Empty state ทั่วไป / ตะกร้าว่าง | sleep |
-| ไม่พบสินค้า / Wish List ว่าง / 404 | search |
+| Empty state ทั่วไป | nap |
+| ตะกร้าว่าง | sleep |
 | ยังไม่มีออเดอร์ | bag |
 | สั่งซื้อสำเร็จ | cheer |
-| การ์ดระดับสมาชิก | Bean = wave, Barista = pour, Roaster Master = cheer |
+| ออเดอร์กำลังจัดส่ง | delivery |
+| ยังไม่มีรีวิว | stir |
+| การ์ดระดับสมาชิก | Bean = peek, Barista = pour, Roaster Master = carry |
 
-ไอคอนแท็บเบราว์เซอร์ (`public/favicon.svg`, `.ico`, `-32.png`, `apple-touch-icon.png`) = หน้าเมล็ด Bean บนพื้น cobalt
+ไอคอนแท็บเบราว์เซอร์ (`public/favicon.ico`, `favicon-32.png`, `favicon-64.png`, `apple-touch-icon.png`) = ส่วนบนของภาพรินกาแฟบนพื้น cobalt
+
+ถ้าได้ไฟล์ความละเอียดสูงกว่านี้ (เช่น sticker แยกตัว 600px+) แทนไฟล์ใน `public/images/mascot/` ชื่อเดิมได้เลย

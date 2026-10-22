@@ -13,6 +13,14 @@
                     <p class="mt-1">{{ __('We got your order and will roast-pack it soon. You can follow every step right here.') }}</p>
                 </div>
             </section>
+        @elseif (in_array($order->status, [\App\Enums\OrderStatus::Shipped, \App\Enums\OrderStatus::InTransit], true))
+            <section class="mt-5 flex items-center gap-5 rounded-card border-2 border-cobalt bg-paper p-5" data-on-the-way>
+                <x-mascot pose="delivery" class="h-24 w-24 shrink-0" />
+                <div>
+                    <p class="font-script text-3xl">on the way!</p>
+                    <p class="mt-1 text-cobalt/80">{{ __('Your beans have left the roastery and are on their way to you.') }}</p>
+                </div>
+            </section>
         @endif
 
         <article class="mt-5 rounded-card border-2 border-cobalt bg-paper p-6 sm:p-8">
