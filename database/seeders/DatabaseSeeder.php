@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             TasteProfileSeeder::class,
             PromotionSeeder::class,
             OrderSeeder::class,
+            LoyaltySeeder::class,
         ]);
     }
 }
