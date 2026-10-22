@@ -12,14 +12,16 @@
     // featured cards are always inverted; normal cards invert on hover
     $surface = $featured
         ? 'bg-cobalt text-paper'
-        : 'bg-paper text-cobalt hover:bg-cobalt hover:text-paper';
+        : 'bg-paper text-cobalt group-hover:bg-cobalt group-hover:text-paper';
     $tag = $featured
         ? 'bg-paper text-cobalt'
         : 'bg-cobalt text-paper group-hover:bg-paper group-hover:text-cobalt';
 @endphp
 
+{{-- wrapper so the heart form can sit on the card without being nested inside the link --}}
+<div {{ $attributes->merge(['class' => 'group relative flex']) }}>
 <a href="{{ route('products.show', $product) }}"
-   {{ $attributes->merge(['class' => "group relative flex flex-col rounded-card border-2 border-cobalt p-[18px] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cobalt focus-visible:ring-offset-2 focus-visible:ring-offset-cream $surface".($soldOut ? ' opacity-60' : '')]) }}>
+   class="{{ "relative flex w-full flex-col rounded-card border-2 border-cobalt p-[18px] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cobalt focus-visible:ring-offset-2 focus-visible:ring-offset-cream $surface".($soldOut ? ' opacity-60' : '') }}">
 
     @if ($match !== null)
         <span class="absolute right-3.5 top-3.5 grid h-[62px] w-[62px] rotate-[8deg] place-items-center rounded-full border-2 border-current text-center leading-none">
@@ -56,6 +58,8 @@
                 <span class="font-sans text-xs align-middle">{{ __('from') }}</span> {{ Money::baht($fromPrice) }}
             </span>
         @endif
-        <span class="text-sm font-semibold">{{ __('View beans') }} ›</span>
+        <span class="pr-11 text-sm font-semibold">{{ __('View beans') }} ›</span>
     </span>
 </a>
+<x-wishlist-button :product="$product" class="absolute bottom-[14px] right-[16px]" />
+</div>

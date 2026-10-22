@@ -1,3 +1,4 @@
+@inject('wishlistState', 'App\Support\Community\WishlistState')
 <nav x-data="{ open: false }" class="bg-cream">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,6 +59,9 @@
                         <x-slot name="content">
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Member Info') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('wishlist.index')" data-nav-wishlist>
+                                {{ __('Wish List') }} ({{ $wishlistState->count() }})
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('taste-quiz.edit')" class="flex items-center justify-between">
                                 {{ __('Taste Profile') }}
@@ -133,6 +137,9 @@
                 <div class="mt-3 space-y-1">
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Member Info') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('wishlist.index')">
+                        {{ __('Wish List') }} ({{ $wishlistState->count() }})
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('taste-quiz.edit')">
                         {{ __('Taste Profile') }}

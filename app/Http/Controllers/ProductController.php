@@ -36,7 +36,7 @@ class ProductController extends Controller
         return view('products.index', [
             'products' => $products,
             'filters' => $filters,
-            'hasFilters' => $filters['flavor'] || $filters['roast'] || $filters['type'] || $filters['country'] || $filters['promo'],
+            'hasFilters' => $filters['flavor'] || $filters['roast'] || $filters['type'] || $filters['country'] || $filters['promo'] || $filters['rare'],
             'flavorCategories' => FlavorCategory::topLevel()->orderBy('id')->get(),
             'countries' => Origin::whereHas('products', fn (Builder $q) => $q->active())->distinct()->orderBy('country')->pluck('country'),
             'canSortByMatch' => (bool) $taster,

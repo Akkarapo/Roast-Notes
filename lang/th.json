@@ -204,5 +204,12 @@
     "Rare lots": "ล็อตหายาก",
     ":tier first · on general sale :date": ":tier ซื้อก่อน · เปิดขายทั่วไป :date",
     ":tier first": ":tier ซื้อก่อน",
-    "Early access for you": "คุณซื้อก่อนได้"
+    "Early access for you": "คุณซื้อก่อนได้",
+    "Wish List": "Wish List",
+    ":product saved to your Wish List.": "เก็บ :product ไว้ใน Wish List แล้ว",
+    ":product removed from your Wish List.": "เอา :product ออกจาก Wish List แล้ว",
+    "Remove from Wish List": "เอาออกจาก Wish List",
+    "Save to Wish List": "เก็บไว้ใน Wish List",
+    "Nothing saved yet. Tap the heart on any bean to keep it here.": "ยังไม่มีเมล็ดที่เก็บไว้ กดหัวใจบนเมล็ดที่อยากลองแล้วมันจะมาอยู่ตรงนี้",
+    ":count saved": "เก็บไว้ :count รายการ"
 }
