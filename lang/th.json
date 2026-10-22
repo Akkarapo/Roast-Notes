@@ -410,5 +410,17 @@
     "Table": "ตาราง",
     "Day": "วัน",
     "Month": "เดือน",
-    "Period summary": "ภาพรวมช่วงนี้"
+    "Period summary": "ภาพรวมช่วงนี้",
+    "Rank": "อันดับ",
+    "Units": "ชิ้น",
+    "Share by roast level": "สัดส่วนตามระดับคั่ว",
+    "Share of units %": "สัดส่วนชิ้น %",
+    "units": "ชิ้น",
+    "Popular flavor notes": "โน้ตรสชาติยอดนิยม",
+    "Flavor group": "หมวดรส",
+    "Kind": "ชนิด",
+    "Top :n notes (units of beans with the note)": "โน้ตยอดนิยม :n อันดับ (ชิ้นของเมล็ดที่มีโน้ตนั้น)",
+    ":n products": ":n สินค้า",
+    "By flavor group (% of units sold)": "ตามหมวดรส (% ของชิ้นที่ขาย)",
+    "A bean can belong to several groups, so the shares add up to more than 100%.": "เมล็ดหนึ่งอยู่ได้หลายหมวด สัดส่วนรวมกันจึงเกิน 100%"
 }
