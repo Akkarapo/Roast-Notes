@@ -238,5 +238,10 @@
     "No reviews for :method yet.": "ยังไม่มีรีวิวที่ชงแบบ :method",
     "Only buyers can review — reviews unlock once your order is delivered.": "รีวิวได้เฉพาะคนที่ซื้อ เมื่อได้รับสินค้าแล้ว",
     "Review this lot": "รีวิวล็อตนี้",
-    "(edited)": "(แก้ไขแล้ว)"
+    "(edited)": "(แก้ไขแล้ว)",
+    "Overview": "ภาพรวม",
+    "Orders": "ออเดอร์",
+    "Promotions": "โปรโมชั่น",
+    "Members": "สมาชิก",
+    "Admin sections": "เมนูหลังร้าน"
 }
