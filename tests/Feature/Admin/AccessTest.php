@@ -19,7 +19,7 @@ class AccessTest extends TestCase
         return collect(RouteFacade::getRoutes()->getRoutes())
             ->filter(fn (Route $route) => str_starts_with((string) $route->getName(), 'admin.'))
             ->flatMap(fn (Route $route) => collect($route->methods())->reject(fn ($m) => $m === 'HEAD')
-                ->map(fn ($method) => [$method, '/'.preg_replace('/\{[^}]+\}/', '1', $route->uri())]))
+                ->map(fn ($method) => [$method, '/'.preg_replace_callback('/\{([^}]+)\}/', fn ($m) => $m[1] === 'key' ? 'x' : '1', $route->uri())]))
             ->values()->all();
     }
 

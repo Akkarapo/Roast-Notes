@@ -8,6 +8,7 @@
         'admin.promotions.index' => [__('Promotions'), 'admin.promotions.*'],
         'admin.users.index' => [__('Members'), 'admin.users.*'],
         'admin.reviews.index' => [__('Reviews'), 'admin.reviews.*'],
+        'admin.reports.index' => [__('Sales report'), 'admin.reports.*'],
     ];
 @endphp
 <x-app-layout>

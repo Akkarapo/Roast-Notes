@@ -2,7 +2,7 @@
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [ ] **R1 — โครง**: `DateRange`, `Report` interface, `Admin\ReportController` (index, csv), ตัวเลือกช่วงเวลา, แท็บ "รายงาน" · Verify: `tests/Feature/Reports/DateRangeTest.php`, access ใน ReportPageTest
+- [x] **R1 — โครง**: `DateRange`, `Report` interface, `Admin\ReportController` (index, csv), ตัวเลือกช่วงเวลา, แท็บ "รายงาน" · Verify: `tests/Feature/Reports/DateRangeTest.php`, access ใน ReportPageTest
 - [ ] **R2 — กราฟ SVG**: `x-chart.bars`, `x-chart.hbars` + ตารางคู่ · Verify: ตรวจในเบราว์เซอร์ + assert ใน ReportPageTest
 - [ ] **R3 — สรุป + ยอดตามเวลา** · Verify: `SummaryTest.php`, `SalesOverTimeTest.php`
 - [ ] **R4 — ขายดี, ระดับคั่ว, โน้ต** · Verify: `TopProductsTest.php`, `RoastShareTest.php`, `FlavorNotesTest.php`

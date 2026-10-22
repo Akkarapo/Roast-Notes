@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,6 @@ Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name(
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/{key}.csv', [ReportController::class, 'csv'])->where('key', '[a-z-]+')->name('reports.csv');

@@ -382,5 +382,14 @@
     "All orders": "ออเดอร์ทั้งหมด",
     "Running low": "ใกล้หมด",
     ":n left": "เหลือ :n",
-    "Every size is well stocked.": "สต็อกทุกขนาดยังพอ"
+    "Every size is well stocked.": "สต็อกทุกขนาดยังพอ",
+    "30 days": "30 วัน",
+    "90 days": "90 วัน",
+    "12 months": "12 เดือน",
+    "This year": "ปีนี้",
+    ":days days · compared with the :days days before": ":days วัน · เทียบกับ :days วันก่อนหน้า",
+    "Show": "แสดง",
+    "Show SQL": "ดู SQL",
+    "Start date": "ตั้งแต่",
+    "End date": "ถึง"
 }
