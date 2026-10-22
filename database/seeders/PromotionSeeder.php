@@ -16,12 +16,14 @@ class PromotionSeeder extends Seeder
 {
     public function run(): void
     {
+        // Each promotion covers only part of the catalogue so the "on promotion" filter visibly narrows the list.
         $beans = Product::ofType(ProductType::Bean)->pluck('id');
-        $lightBeans = Product::ofType(ProductType::Bean)->roastLevels([RoastLevel::Light])->pluck('id');
-        $dripBags = Product::ofType(ProductType::DripBag)->pluck('id');
+        $lightBeans = $this->half(Product::ofType(ProductType::Bean)->roastLevels([RoastLevel::Light])->orderBy('id')->pluck('id'));
+        $darkBeans = Product::ofType(ProductType::Bean)->roastLevels([RoastLevel::Dark])->pluck('id');
+        $dripBags = $this->half(Product::ofType(ProductType::DripBag)->orderBy('id')->pluck('id'));
 
         $this->coupon('คั่วอ่อนลด 15%', 'LIGHTROAST15', 15, $lightBeans, ['usage_limit' => 100, 'per_user_limit' => 1], now()->startOfDay(), now()->addDays(60)->endOfDay());
-        $this->coupon('ลด 10% เมื่อซื้อเมล็ดครบ ฿500', 'ROASTER50', 10, $beans, ['min_subtotal' => 500, 'per_user_limit' => 3], now()->startOfDay(), null);
+        $this->coupon('คั่วเข้มลด 10% เมื่อซื้อครบ ฿500', 'ROASTER50', 10, $darkBeans, ['min_subtotal' => 500, 'per_user_limit' => 3], now()->startOfDay(), null);
         $this->coupon('Summer sale (หมดอายุแล้ว)', 'SUMMER20', 20, $beans, [], now()->subMonths(4), now()->subMonths(1));
 
         $deal = Promotion::create([
@@ -32,6 +34,12 @@ class PromotionSeeder extends Seeder
         ]);
         $deal->buyXGetY()->create(['buy_quantity' => 10, 'free_quantity' => 2]);
         $deal->products()->attach($dripBags);
+    }
+
+    /** Every other product (at least one), deterministic by id. */
+    private function half($ids)
+    {
+        return $ids->filter(fn ($id, $i) => $i % 2 === 0)->values();
     }
 
     private function coupon(string $name, string $code, int $percent, $productIds, array $limits, $startsAt, $endsAt): void

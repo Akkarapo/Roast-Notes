@@ -69,6 +69,10 @@ class PromoBadgeTest extends TestCase
         $light = Coupon::where('code', 'LIGHTROAST15')->first();
         $this->assertSame([100, 1], [$light->usage_limit, $light->per_user_limit]);
         $this->assertSame(1, $light->promotion->products()->count());
+        $this->assertSame(
+            Product::ofType(ProductType::Bean)->roastLevels([RoastLevel::Dark])->pluck('id')->all(),
+            Coupon::where('code', 'ROASTER50')->first()->promotion->products->pluck('id')->all()
+        );
         $this->assertFalse(Coupon::where('code', 'SUMMER20')->first()->promotion->isCurrentlyActive());
         $this->assertSame(
             Product::ofType(ProductType::DripBag)->pluck('id')->all(),
