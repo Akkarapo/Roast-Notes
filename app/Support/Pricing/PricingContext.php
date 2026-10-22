@@ -13,6 +13,7 @@ final readonly class PricingContext
     /**
      * @param  Collection<int, CartLine>  $lines
      * @param  int  $discountedSoFar  total given by earlier rules (loyalty discounts what is left)
+     * @param  list<DiscountLine>  $appliedDiscounts  discounts from earlier rules (coupon skips units already free)
      */
     public function __construct(
         public User $user,
@@ -20,6 +21,7 @@ final readonly class PricingContext
         public int $subtotal,
         public int $discountedSoFar = 0,
         public ?string $couponCode = null,
+        public array $appliedDiscounts = [],
     ) {}
 
     public function remaining(): int
@@ -27,8 +29,15 @@ final readonly class PricingContext
         return max(0, $this->subtotal - $this->discountedSoFar);
     }
 
-    public function withDiscounted(int $discountedSoFar): self
+    /** @param list<DiscountLine> $appliedDiscounts */
+    public function withDiscounted(int $discountedSoFar, array $appliedDiscounts = []): self
     {
-        return new self($this->user, $this->lines, $this->subtotal, $discountedSoFar, $this->couponCode);
+        return new self($this->user, $this->lines, $this->subtotal, $discountedSoFar, $this->couponCode, $appliedDiscounts);
+    }
+
+    /** Satang already taken off one cart line by earlier rules (from DiscountLine meta['lines']). */
+    public function discountedOnLine(int $cartItemId): int
+    {
+        return array_sum(array_map(fn (DiscountLine $d) => $d->meta['lines'][$cartItemId] ?? 0, $this->appliedDiscounts));
     }
 }

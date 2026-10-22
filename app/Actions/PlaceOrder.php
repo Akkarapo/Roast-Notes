@@ -83,6 +83,7 @@ class PlaceOrder
             }
 
             $order->discounts()->createMany(array_map(fn (DiscountLine $discount) => [
+                'promotion_id' => $discount->promotionId(),
                 'source' => $discount->source,
                 'label' => $discount->label,
                 'amount' => Money::fromSatang($discount->amount),

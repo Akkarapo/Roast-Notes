@@ -12,7 +12,7 @@ class OrderDiscount extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['order_id', 'source', 'label', 'amount'];
+    protected $fillable = ['order_id', 'promotion_id', 'source', 'label', 'amount'];
 
     protected function casts(): array
     {
@@ -22,5 +22,10 @@ class OrderDiscount extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function promotion(): BelongsTo
+    {
+        return $this->belongsTo(Promotion::class);
     }
 }

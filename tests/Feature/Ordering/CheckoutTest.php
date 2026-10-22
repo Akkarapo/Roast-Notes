@@ -8,9 +8,11 @@ use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Promotion;
 use App\Models\User;
 use App\Support\Pricing\DiscountLine;
 use App\Support\Pricing\DiscountRule;
+use App\Support\Pricing\PriceCalculator;
 use App\Support\Pricing\PricingContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -134,6 +136,56 @@ class CheckoutTest extends TestCase
         $this->assertEquals(50, $order->shipping_fee);       // 828 after discount < 1000
         $this->assertEquals(920 - 92 + 50, $order->total);
         $this->assertSame('TEST10 ลด 10%', $order->discounts->sole()->label);
+    }
+
+    public function test_promotion_id_from_discount_meta_is_saved(): void
+    {
+        $promotion = Promotion::factory()->coupon('META10')->create();
+        $rule = new class($promotion->id) implements DiscountRule
+        {
+            public function __construct(private int $promotionId) {}
+
+            public function apply(PricingContext $context): array
+            {
+                return [new DiscountLine('coupon', 'META10', 1000, ['promotion_id' => $this->promotionId])];
+            }
+        };
+        config(['roastnotes.discount_rules' => [$rule::class]]);
+        $this->app->instance($rule::class, $rule);
+
+        $this->checkout();
+
+        $this->assertSame($promotion->id, Order::sole()->discounts->sole()->promotion_id);
+    }
+
+    public function test_later_rules_see_earlier_discounts_per_line(): void
+    {
+        $item = $this->member->cart->items->sole();
+        $first = new class($item->id) implements DiscountRule
+        {
+            public function __construct(private int $itemId) {}
+
+            public function apply(PricingContext $context): array
+            {
+                return [new DiscountLine('buy_x_get_y', 'free', 2000, ['lines' => [$this->itemId => 2000]])];
+            }
+        };
+        $seen = new \ArrayObject;
+        $second = new class($item->id, $seen) implements DiscountRule
+        {
+            public function __construct(private int $itemId, private \ArrayObject $seen) {}
+
+            public function apply(PricingContext $context): array
+            {
+                $this->seen['line'] = $context->discountedOnLine($this->itemId);
+
+                return [];
+            }
+        };
+
+        (new PriceCalculator([$first, $second]))->quote($this->member->cart);
+
+        $this->assertSame(2000, $seen['line']);
     }
 
     public function test_shipping_details_are_required(): void

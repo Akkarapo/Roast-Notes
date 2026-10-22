@@ -72,6 +72,17 @@ class Product extends Model
         )], 'quantity');
     }
 
+    public function promotions(): BelongsToMany
+    {
+        return $this->belongsToMany(Promotion::class, 'promotion_products');
+    }
+
+    /** Products in at least one promotion that is active right now. */
+    public function scopeOnPromotion(Builder $query): void
+    {
+        $query->whereHas('promotions', fn (Builder $q) => $q->currentlyActive());
+    }
+
     public function cupping(): HasOne
     {
         return $this->hasOne(CuppingScore::class);

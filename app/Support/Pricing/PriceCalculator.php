@@ -36,7 +36,7 @@ class PriceCalculator
         $discounts = [];
         $discountTotal = 0;
         foreach ($this->rules as $rule) {
-            foreach ($rule->apply($context->withDiscounted($discountTotal)) as $line) {
+            foreach ($rule->apply($context->withDiscounted($discountTotal, $discounts)) as $line) {
                 // never discount more than what is left of the subtotal
                 $amount = min(max(0, $line->amount), $subtotal - $discountTotal);
                 if ($amount > 0) {
