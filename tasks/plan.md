@@ -1,40 +1,39 @@
-# Plan: promotions
+# Plan: loyalty
 
-> อ้างอิง [docs/specs/SPEC-promotions.md](../docs/specs/SPEC-promotions.md) · สถานะ: **เสร็จแล้ว**
+> อ้างอิง [docs/specs/SPEC-loyalty.md](../docs/specs/SPEC-loyalty.md) · สถานะ: **รอรีวิว**
 
 ## ลำดับ
 
 ```
-P1 Schema (supertype/subtype + pivot + order_discounts.promotion_id) + models + factories
- ├─ P2 ขยาย pipeline: PricingContext.appliedDiscounts, DiscountLine meta → PlaceOrder บันทึก promotion_id
- │   ├─ P3 BuyXGetYRule + ข้อความชวนเพิ่ม
- │   └─ P4 CouponValidator + CouponRule
- │       └─ P5 คูปองในตะกร้า (session) + Checkout ตรวจซ้ำใน transaction
- └─ P6 ป้ายโปรบนการ์ด/หน้าสินค้า + ตัวกรอง "มีโปรโมชั่น" + PromotionSeeder
-     └─ P7 Checkpoint
+L1 Schema: member_tiers (+3 แถวใน migration), users.member_tier_id, products.exclusive_until + models
+ ├─ L2 RecalculateMemberTier + LoyaltyStatus (ยอดสะสม, ระดับถัดไป, ยอดที่ขาด)
+ │   ├─ L3 LoyaltyTierRule ใน pipeline + PlaceOrder อ่านระดับใน transaction
+ │   └─ L4 Member Info การ์ดระดับ + ป้ายใน navbar + ข้อความชวนในตะกร้า
+ └─ L5 Early access: Product::isExclusiveNow, ProductPolicy::purchase, AddToCart/PlaceOrder ปฏิเสธ, ป้าย + ปุ่มปิด
+     └─ L6 LoyaltySeeder (ระดับ demo + ล็อตหายาก 3 ตัว)
+         └─ L7 Checkpoint
 ```
 
 ## การตัดสินใจทางเทคนิค
 
 | เรื่อง | เลือก | เหตุผล |
 |---|---|---|
-| Subtype | ตารางลูกใช้ `promotion_id` เป็น PK+FK, model `Coupon`/`BuyXGetY` belongsTo `Promotion`, `Promotion` hasOne ทั้งสอง | mapping EER แบบ class-table, query ตรงไปตรงมา |
-| เก็บคูปองที่ใส่ | `session('coupon_code')` | ไม่ต้องเพิ่มคอลัมน์ใน carts; หายเมื่อสั่งซื้อสำเร็จ |
-| นับสิทธิ์ | `order_discounts` join orders ที่ไม่ cancelled | ไม่มีตาราง redemption; ยกเลิก = คืนสิทธิ์ |
-| กันใช้เกินสิทธิ์พร้อมกัน | `lockForUpdate` แถว promotion ใน PlaceOrder ก่อนนับ | สองออเดอร์พร้อมกันไม่เกิน usage_limit |
-| ฟรีตัวถูกสุด | แตกบรรทัดเป็นหน่วย (≤ 20 × จำนวนบรรทัด) เรียงราคา แล้วเลือก Y × รอบ ตัวแรก | ง่าย, ข้อมูลเล็ก |
-| ป้ายบนการ์ด | โหลดโปรที่ active ทั้งหมด 1 query ต่อหน้า (`PromotionBadges` เก็บ map product_id → ป้าย) | ไม่เพิ่ม query ตามจำนวนการ์ด |
-| ตัวกรอง "มีโปรโมชั่น" | `whereHas('promotions', currentlyActive)` | ใช้ scope เดิมต่อได้ |
+| ข้อมูลระดับ | insert 3 แถวใน migration, ใช้ `slug` อ้างอิงในโค้ด | ระบบต้องมีเสมอ เทสไม่ต้อง seed เพิ่ม |
+| default ของ users.member_tier_id | migration ตั้ง default = id ของ Bean; `User::creating` เติมให้ถ้าว่าง | สมาชิกใหม่เป็น Bean เสมอ |
+| ยอดสะสม | `orders.where(status, delivered)->sum(total)` ทุกครั้ง | ไม่มีข้อมูลซ้ำซ้อน, ข้อมูลเล็ก |
+| เรียก RecalculateMemberTier | method `Order::markDelivered()` ที่ admin จะใช้ + LoyaltySeeder | จุดเดียวที่สถานะกลายเป็น delivered |
+| ไม่ลดระดับ | เลือก `max(ระดับเดิม, ระดับที่คำนวณได้)` ตาม min_spend | ตามที่ตกลง |
+| early access | `ProductPolicy::purchase` ใช้ทั้ง AddToCartRequest::authorize, หน้าสินค้า (`@can`), PlaceOrder | กติกาเดียวทุกที่ |
+| PlaceOrder ปฏิเสธล็อตหายาก | throw ValidationException(['cart' => ...]) แบบเดียวกับสต็อกไม่พอ | ใช้ flow กลับตะกร้าเดิม |
 
 ## ความเสี่ยง
 
 | ความเสี่ยง | วิธีลด |
 |---|---|
-| เปลี่ยน `PricingContext` แล้วเทส ordering พัง | เพิ่ม field แบบมีค่าเริ่มต้น; รันเทส ordering ทุก task |
-| เวลา starts/ends กับ timezone | ใช้ `now()` ตาม APP_TIMEZONE (Asia/Bangkok) ทั้งหมด |
-| ข้อความชวนเพิ่มแสดงผิดเมื่อมีหลายโปร Buy X Get Y | คำนวณต่อโปร แสดงทีละโปร |
+| เพิ่มกฎตัวที่ 3 แล้วเทส ordering/promotions เดิมเปลี่ยนตัวเลข | factory ผู้ใช้เป็น Bean (0%) โดย default |
+| ยอดสะสม member ใน demo ขึ้นกับวันที่ seed | OrderSeeder ใช้ seed คงที่ ตรวจใน L6 ว่าได้ 3 ระดับตามที่คาด |
+| หน้าเว็บ query ยอดสะสมซ้ำหลายจุด | `LoyaltyStatus` cache ต่อ request แบบเดียวกับ PromotionBadges |
 
 ## Checkpoints
-- หลัง P3–P4: เทียบตัวเลขกับการคิดมือ 3 กรณี (12 ซอง, คั่วอ่อน + คูปอง, ปนกัน)
-- หลัง P5: ลองใส่โค้ดทั้ง 4 ตัว + โค้ดมั่ว ในเบราว์เซอร์
-- P7: Success Criteria 1–7 + screenshot
+- หลัง L3: คิดมือ 2 กรณี (Barista + คูปอง, Roaster Master + ซื้อ 10 แถม 2) เทียบกับหน้าจอ
+- L7: Success Criteria 1–5 + screenshot

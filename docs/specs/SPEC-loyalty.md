@@ -1,7 +1,7 @@
 # Spec: loyalty
 
 > โมดูลที่ 6 ของ Roast & Notes — ดู [CAPABILITY-MAP.md](CAPABILITY-MAP.md) · หน้าตาตาม [DESIGN.md](DESIGN.md)
-> สถานะ: **ร่าง — รอรีวิว** · Depends on: ordering (pricing pipeline, orders), catalog · ผู้ใช้ต่อ: admin (เปลี่ยนสถานะออเดอร์ → อัปเดตระดับ), sales-report
+> สถานะ: **อนุมัติแล้ว (2026-10-23)** · Depends on: ordering (pricing pipeline, orders), catalog · ผู้ใช้ต่อ: admin (เปลี่ยนสถานะออเดอร์ → อัปเดตระดับ), sales-report
 
 ## Objective
 
@@ -36,7 +36,7 @@ order_discounts.source = 'loyalty'      (ใช้ตารางเดิมข
 | early_access | boolean | ซื้อล็อตหายากก่อนได้ไหม |
 | timestamps | | |
 
-| ระดับ | ยอดสะสม (เสนอ) | ส่วนลด | ล็อตหายากก่อน |
+| ระดับ | ยอดสะสม | ส่วนลด | ล็อตหายากก่อน |
 |---|---|---|---|
 | Bean | ฿0 | — | — |
 | Barista | ≥ ฿25,000 | 5% | — |
@@ -136,6 +136,8 @@ public function apply(PricingContext $context): array
 4. Roaster Master ซื้อล็อตหายากได้ คนอื่นเห็นป้ายวันเปิดขายแต่ใส่ตะกร้าไม่ได้ (UI + POST + PlaceOrder)
 5. `sail artisan test` ผ่าน, `sail pint --test` สะอาด
 
-## Decisions
+## Decisions (2026-10-23)
 
-1. (2026-10-23) ปรับเกณฑ์ระดับจากสมมติฐานเดิม ให้ข้อมูลตัวอย่างเห็นครบ 3 ระดับ — ตัวเลขรอยืนยัน
+1. เกณฑ์ Bean ฿0 / Barista ≥ ฿25,000 (5%) / Roaster Master ≥ ฿50,000 (10% + ล็อตหายากก่อน) นับเฉพาะออเดอร์ที่ได้รับแล้ว
+2. ไม่ลดระดับ
+3. ล็อตหายาก: คนที่ยังไม่มีสิทธิ์เห็นสินค้าได้ แต่ใส่ตะกร้าไม่ได้ จนถึงวันเปิดขายทั่วไป (Roaster Master ได้ก่อน 14 วัน)

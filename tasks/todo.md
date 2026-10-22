@@ -1,11 +1,11 @@
-# Todo: promotions
+# Todo: loyalty
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [x] **P1 — Schema + models**: promotions, coupons, buy_x_get_y, promotion_products, `order_discounts.promotion_id`; `Promotion` (scope `currentlyActive`), `Coupon`, `BuyXGetY`; factories · Verify: `tests/Feature/Promotions/SchemaTest.php`
-- [x] **P2 — ขยาย pipeline**: `PricingContext::appliedDiscounts`, meta `promotion_id` + `lines`; `PlaceOrder` บันทึก promotion_id · Verify: เทส ordering เดิมผ่าน + เทสใหม่
-- [x] **P3 — BuyXGetYRule**: ทุก X+Y → Y ตัวถูกสุดฟรี, ซ้ำได้, เฉพาะสินค้าร่วมรายการ, ข้อความชวนเพิ่ม · Verify: `BuyXGetYRuleTest.php`
-- [x] **P4 — Coupon**: `CouponValidator` (6 เหตุผล), `CouponRule` (ฐานหักของแถม, ปัดลง) · Verify: `CouponValidatorTest.php`, `CouponRuleTest.php`
-- [x] **P5 — คูปองในตะกร้า + Checkout**: POST/DELETE `/cart/coupon`, ชิปคูปอง, error, Checkout แสดงอย่างเดียว, PlaceOrder ตรวจซ้ำ + lock, ล้าง session หลังสั่ง · Verify: `CartCouponTest.php`, `CheckoutPromotionTest.php`
-- [x] **P6 — ป้ายโปร + ตัวกรอง + seeder**: ริบบิ้นบนการ์ด/หน้าสินค้า, ตัวกรอง "มีโปรโมชั่น", `PromotionSeeder` 4 โปร · Verify: `PromoBadgeTest.php`
-- [x] **P7 — Checkpoint**: Success Criteria 1–7, screenshot, pint, CAPABILITY-MAP
+- [ ] **L1 — Schema + models**: `member_tiers` (+ Bean/Barista/Roaster Master), `users.member_tier_id`, `products.exclusive_until`; `MemberTier`, relations · Verify: `tests/Feature/Loyalty/SchemaTest.php`
+- [ ] **L2 — ยอดสะสม + ขึ้นระดับ**: `RecalculateMemberTier`, `Order::markDelivered()`, `LoyaltyStatus` · Verify: `RecalculateMemberTierTest.php`
+- [ ] **L3 — ส่วนลดระดับ**: `LoyaltyTierRule` ใน config ต่อจาก CouponRule · Verify: `LoyaltyTierRuleTest.php`, `CheckoutLoyaltyTest.php`
+- [ ] **L4 — หน้าจอระดับ**: การ์ดใน Member Info (progress bar), ป้ายใน navbar, ข้อความชวนในตะกร้า · Verify: `MemberInfoTierTest.php`
+- [ ] **L5 — ล็อตหายาก**: policy `purchase`, ปฏิเสธใน AddToCart + PlaceOrder, ป้าย "Roaster Master ซื้อก่อน" + ปุ่มปิด · Verify: `EarlyAccessTest.php`
+- [ ] **L6 — LoyaltySeeder**: คำนวณระดับ demo, ล็อตหายาก 3 ตัว · Verify: seed แล้วได้ member1/2/3 = RM/Barista/Bean
+- [ ] **L7 — Checkpoint**: Success Criteria 1–5, screenshot, pint, CAPABILITY-MAP
