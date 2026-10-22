@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BrewMethod;
 use App\Http\Requests\ProductFilterRequest;
 use App\Models\FlavorCategory;
 use App\Models\Origin;
 use App\Models\Product;
 use App\Models\User;
+use App\Support\Community\ProductReviews;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -26,6 +28,7 @@ class ProductController extends Controller
             ->filter($filters)
             ->with(['origin', 'flavorNotes', 'variants'])
             ->withMin('variants', 'price')
+            ->withRating()
             ->when($taster, fn (Builder $q) => $q->withTasteMatch($taster))
             ->when($filters['sort'] === 'match',
                 fn (Builder $q) => $q->sortedByMatch($taster),
@@ -50,9 +53,14 @@ class ProductController extends Controller
         $product->load(['origin', 'flavorNotes.category.parent', 'variants', 'cupping']);
 
         $taster = $this->taster(request());
+        $reviews = new ProductReviews($product, BrewMethod::tryFrom((string) request()->query('brew')));
 
         return view('products.show', [
             'product' => $product,
+            'reviews' => $reviews,
+            'reviewSummary' => $reviews->summary(),
+            'reviewList' => $reviews->list(),
+            'reviewableItem' => $reviews->reviewableItemFor(request()->user()),
             'similar' => $this->similar($product, $taster),
             'taster' => $taster,
         ]);
@@ -78,6 +86,7 @@ class ProductController extends Controller
             ->orderByDesc('roast_date')
             ->with(['origin', 'flavorNotes', 'variants'])
             ->withMin('variants', 'price')
+            ->withRating()
             ->when($taster, fn (Builder $q) => $q->withTasteMatch($taster))
             ->take(4)
             ->get();

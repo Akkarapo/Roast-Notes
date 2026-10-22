@@ -17,6 +17,7 @@ class WishlistController extends Controller
         $products = $user->wishlist()
             ->with(['origin', 'flavorNotes', 'variants'])
             ->withMin('variants', 'price')
+            ->withRating()
             ->when($user->hasTasteProfile(), fn (Builder $q) => $q->withTasteMatch($user))
             ->orderByPivot('created_at', 'desc')
             ->get();

@@ -42,6 +42,7 @@ class HomeController extends Controller
             ->active()
             ->with(['origin', 'flavorNotes', 'variants'])
             ->withMin('variants', 'price')
+            ->withRating()
             ->when($taster, fn (Builder $q) => $q->withTasteMatch($taster));
     }
 }

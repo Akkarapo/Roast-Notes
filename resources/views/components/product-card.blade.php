@@ -46,6 +46,9 @@
     <x-dynamic-component :component="$isDrip ? 'illustrations.drip-bag' : 'illustrations.bean-bag'" class="mx-auto my-2 h-36 w-auto" />
 
     <span class="mb-3.5 flex flex-wrap items-center gap-2 text-[13px]">
+        @if ($product->rating_count)
+            <x-star-rating :rating="$product->rating_avg" class="text-xs font-semibold" data-card-rating>{{ number_format($product->rating_avg, 1) }} ({{ $product->rating_count }})</x-star-rating>
+        @endif
         <span class="rounded-full border-[1.5px] border-current px-2 py-0.5 text-xs font-semibold">{{ $product->roast_level->label() }}</span>
         <span>{{ $product->flavorNotes->take(3)->pluck('name')->join(' · ') }}</span>
     </span>

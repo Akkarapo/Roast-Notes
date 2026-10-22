@@ -45,7 +45,7 @@
                 <label class="flex items-center gap-2 text-sm font-semibold sm:ml-auto">
                     {{ __('Sort by') }}
                     <select name="sort" class="rounded-full border-2 border-cobalt/40 bg-paper py-1.5 pl-4 pr-9 text-sm text-cobalt focus:border-cobalt focus:ring-0">
-                        @foreach (($canSortByMatch ? ['match' => __('Matches your taste')] : []) + ['newest' => __('Freshest roast'), 'price_asc' => __('Price: low to high'), 'price_desc' => __('Price: high to low'), 'score' => __('Cupping score')] as $value => $label)
+                        @foreach (($canSortByMatch ? ['match' => __('Matches your taste')] : []) + ['newest' => __('Freshest roast'), 'price_asc' => __('Price: low to high'), 'price_desc' => __('Price: high to low'), 'score' => __('Cupping score'), 'rating' => __('Review rating')] as $value => $label)
                             <option value="{{ $value }}" @selected($filters['sort'] === $value)>{{ $label }}</option>
                         @endforeach
                     </select>

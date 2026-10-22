@@ -155,6 +155,84 @@
             @endif
         </div>
 
+        <section id="reviews" class="mt-14 scroll-mt-6">
+            <x-page-title as="h2" script="from the cup">{{ __('Reviews') }}</x-page-title>
+
+            <div class="mt-6 grid items-start gap-8 lg:grid-cols-[340px_1fr]">
+                <aside class="space-y-5 rounded-card border-2 border-cobalt bg-paper p-6">
+                    @if ($reviewSummary['count'])
+                        <div class="flex items-end gap-3" data-review-average>
+                            <span class="font-script text-6xl leading-none">{{ number_format($reviewSummary['avg'], 1) }}</span>
+                            <div class="pb-1">
+                                <x-star-rating :rating="$reviewSummary['avg']" size="lg" />
+                                <p class="text-sm text-cobalt/70">{{ __(':count reviews', ['count' => $reviewSummary['count']]) }}</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-1 text-sm">
+                            @foreach ($reviewSummary['stars'] as $star => $n)
+                                <li class="flex items-center gap-2">
+                                    <span class="w-6 text-right">{{ $star }}★</span>
+                                    <span class="h-2 flex-1 overflow-hidden rounded-full border border-cobalt/40 bg-cream"><span class="block h-full bg-cobalt" style="width: {{ round($n / $reviewSummary['count'] * 100) }}%"></span></span>
+                                    <span class="w-6 text-cobalt/70">{{ $n }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                        <div class="border-t-2 border-dashed border-cobalt pt-4">
+                            <h3 class="text-sm font-semibold">{{ __('By brew method') }}</h3>
+                            <table class="mt-2 w-full text-sm" data-brew-averages>
+                                @foreach ($reviews->byBrewMethod() as $row)
+                                    <tr>
+                                        <td class="py-1">{{ $row->method->label() }}</td>
+                                        <td class="py-1"><x-star-rating :rating="$row->avg" /></td>
+                                        <td class="py-1 text-right font-semibold">{{ number_format($row->avg, 1) }}</td>
+                                        <td class="py-1 text-right text-cobalt/60">({{ $row->count }})</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-cobalt/80">{{ __('No reviews yet.') }}</p>
+                    @endif
+
+                    @if ($reviewableItem)
+                        <a href="{{ route('reviews.create', $reviewableItem) }}" class="flex w-full justify-center rounded-full border-2 border-cobalt bg-cobalt px-5 py-2.5 font-semibold text-paper hover:bg-cobalt-ink" data-review-this-lot>★ {{ __('Review this lot') }}</a>
+                    @else
+                        <p class="text-xs text-cobalt/60">{{ __('Only buyers can review — reviews unlock once your order is delivered.') }}</p>
+                    @endif
+                </aside>
+
+                <div>
+                    @if ($reviewSummary['count'])
+                        @php
+                            $myBrew = auth()->user()?->preferred_brew_method;
+                        @endphp
+                        <nav class="flex flex-wrap gap-2" aria-label="{{ __('By brew method') }}" data-brew-filter>
+                            <a href="{{ route('products.show', $product) }}#reviews" class="inline-flex items-center rounded-full border-[1.5px] border-cobalt px-3.5 py-1.5 text-sm font-medium {{ $reviews->brew ? 'hover:bg-paper' : 'bg-cobalt text-paper' }}">{{ __('All methods') }}</a>
+                            @foreach ($reviews->byBrewMethod() as $row)
+                                <a href="{{ route('products.show', [$product, 'brew' => $row->method->value]) }}#reviews"
+                                   class="inline-flex items-center rounded-full border-[1.5px] border-cobalt px-3.5 py-1.5 text-sm font-medium {{ $reviews->brew === $row->method ? 'bg-cobalt text-paper' : 'hover:bg-paper' }}">
+                                    {{ $row->method->label() }} ({{ $row->count }})
+                                    @if ($myBrew === $row->method) <span class="ms-1 font-script">· {{ __('My brew method') }}</span> @endif
+                                </a>
+                            @endforeach
+                        </nav>
+                    @endif
+
+                    <div class="mt-2 divide-y-[1.5px] divide-dashed divide-cobalt/40">
+                        @forelse ($reviewList as $review)
+                            <x-review-card :review="$review" />
+                        @empty
+                            @if ($reviews->brew)
+                                <p class="py-5 text-cobalt/80">{{ __('No reviews for :method yet.', ['method' => $reviews->brew->label()]) }}</p>
+                            @endif
+                        @endforelse
+                    </div>
+                    <div class="mt-4">{{ $reviewList->links() }}</div>
+                </div>
+            </div>
+        </section>
+
         @if ($similar->isNotEmpty())
             <section class="mt-14">
                 <x-page-title as="h2" script="you may also like">{{ __('Similar beans') }}</x-page-title>

@@ -20,7 +20,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    public const SORTS = ['newest', 'price_asc', 'price_desc', 'score', 'match'];
+    public const SORTS = ['newest', 'price_asc', 'price_desc', 'score', 'rating', 'match'];
 
     protected $fillable = [
         'origin_id', 'name', 'slug', 'nickname', 'type', 'farm_name', 'variety', 'process',
@@ -94,6 +94,26 @@ class Product extends Model
     public function reviewsQuery(): Builder
     {
         return Review::query()->forProduct($this);
+    }
+
+    /**
+     * rating_avg + rating_count for cards, as correlated subqueries (reviews → order_items → product_variants),
+     * so a page of cards still costs one query.
+     */
+    public function scopeWithRating(Builder $query): void
+    {
+        $reviews = fn () => Review::query()
+            ->join('order_items', 'order_items.id', '=', 'reviews.order_item_id')
+            ->join('product_variants', 'product_variants.id', '=', 'order_items.product_variant_id')
+            ->whereColumn('product_variants.product_id', 'products.id');
+
+        if ($query->getQuery()->columns === null) {
+            $query->select('products.*');
+        }
+        $query->addSelect([
+            'rating_avg' => $reviews()->selectRaw('ROUND(AVG(reviews.rating), 1)'),
+            'rating_count' => $reviews()->selectRaw('COUNT(*)'),
+        ]);
     }
 
     public function cupping(): HasOne
@@ -208,6 +228,8 @@ class Product extends Model
             'score' => $query->orderByDesc(
                 CuppingScore::select('total_points')->whereColumn('cupping_scores.product_id', 'products.id')
             )->orderBy('products.id'),
+            // needs withRating(); products without reviews go last
+            'rating' => $query->orderByRaw('rating_avg IS NULL')->orderByDesc('rating_avg')->orderByDesc('rating_count')->orderBy('products.id'),
             default => $query->orderByDesc('roast_date')->orderBy('products.id'),
         };
     }

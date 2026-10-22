@@ -227,5 +227,16 @@
     "What did you taste? Grind, ratio, water temperature…": "ได้รสอะไรบ้าง? ความละเอียดบด สัดส่วน อุณหภูมิน้ำ…",
     "Save changes": "บันทึก",
     "Post review": "ส่งรีวิว",
-    "Delete this review": "ลบรีวิวนี้"
+    "Delete this review": "ลบรีวิวนี้",
+    "Review rating": "คะแนนรีวิว",
+    "Reviews": "รีวิว",
+    ":count reviews": ":count รีวิว",
+    "By brew method": "แยกตามวิธีชง",
+    "All methods": "ทุกวิธี",
+    "My brew method": "วิธีชงของฉัน",
+    "No reviews yet.": "ยังไม่มีรีวิว",
+    "No reviews for :method yet.": "ยังไม่มีรีวิวที่ชงแบบ :method",
+    "Only buyers can review — reviews unlock once your order is delivered.": "รีวิวได้เฉพาะคนที่ซื้อ เมื่อได้รับสินค้าแล้ว",
+    "Review this lot": "รีวิวล็อตนี้",
+    "(edited)": "(แก้ไขแล้ว)"
 }
