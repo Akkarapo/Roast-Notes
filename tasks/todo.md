@@ -1,11 +1,10 @@
-# Todo: loyalty
+# Todo: community
 
 > อ้างอิง [plan.md](plan.md) · ทุก task จบด้วย `sail artisan test` ผ่าน + 1 commit
 
-- [x] **L1 — Schema + models**: `member_tiers` (+ Bean/Barista/Roaster Master), `users.member_tier_id`, `products.exclusive_until`; `MemberTier`, relations · Verify: `tests/Feature/Loyalty/SchemaTest.php`
-- [x] **L2 — ยอดสะสม + ขึ้นระดับ**: `RecalculateMemberTier`, `Order::markDelivered()`, `LoyaltyStatus` · Verify: `RecalculateMemberTierTest.php`
-- [x] **L3 — ส่วนลดระดับ**: `LoyaltyTierRule` ใน config ต่อจาก CouponRule · Verify: `LoyaltyTierRuleTest.php`, `CheckoutLoyaltyTest.php`
-- [x] **L4 — หน้าจอระดับ**: การ์ดใน Member Info (progress bar), ป้ายใน navbar, ข้อความชวนในตะกร้า · Verify: `MemberInfoTierTest.php`
-- [x] **L5 — ล็อตหายาก**: policy `purchase`, ปฏิเสธใน AddToCart + PlaceOrder, ป้าย "Roaster Master ซื้อก่อน" + ปุ่มปิด · Verify: `EarlyAccessTest.php`
-- [x] **L6 — LoyaltySeeder**: คำนวณระดับ demo, ล็อตหายาก 3 ตัว · Verify: seed แล้วได้ member1/2/3 = RM/Barista/Bean
-- [x] **L7 — Checkpoint**: Success Criteria 1–5, screenshot, pint, CAPABILITY-MAP
+- [ ] **C1 — Schema + models**: `wishlists`, `reviews` (order_item_id UNIQUE, CHECK rating), `Review`, relations, factories · Verify: `tests/Feature/Community/SchemaTest.php`
+- [ ] **C2 — Wish List**: POST/DELETE `/wishlist/{product}`, หน้า `/wishlist`, `x-wishlist-button` บนการ์ด/หน้าสินค้า, "Wish List (n)" ในเมนู · Verify: `WishlistTest.php`
+- [ ] **C3 — รีวิว**: `ReviewPolicy`, `SubmitReview`, ฟอร์มสร้าง/แก้/ลบ (`x-star-input`), ปุ่มในหน้าออเดอร์ delivered · Verify: `ReviewEligibilityTest.php`, `ReviewCrudTest.php`
+- [ ] **C4 — Rating**: `scopeWithRating`, ★ บนการ์ด, section รีวิวในหน้าสินค้า (สรุป, ตามวิธีชง, กรอง `?brew=`, หน้าละ 10), เรียง "คะแนนรีวิว" · Verify: `RatingTest.php`
+- [ ] **C5 — CommunitySeeder**: รีวิว ~60% ของรายการ delivered, Wish List สมาชิกละ 3–5 · Verify: `CommunitySeederTest.php`
+- [ ] **C6 — Checkpoint**: Success Criteria 1–6, screenshot, pint, CAPABILITY-MAP

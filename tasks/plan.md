@@ -1,39 +1,39 @@
-# Plan: loyalty
+# Plan: community
 
-> อ้างอิง [docs/specs/SPEC-loyalty.md](../docs/specs/SPEC-loyalty.md) · สถานะ: **เสร็จแล้ว**
+> อ้างอิง [docs/specs/SPEC-community.md](../docs/specs/SPEC-community.md) · สถานะ: **รอรีวิว**
 
 ## ลำดับ
 
 ```
-L1 Schema: member_tiers (+3 แถวใน migration), users.member_tier_id, products.exclusive_until + models
- ├─ L2 RecalculateMemberTier + LoyaltyStatus (ยอดสะสม, ระดับถัดไป, ยอดที่ขาด)
- │   ├─ L3 LoyaltyTierRule ใน pipeline + PlaceOrder อ่านระดับใน transaction
- │   └─ L4 Member Info การ์ดระดับ + ป้ายใน navbar + ข้อความชวนในตะกร้า
- └─ L5 Early access: Product::isExclusiveNow, ProductPolicy::purchase, AddToCart/PlaceOrder ปฏิเสธ, ป้าย + ปุ่มปิด
-     └─ L6 LoyaltySeeder (ระดับ demo + ล็อตหายาก 3 ตัว)
-         └─ L7 Checkpoint
+C1 Schema: wishlists (PK คู่), reviews (order_item_id UNIQUE, rating CHECK 1–5) + models + factories
+ ├─ C2 Wish List: toggle POST/DELETE, หน้า /wishlist, หัวใจบนการ์ด/หน้าสินค้า, ลิงก์ในเมนู
+ └─ C3 รีวิว: ReviewPolicy, SubmitReview, ฟอร์มสร้าง/แก้/ลบ, ปุ่มในหน้าออเดอร์
+     └─ C4 Rating: scopeWithRating (subquery), ★ บนการ์ด, สรุป + ตามวิธีชง + กรอง ในหน้าสินค้า, เรียงตามคะแนน
+         └─ C5 CommunitySeeder (รีวิว + Wish List ตัวอย่าง)
+             └─ C6 Checkpoint
 ```
 
 ## การตัดสินใจทางเทคนิค
 
 | เรื่อง | เลือก | เหตุผล |
 |---|---|---|
-| ข้อมูลระดับ | insert 3 แถวใน migration, ใช้ `slug` อ้างอิงในโค้ด | ระบบต้องมีเสมอ เทสไม่ต้อง seed เพิ่ม |
-| default ของ users.member_tier_id | migration ตั้ง default = id ของ Bean; `User::creating` เติมให้ถ้าว่าง | สมาชิกใหม่เป็น Bean เสมอ |
-| ยอดสะสม | `orders.where(status, delivered)->sum(total)` ทุกครั้ง | ไม่มีข้อมูลซ้ำซ้อน, ข้อมูลเล็ก |
-| เรียก RecalculateMemberTier | method `Order::markDelivered()` ที่ admin จะใช้ + LoyaltySeeder | จุดเดียวที่สถานะกลายเป็น delivered |
-| ไม่ลดระดับ | เลือก `max(ระดับเดิม, ระดับที่คำนวณได้)` ตาม min_spend | ตามที่ตกลง |
-| early access | `ProductPolicy::purchase` ใช้ทั้ง AddToCartRequest::authorize, หน้าสินค้า (`@can`), PlaceOrder | กติกาเดียวทุกที่ |
-| PlaceOrder ปฏิเสธล็อตหายาก | throw ValidationException(['cart' => ...]) แบบเดียวกับสต็อกไม่พอ | ใช้ flow กลับตะกร้าเดิม |
+| reviews → สินค้า/ผู้รีวิว | JOIN ผ่าน order_items (ไม่เก็บซ้ำ) | ตาม 3NF ที่ตกลง |
+| ค่าเฉลี่ยบนการ์ด | correlated subquery `rating_avg`, `rating_count` ใน `addSelect` | 1 query ต่อหน้าเหมือนเดิม |
+| ค่าเฉลี่ยตามวิธีชง | `GROUP BY brew_method` บน `Review::forProduct()` | query เดียวต่อหน้าสินค้า |
+| rating 1–5 | validation + CHECK constraint ใน MySQL 8 | ป้องกันทั้งสองชั้น |
+| order_item ที่ยังไม่รีวิวในหน้าออเดอร์ | eager load `items.review` | ไม่มี N+1 |
+| Wish List toggle | ฟอร์ม POST/DELETE + redirect back (ไม่ต้องมี JS) | ทำงานกับทุกการ์ด, เทสง่าย |
+| สถานะหัวใจบนการ์ด | โหลด id ใน Wish List ของผู้ใช้ครั้งเดียวต่อ request (cache แบบ PromotionBadges) | ไม่เพิ่ม query ตามจำนวนการ์ด |
+| ชื่อผู้รีวิว | `User::shortName()` → "สมชาย ใ." | ใช้ซ้ำใน sales-report ได้ |
 
 ## ความเสี่ยง
 
 | ความเสี่ยง | วิธีลด |
 |---|---|
-| เพิ่มกฎตัวที่ 3 แล้วเทส ordering/promotions เดิมเปลี่ยนตัวเลข | factory ผู้ใช้เป็น Bean (0%) โดย default |
-| ยอดสะสม member ใน demo ขึ้นกับวันที่ seed | OrderSeeder ใช้ seed คงที่ ตรวจใน L6 ว่าได้ 3 ระดับตามที่คาด |
-| หน้าเว็บ query ยอดสะสมซ้ำหลายจุด | `LoyaltyStatus` cache ต่อ request แบบเดียวกับ PromotionBadges |
+| ปุ่มหัวใจอยู่ในการ์ดที่เป็น `<a>` ทั้งใบ (form ใน a ไม่ valid) | ย้ายการ์ดเป็น `<article>` + ลิงก์ stretched หรือวางหัวใจนอก `<a>` ด้วย absolute |
+| JOIN 3 ตารางบนหน้า Products ช้า | index ที่มีอยู่ครบ, ข้อมูลเล็ก; ตรวจด้วย query log |
+| seeder รีวิวไม่ตรงกับออเดอร์ delivered เมื่อวันที่เปลี่ยน | สร้างจากออเดอร์ delivered จริงหลัง OrderSeeder, seed RNG คงที่ |
 
 ## Checkpoints
-- หลัง L3: คิดมือ 2 กรณี (Barista + คูปอง, Roaster Master + ซื้อ 10 แถม 2) เทียบกับหน้าจอ
-- L7: Success Criteria 1–5 + screenshot
+- หลัง C3: เขียน/แก้/ลบรีวิวในเบราว์เซอร์จากหน้าออเดอร์
+- C6: Success Criteria 1–6 + screenshot
