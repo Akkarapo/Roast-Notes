@@ -3,6 +3,8 @@
 use App\Support\Pricing\Rules\BuyXGetYRule;
 use App\Support\Pricing\Rules\CouponRule;
 use App\Support\Pricing\Rules\LoyaltyTierRule;
+use App\Support\Reports\SalesOverTime;
+use App\Support\Reports\Summary;
 
 return [
 
@@ -50,6 +52,8 @@ return [
     */
 
     'reports' => [
+        Summary::class,
+        SalesOverTime::class,
     ],
 
 ];
