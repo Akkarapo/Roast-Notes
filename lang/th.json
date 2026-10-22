@@ -422,5 +422,20 @@
     "Top :n notes (units of beans with the note)": "โน้ตยอดนิยม :n อันดับ (ชิ้นของเมล็ดที่มีโน้ตนั้น)",
     ":n products": ":n สินค้า",
     "By flavor group (% of units sold)": "ตามหมวดรส (% ของชิ้นที่ขาย)",
-    "A bean can belong to several groups, so the shares add up to more than 100%.": "เมล็ดหนึ่งอยู่ได้หลายหมวด สัดส่วนรวมกันจึงเกิน 100%"
+    "A bean can belong to several groups, so the shares add up to more than 100%.": "เมล็ดหนึ่งอยู่ได้หลายหมวด สัดส่วนรวมกันจึงเกิน 100%",
+    "Discounts by promotion": "ส่วนลดตามโปรโมชั่น",
+    "Label": "ป้าย",
+    "Discount (THB)": "ส่วนลด (บาท)",
+    "Discount": "ส่วนลด",
+    "No discounts in this period.": "ไม่มีส่วนลดในช่วงนี้",
+    "Taste they like vs taste that sells": "รสที่ลูกค้าชอบ vs รสที่ขายได้",
+    "Members who like it": "สมาชิกที่ชอบ",
+    "% of members": "% ของสมาชิก",
+    "Units sold": "ชิ้นที่ขาย",
+    "% of units": "% ของชิ้น",
+    "% of members who like it (Taste Quiz)": "% สมาชิกที่ชอบ (Taste Quiz)",
+    "% of units sold in the period": "% ของชิ้นที่ขายในช่วงนี้",
+    "people": "คน",
+    "Taste Quiz answers are as members have them today; sales follow the period. A member can like several groups and a bean can sit in several groups.": "คำตอบ Taste Quiz เป็นของปัจจุบัน ส่วนยอดขายตามช่วงที่เลือก · สมาชิกชอบได้หลายหมวด และเมล็ดหนึ่งอยู่ได้หลายหมวด",
+    "All discounts": "รวมทั้งหมด"
 }
