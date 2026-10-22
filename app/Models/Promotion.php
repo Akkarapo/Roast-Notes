@@ -58,6 +58,30 @@ class Promotion extends Model
             ->where(fn (Builder $q) => $q->whereNull('promotions.ends_at')->orWhere('promotions.ends_at', '>=', now()));
     }
 
+    /** active | scheduled | expired | off — for the admin list */
+    public function state(): string
+    {
+        return match (true) {
+            ! $this->is_active => 'off',
+            $this->starts_at->isFuture() => 'scheduled',
+            $this->ends_at !== null && $this->ends_at->isPast() => 'expired',
+            default => 'active',
+        };
+    }
+
+    public function scopeWithTimesUsed(Builder $query): void
+    {
+        $query->withCount(['orderDiscounts as times_used' => fn (Builder $q) => $q->whereHas(
+            'order', fn (Builder $o) => $o->where('status', '!=', OrderStatus::Cancelled->value)
+        )]);
+    }
+
+    /** Used promotions stay (order_discounts point at them) — switch them off instead. */
+    public function hasBeenUsed(): bool
+    {
+        return $this->orderDiscounts()->exists();
+    }
+
     public function isCurrentlyActive(): bool
     {
         return $this->is_active && $this->starts_at->lte(now()) && ($this->ends_at === null || $this->ends_at->gte(now()));
