@@ -104,6 +104,20 @@ class User extends Authenticatable
         return $this->belongsTo(MemberTier::class);
     }
 
+    /** Products the member saved for later. */
+    public function wishlist(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withPivot('created_at');
+    }
+
+    /** "สมชาย ใจดี" → "สมชาย ใ." (public name on reviews) */
+    public function shortName(): string
+    {
+        $parts = preg_split('/\s+/u', trim($this->name));
+
+        return count($parts) > 1 ? $parts[0].' '.mb_substr($parts[1], 0, 1).'.' : $parts[0];
+    }
+
     public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);

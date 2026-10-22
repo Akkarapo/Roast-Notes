@@ -84,6 +84,18 @@ class Product extends Model
         $query->whereHas('promotions', fn (Builder $q) => $q->currentlyActive());
     }
 
+    /** Members who saved this product. */
+    public function wishedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'wishlists');
+    }
+
+    /** Reviews reach products through order_items → product_variants (see Review::scopeForProduct). */
+    public function reviewsQuery(): Builder
+    {
+        return Review::query()->forProduct($this);
+    }
+
     public function cupping(): HasOne
     {
         return $this->hasOne(CuppingScore::class);

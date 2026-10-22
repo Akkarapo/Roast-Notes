@@ -1,6 +1,6 @@
 # Plan: community
 
-> อ้างอิง [docs/specs/SPEC-community.md](../docs/specs/SPEC-community.md) · สถานะ: **รอรีวิว**
+> อ้างอิง [docs/specs/SPEC-community.md](../docs/specs/SPEC-community.md) · สถานะ: **อนุมัติแล้ว**
 
 ## ลำดับ
 
