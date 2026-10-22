@@ -63,11 +63,47 @@ class OrderSeeder extends Seeder
         foreach ($orders as [$user, $placedAt]) {
             $this->placeOrder($user, $placedAt, $variants, maxLines: 2, dripQuantities: [1, 2, 5, 10], maxBeanBags: 1);
         }
+
+        $this->histories();
+    }
+
+    /**
+     * Status history for every demo order: one step at a time up to its current status, 2–30 hours apart.
+     * The customer places (and cancels); the shop admin moves it forward. Own random stream.
+     */
+    private function histories(): void
+    {
+        $random = new Randomizer(new Mt19937(20261026));
+        $admin = User::where('role', 'admin')->orderBy('id')->first();
+
+        Order::orderBy('id')->each(function (Order $order) use ($random, $admin) {
+            $at = $order->placed_at->copy();
+            $rows = [['from_status' => null, 'to_status' => OrderStatus::Pending, 'changed_by' => $order->user_id, 'note' => null, 'created_at' => $at->copy()]];
+
+            if ($order->status === OrderStatus::Cancelled) {
+                $rows[] = ['from_status' => OrderStatus::Pending, 'to_status' => OrderStatus::Cancelled, 'changed_by' => $order->user_id, 'note' => 'ลูกค้ายกเลิกเอง', 'created_at' => $order->cancelled_at];
+            } else {
+                $previous = OrderStatus::Pending;
+                foreach (array_slice(OrderStatus::FLOW, 1, array_search($order->status, OrderStatus::FLOW, true)) as $status) {
+                    $at = $at->copy()->addHours($random->getInt(2, 30));
+                    if ($at->isFuture()) {
+                        $at = now()->subMinutes($random->getInt(5, 60));
+                    }
+                    $note = $status === OrderStatus::Shipped ? sprintf('Kerry Express TH%010d', $random->getInt(1, 9999999999)) : null;
+                    $rows[] = ['from_status' => $previous, 'to_status' => $status, 'changed_by' => $admin?->id, 'note' => $note, 'created_at' => $at];
+                    $previous = $status;
+                }
+            }
+
+            $order->statusChanges()->createMany($rows);
+        });
     }
 
     private function randomDate(): Carbon
     {
-        return today()->subDays($this->random->getInt(0, self::DAYS - 1))->setTime($this->random->getInt(8, 21), $this->random->getInt(0, 59));
+        $at = today()->subDays($this->random->getInt(0, self::DAYS - 1))->setTime($this->random->getInt(8, 21), $this->random->getInt(0, 59));
+
+        return $at->isFuture() ? now()->subHour()->startOfMinute() : $at; // "later today" has not happened yet
     }
 
     /** @param list<int> $dripQuantities */

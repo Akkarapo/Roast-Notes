@@ -21,7 +21,7 @@ class OrderController extends Controller
     {
         $this->authorize('view', $order);
 
-        return view('orders.show', ['order' => $order->load(['items.variant.product', 'items.review', 'discounts'])]);
+        return view('orders.show', ['order' => $order->load(['items.variant.product', 'items.review', 'discounts', 'statusChanges'])]);
     }
 
     public function cancel(Order $order, CancelOrder $cancelOrder): RedirectResponse

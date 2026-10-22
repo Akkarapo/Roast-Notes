@@ -15,6 +15,13 @@
                 <x-order-status-badge :status="$order->status" class="text-sm" />
             </header>
 
+            @if ($order->statusChanges->isNotEmpty())
+                <section class="border-b-2 border-dashed border-cobalt py-5">
+                    <h2 class="mb-3 text-sm font-semibold">{{ __('Order status') }}</h2>
+                    <x-order-timeline :changes="$order->statusChanges" />
+                </section>
+            @endif
+
             <section class="grid gap-6 border-b-2 border-dashed border-cobalt py-5 sm:grid-cols-2">
                 <div>
                     <h2 class="text-sm font-semibold">{{ __('Ship to') }}</h2>

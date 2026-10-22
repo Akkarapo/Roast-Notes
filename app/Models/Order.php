@@ -40,12 +40,31 @@ class Order extends Model
     /**
      * Mark the order delivered and let the member move up a tier. The admin module calls this.
      */
-    public function markDelivered(): void
+    public function markDelivered(?User $by = null, ?string $note = null): void
     {
-        DB::transaction(function () {
+        DB::transaction(function () use ($by, $note) {
+            $from = $this->status;
             $this->update(['status' => OrderStatus::Delivered]);
+            $this->recordStatus($from, OrderStatus::Delivered, $by, $note);
             app(RecalculateMemberTier::class)($this->user);
         });
+    }
+
+    /** Append to the status history. Call inside the same transaction as the change itself. */
+    public function recordStatus(?OrderStatus $from, OrderStatus $to, ?User $by = null, ?string $note = null): OrderStatusChange
+    {
+        return $this->statusChanges()->create([
+            'from_status' => $from,
+            'to_status' => $to,
+            'changed_by' => $by?->id,
+            'note' => $note,
+            'created_at' => now(),
+        ]);
+    }
+
+    public function statusChanges(): HasMany
+    {
+        return $this->hasMany(OrderStatusChange::class)->orderBy('created_at')->orderBy('id');
     }
 
     public function user(): BelongsTo

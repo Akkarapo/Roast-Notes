@@ -85,6 +85,8 @@ class PlaceOrder
                 'placed_at' => now(),
             ]);
 
+            $order->recordStatus(null, OrderStatus::Pending, $user);
+
             foreach ($quote->lines as $line) {
                 $order->items()->create([
                     'product_variant_id' => $line->variant->id,

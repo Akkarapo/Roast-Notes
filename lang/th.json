@@ -243,5 +243,9 @@
     "Orders": "ออเดอร์",
     "Promotions": "โปรโมชั่น",
     "Members": "สมาชิก",
-    "Admin sections": "เมนูหลังร้าน"
+    "Admin sections": "เมนูหลังร้าน",
+    "Order placed": "สั่งซื้อแล้ว",
+    "by :name": "โดย :name",
+    "by customer": "โดยลูกค้า",
+    "Order status": "สถานะคำสั่งซื้อ"
 }
