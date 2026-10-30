@@ -1,0 +1,446 @@
+// Roast & Notes — Database course 261343
+// 22 tables, generated from the live MySQL schema. Paste into https://dbdiagram.io
+
+Table member_tiers [headercolor: #615CF6] {
+  id tinyint [pk, not null]
+  slug varchar(30) [unique, not null]
+  name varchar(50) [not null]
+  min_spend decimal(10,2) [unique, not null]
+  discount_percent tinyint [not null]
+  early_access boolean [not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table users [headercolor: #615CF6] {
+  id bigint [pk, not null]
+  name varchar(100) [not null]
+  email varchar(255) [unique, not null]
+  email_verified_at timestamp [null]
+  password varchar(255) [not null]
+  phone varchar(20) [null]
+  address text [null]
+  role users_role [not null]
+  member_tier_id tinyint [not null]
+  preferred_roast_level users_preferred_roast_level [null]
+  preferred_brew_method users_preferred_brew_method [null]
+  taste_quiz_completed_at datetime [null]
+  remember_token varchar(100) [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table user_taste_preferences [headercolor: #615CF6] {
+  user_id bigint [not null]
+  flavor_category_id bigint [not null]
+
+  indexes {
+    (user_id, flavor_category_id) [pk]
+  }
+}
+
+Table flavor_categories [headercolor: #2F9E8F] {
+  id bigint [pk, not null]
+  parent_id bigint [null]
+  slug varchar(40) [unique, not null]
+  name varchar(60) [not null]
+
+  Note: 'self-reference: parent_id NULL = top-level group (Fruity, Floral, ...)'
+}
+
+Table flavor_notes [headercolor: #2F9E8F] {
+  id bigint [pk, not null]
+  flavor_category_id bigint [not null]
+  name varchar(40) [unique, not null]
+}
+
+Table product_flavor_notes [headercolor: #2F9E8F] {
+  product_id bigint [not null]
+  flavor_note_id bigint [not null]
+
+  indexes {
+    (product_id, flavor_note_id) [pk]
+  }
+}
+
+Table origins [headercolor: #2338C4] {
+  id bigint [pk, not null]
+  country varchar(60) [not null]
+  region varchar(100) [not null]
+
+  indexes {
+    (country, region) [unique]
+  }
+}
+
+Table products [headercolor: #2338C4] {
+  id bigint [pk, not null]
+  origin_id bigint [not null]
+  name varchar(120) [not null]
+  slug varchar(140) [unique, not null]
+  nickname varchar(60) [not null]
+  type products_type [not null]
+  farm_name varchar(150) [null]
+  variety varchar(60) [null]
+  process products_process [not null]
+  altitude_m smallint [null]
+  roast_level products_roast_level [not null]
+  roast_date date [not null]
+  description text [null]
+  is_active boolean [not null]
+  exclusive_until datetime [null]
+  cqi_ref varchar(20) [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  Note: 'superclass: type = \'bean\' → beans, \'drip_bag\' → drip_bags (disjoint, total; single-table mapping)'
+}
+
+Table product_variants [headercolor: #2338C4] {
+  id bigint [pk, not null]
+  product_id bigint [not null]
+  size product_variants_size [not null]
+  weight_g smallint [not null]
+  price decimal(10,2) [not null]
+  stock int [not null]
+  sku varchar(40) [unique, not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    (product_id, size) [unique]
+  }
+
+  Note: 'one row per bag size; price and stock live here (weak entity of products, identified by product_id + size)'
+}
+
+Table cupping_scores [headercolor: #2338C4] {
+  product_id bigint [pk, not null]
+  aroma decimal(4,2) [not null]
+  flavor decimal(4,2) [not null]
+  aftertaste decimal(4,2) [not null]
+  acidity decimal(4,2) [not null]
+  body decimal(4,2) [not null]
+  balance decimal(4,2) [not null]
+  uniformity decimal(4,2) [not null]
+  clean_cup decimal(4,2) [not null]
+  sweetness decimal(4,2) [not null]
+  cupper_points decimal(4,2) [not null]
+  total_points decimal(5,2) [not null]
+  graded_on date [null]
+
+  Note: '1:1 with products (PK = FK)'
+}
+
+Table carts [headercolor: #D9822B] {
+  id bigint [pk, not null]
+  user_id bigint [unique, not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table cart_items [headercolor: #D9822B] {
+  id bigint [pk, not null]
+  cart_id bigint [not null]
+  product_variant_id bigint [not null]
+  grind cart_items_grind [not null]
+  quantity smallint [not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    (cart_id, product_variant_id, grind) [unique]
+  }
+}
+
+Table orders [headercolor: #D9822B] {
+  id bigint [pk, not null]
+  order_number varchar(20) [unique, not null]
+  user_id bigint [not null]
+  status orders_status [not null]
+  subtotal decimal(10,2) [not null]
+  discount_total decimal(10,2) [not null]
+  shipping_fee decimal(10,2) [not null]
+  total decimal(10,2) [not null]
+  recipient_name varchar(100) [not null]
+  phone varchar(20) [not null]
+  shipping_address text [not null]
+  note varchar(500) [null]
+  placed_at datetime [not null]
+  cancelled_at datetime [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+}
+
+Table order_items [headercolor: #D9822B] {
+  id bigint [pk, not null]
+  order_id bigint [not null]
+  product_variant_id bigint [not null]
+  product_name varchar(160) [not null]
+  size varchar(10) [not null]
+  grind order_items_grind [not null]
+  unit_price decimal(10,2) [not null]
+  quantity smallint [not null]
+  line_total decimal(10,2) [not null]
+
+  Note: 'price snapshot at order time'
+}
+
+Table order_status_changes [headercolor: #D9822B] {
+  id bigint [pk, not null]
+  order_id bigint [not null]
+  from_status order_status_changes_from_status [null]
+  to_status order_status_changes_to_status [not null]
+  changed_by bigint [null]
+  note varchar(255) [null]
+  created_at datetime [not null]
+
+  Note: 'status history (orders.status keeps the current one)'
+}
+
+Table promotions [headercolor: #B42CE6] {
+  id bigint [pk, not null]
+  type promotions_type [not null]
+  name varchar(100) [not null]
+  description varchar(255) [null]
+  starts_at datetime [not null]
+  ends_at datetime [null]
+  is_active boolean [not null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  Note: 'supertype: type = \'coupon\' → coupons, \'buy_x_get_y\' → buy_x_get_y (disjoint, total)'
+}
+
+Table coupons [headercolor: #B42CE6] {
+  promotion_id bigint [pk, not null]
+  code varchar(30) [unique, not null]
+  percent_off tinyint [not null]
+  min_subtotal decimal(10,2) [null]
+  usage_limit int [null]
+  per_user_limit smallint [null]
+
+  Note: 'subtype of promotions (PK = FK)'
+}
+
+Table buy_x_get_y [headercolor: #B42CE6] {
+  promotion_id bigint [pk, not null]
+  buy_quantity smallint [not null]
+  free_quantity smallint [not null]
+
+  Note: 'subtype of promotions (PK = FK)'
+}
+
+Table promotion_products [headercolor: #B42CE6] {
+  promotion_id bigint [not null]
+  product_id bigint [not null]
+
+  indexes {
+    (promotion_id, product_id) [pk]
+  }
+}
+
+Table order_discounts [headercolor: #B42CE6] {
+  id bigint [pk, not null]
+  order_id bigint [not null]
+  promotion_id bigint [null]
+  source varchar(30) [not null]
+  label varchar(120) [not null]
+  amount decimal(10,2) [not null]
+}
+
+Table wishlists [headercolor: #C2417A] {
+  user_id bigint [not null]
+  product_id bigint [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (user_id, product_id) [pk]
+  }
+}
+
+Table reviews [headercolor: #C2417A] {
+  id bigint [pk, not null]
+  order_item_id bigint [unique, not null]
+  rating tinyint [not null]
+  brew_method reviews_brew_method [not null]
+  comment text [null]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  Note: 'one review per purchased line; reviewer and product reached through order_items (3NF)'
+}
+
+// ---------- relationships ( > many-to-one, - one-to-one ) ----------
+Ref: users.member_tier_id > member_tiers.id
+Ref: user_taste_preferences.flavor_category_id > flavor_categories.id
+Ref: user_taste_preferences.user_id > users.id
+Ref: flavor_categories.parent_id > flavor_categories.id
+Ref: flavor_notes.flavor_category_id > flavor_categories.id
+Ref: product_flavor_notes.flavor_note_id > flavor_notes.id
+Ref: product_flavor_notes.product_id > products.id
+Ref: products.origin_id > origins.id
+Ref: product_variants.product_id > products.id
+Ref: cupping_scores.product_id - products.id
+Ref: carts.user_id - users.id
+Ref: cart_items.cart_id > carts.id
+Ref: cart_items.product_variant_id > product_variants.id
+Ref: orders.user_id > users.id
+Ref: order_items.order_id > orders.id
+Ref: order_items.product_variant_id > product_variants.id
+Ref: order_status_changes.changed_by > users.id
+Ref: order_status_changes.order_id > orders.id
+Ref: coupons.promotion_id - promotions.id
+Ref: buy_x_get_y.promotion_id - promotions.id
+Ref: promotion_products.product_id > products.id
+Ref: promotion_products.promotion_id > promotions.id
+Ref: order_discounts.order_id > orders.id
+Ref: order_discounts.promotion_id > promotions.id
+Ref: wishlists.product_id > products.id
+Ref: wishlists.user_id > users.id
+Ref: reviews.order_item_id - order_items.id
+
+// ---------- enums ----------
+Enum users_role {
+  "member"
+  "admin"
+}
+
+Enum users_preferred_roast_level {
+  "light"
+  "medium"
+  "dark"
+}
+
+Enum users_preferred_brew_method {
+  "pour_over"
+  "french_press"
+  "espresso"
+  "moka_pot"
+  "aeropress"
+  "cold_brew"
+  "drip_bag"
+}
+
+Enum products_type {
+  "bean"
+  "drip_bag"
+}
+
+Enum products_process {
+  "washed"
+  "natural"
+  "honey"
+  "semi_washed"
+  "other"
+}
+
+Enum products_roast_level {
+  "light"
+  "medium"
+  "dark"
+}
+
+Enum product_variants_size {
+  "100g"
+  "250g"
+  "500g"
+  "sachet"
+}
+
+Enum cart_items_grind {
+  "whole_bean"
+  "drip"
+  "espresso"
+  "none"
+}
+
+Enum orders_status {
+  "pending"
+  "confirmed"
+  "shipped"
+  "in_transit"
+  "delivered"
+  "cancelled"
+}
+
+Enum order_items_grind {
+  "whole_bean"
+  "drip"
+  "espresso"
+  "none"
+}
+
+Enum order_status_changes_from_status {
+  "pending"
+  "confirmed"
+  "shipped"
+  "in_transit"
+  "delivered"
+  "cancelled"
+}
+
+Enum order_status_changes_to_status {
+  "pending"
+  "confirmed"
+  "shipped"
+  "in_transit"
+  "delivered"
+  "cancelled"
+}
+
+Enum promotions_type {
+  "coupon"
+  "buy_x_get_y"
+}
+
+Enum reviews_brew_method {
+  "pour_over"
+  "french_press"
+  "espresso"
+  "moka_pot"
+  "aeropress"
+  "cold_brew"
+  "drip_bag"
+}
+
+// ---------- groups ----------
+TableGroup members [color: #615CF6] {
+  member_tiers
+  users
+  user_taste_preferences
+}
+
+TableGroup flavors [color: #2F9E8F] {
+  flavor_categories
+  flavor_notes
+  product_flavor_notes
+}
+
+TableGroup catalog [color: #2338C4] {
+  origins
+  products
+  product_variants
+  cupping_scores
+}
+
+TableGroup ordering [color: #D9822B] {
+  carts
+  cart_items
+  orders
+  order_items
+  order_status_changes
+}
+
+TableGroup promotions [color: #B42CE6] {
+  promotions
+  coupons
+  buy_x_get_y
+  promotion_products
+  order_discounts
+}
+
+TableGroup community [color: #C2417A] {
+  wishlists
+  reviews
+}
