@@ -442,5 +442,6 @@
     "We couldn't find that page.": "หาหน้านี้ไม่เจอ",
     "Maybe it moved, or the link has a typo.": "อาจถูกย้ายไปแล้ว หรือพิมพ์ลิงก์ผิด",
     "Back to the shop": "กลับไปหน้าร้าน",
-    "Your beans have left the roastery and are on their way to you.": "เมล็ดของคุณออกจากร้านแล้ว กำลังเดินทางไปหาคุณ"
+    "Your beans have left the roastery and are on their way to you.": "เมล็ดของคุณออกจากร้านแล้ว กำลังเดินทางไปหาคุณ",
+    "The :attribute field must be lowercase.": ":attribute ต้องเป็นตัวพิมพ์เล็ก"
 }

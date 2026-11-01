@@ -51,4 +51,13 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/');
     }
+
+    public function test_users_can_login_with_email_in_any_case(): void
+    {
+        $user = User::factory()->create(['email' => 'case@example.com']);
+
+        $this->post('/login', ['email' => 'Case@Example.com', 'password' => 'password']);
+
+        $this->assertAuthenticatedAs($user);
+    }
 }
