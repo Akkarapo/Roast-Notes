@@ -443,5 +443,10 @@
     "Maybe it moved, or the link has a typo.": "อาจถูกย้ายไปแล้ว หรือพิมพ์ลิงก์ผิด",
     "Back to the shop": "กลับไปหน้าร้าน",
     "Your beans have left the roastery and are on their way to you.": "เมล็ดของคุณออกจากร้านแล้ว กำลังเดินทางไปหาคุณ",
-    "The :attribute field must be lowercase.": ":attribute ต้องเป็นตัวพิมพ์เล็ก"
+    "The :attribute field must be lowercase.": ":attribute ต้องเป็นตัวพิมพ์เล็ก",
+    "passwords.sent": "ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลของคุณแล้ว",
+    "passwords.throttled": "เพิ่งส่งลิงก์ไปเมื่อสักครู่ กรุณารอ 1 นาทีแล้วค่อยลองใหม่",
+    "passwords.user": "ไม่พบบัญชีที่ใช้อีเมลนี้",
+    "passwords.token": "ลิงก์ตั้งรหัสผ่านนี้ไม่ถูกต้องหรือหมดอายุแล้ว",
+    "passwords.reset": "ตั้งรหัสผ่านใหม่เรียบร้อยแล้ว"
 }
