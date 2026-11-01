@@ -14,6 +14,7 @@ class Slide:
     def __init__(s, sid, eyebrow, title, footer, notes):
         s.sid, s.eyebrow, s.title, s.footer, s.notes = sid, eyebrow, title, footer, notes
         s.n, s.lines, s.marks = {}, [], []
+        s.edges, s.items = [], []   # structured copies (used by eer_drawio.py)
 
     # ---- nodes -------------------------------------------------------
     def ent(s, k, x, y, label=None, weak=False, w=None):
@@ -28,12 +29,14 @@ class Slide:
     def circ(s, k, x, y, label='d'):
         s.n[k] = dict(t='circ', x=x, y=y, w=68, h=68, label=label)
     def note(s, x, y, text, w=360):
+        s.items.append(('note', x, y, text, w))
         s.marks.append(f'<p style="position:absolute;left:{x - w/2:.0f}px;top:{y:.0f}px;width:{w}px;font-size:24px;line-height:1.3;text-align:center;color:#6B7096;font-style:italic">{html.escape(text)}</p>')
 
     # ---- edges -------------------------------------------------------
     def ln(s, a, b, double=False, card=None, card_at='a', subset=False, side=1):
         A, B = s.n[a], s.n[b]
-        s._seg(A['x'], A['y'], B['x'], B['y'], double)
+        s.edges.append((a, b, double))
+        s._seg(A['x'], A['y'], B['x'], B['y'], double, rec=False)
         dx, dy = B['x'] - A['x'], B['y'] - A['y']; L = math.hypot(dx, dy); ux, uy = dx / L, dy / L
         if card:
             P = A if card_at == 'a' else B
@@ -41,14 +44,17 @@ class Slide:
             t = s._exit(P, ux if P is A else -ux, uy if P is A else -uy) + (40 if P['t'] == 'rel' else 26)
             px, py = (P['x'] + ux * t, P['y'] + uy * t) if P is A else (P['x'] - ux * t, P['y'] - uy * t)
             nx, ny = -uy * side, ux * side
+            s.items.append(('card', px + nx*22, py + ny*22, card))
             s.marks.append(f'<p style="position:absolute;left:{px + nx*22 - 30:.0f}px;top:{py + ny*22 - 20:.0f}px;width:60px;height:40px;line-height:40px;font-size:28px;font-weight:700;text-align:center;color:{CARD}">{card}</p>')
         if subset:
             mx, my = A['x'] + dx * 0.55, A['y'] + dy * 0.55
             ang = math.degrees(math.atan2(-uy, -ux)) + 90
+            s.items.append(('subset', mx, my, ang))
             s.marks.append(f'<p style="position:absolute;left:{mx-22:.0f}px;top:{my-24:.0f}px;width:44px;height:44px;line-height:44px;font-size:36px;font-weight:700;text-align:center;color:{COB};background:{PAPER};border-radius:50%;transform:rotate({ang:.0f}deg)">∪</p>')
     def ln_pts(s, x1, y1, x2, y2, double=False):
         s._seg(x1, y1, x2, y2, double)
     def label(s, x, y, text, color=CARD, size=26, w=160):
+        s.items.append(('label', x, y, text, w, color))
         s.marks.append(f'<p style="position:absolute;left:{x - w/2:.0f}px;top:{y - 18:.0f}px;width:{w}px;font-size:{size}px;font-weight:700;text-align:center;color:{color}">{html.escape(text)}</p>')
 
     def _exit(s, N, ux, uy):  # distance from centre to node border along (ux,uy)
@@ -58,7 +64,8 @@ class Slide:
         if N['t'] == 'rel':
             return 1 / (abs(ux) / a + abs(uy) / b)
         return min(a / abs(ux) if ux else 1e9, b / abs(uy) if uy else 1e9)
-    def _seg(s, x1, y1, x2, y2, double):
+    def _seg(s, x1, y1, x2, y2, double, rec=True):
+        if rec: s.edges.append(((x1, y1), (x2, y2), double))
         st = f'color:{LINE};border-width:2px'
         if not double:
             s.lines.append(f'<x-connector x1="{x1:.0f}" y1="{y1:.0f}" x2="{x2:.0f}" y2="{y2:.0f}" head="none" style="{st}"></x-connector>')
@@ -235,7 +242,8 @@ for k, x, y, kw in [('id_r', 1520, 600, 1), ('rating', 1720, 600, 0), ('brew_met
 s.note(1050, 640, 'ผู้รีวิวและสินค้า หาได้ด้วย JOIN', w=420)
 slides.append(s)
 
-out = sys.argv[1] if len(sys.argv) > 1 else '.'
-for sl in slides:
+if __name__ == '__main__':
+  out = sys.argv[1] if len(sys.argv) > 1 else '.'
+  for sl in slides:
     open(f'{out}/{sl.sid}.html', 'w').write(sl.html())
     print(sl.sid, sl.html().count('<') // 2, 'elements approx')
