@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>Roast & Notes — Walkthrough</title>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Sriracha&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; font-family: 'Anuphan', sans-serif; color: #18248A; }
+  .stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+           background: radial-gradient(ellipse at 50% 35%, #FFFFFF 0%, #F6F2EA 55%, #ECE6DA 100%); }
+  .layer { position: absolute; inset: 0; opacity: 0; }
+  .abs { position: absolute; will-change: transform, opacity; }
+  .grad { background: linear-gradient(90deg, #18248A 15%, #3F5BF2 90%); -webkit-background-clip: text; background-clip: text;
+          -webkit-text-fill-color: transparent; padding: .06em .04em .28em; margin-bottom: -.28em; }
+  .center { left: 0; width: 1920px; text-align: center; }
+  #dev { left: 216px; top: 58px; width: 1488px; height: 924px; border-radius: 34px; background: #1C1C1E; padding: 12px;
+         box-shadow: 0 50px 110px rgba(24,36,138,.22), 0 0 0 2px #3A3A3C inset; transform-origin: 50% 45%; }
+  #dev .scr { width: 1464px; height: 900px; border-radius: 22px; overflow: hidden; background: #F6F2EA; position: relative; }
+  #dev img { width: 1464px; height: 915px; display: block; }
+  #cap { top: 996px; height: 64px; padding: 0 34px; border-radius: 32px; background: rgba(255,255,255,.92); color: #2338C4;
+         font-size: 32px; font-weight: 600; line-height: 64px; white-space: nowrap; left: 960px; transform: translateX(-50%);
+         box-shadow: 0 12px 30px rgba(24,36,138,.14); }
+  #tag { left: 48px; top: 14px; font-size: 26px; font-weight: 600; color: #6B7096; letter-spacing: .5px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="layer" id="intro">
+    <img class="abs" id="im" src="../promo/assets/mascot-pour.svg" style="left:790px;top:110px;width:340px">
+    <div class="abs center grad" id="it" style="top:480px;font-size:170px;font-weight:700;letter-spacing:-6px;line-height:1.1">Roast &amp; Notes</div>
+    <div class="abs center" id="is" style="top:720px;font-size:48px;font-weight:500;color:#4A5280">ทุกฟังก์ชัน ในสองนาที</div>
+  </div>
+
+  <div class="layer" id="card">
+    <div class="abs center" id="cn" style="top:330px;font-size:40px;font-weight:700;color:#2338C4;letter-spacing:4px"></div>
+    <div class="abs center grad" id="ct" style="top:395px;font-size:136px;font-weight:700;letter-spacing:-4px;line-height:1.15"></div>
+    <div class="abs center" id="cs" style="top:620px;font-size:42px;color:#4A5280"></div>
+  </div>
+
+  <div class="abs" id="dev"><div class="scr"><img id="fr"></div></div>
+  <div class="abs" id="tag"></div>
+  <div class="abs" id="cap"></div>
+
+  <div class="layer" id="outro">
+    <img class="abs" id="om" src="../promo/assets/mascot-cheer.svg" style="left:800px;top:120px;width:320px">
+    <div class="abs center grad" id="ot" style="top:500px;font-size:170px;font-weight:700;letter-spacing:-6px;line-height:1.1">Roast &amp; Notes</div>
+    <div class="abs center" id="os" style="top:735px;font-family:'Sriracha',cursive;font-size:80px;color:#2338C4">sip your notes.</div>
+    <div class="abs center" id="of" style="top:880px;font-size:32px;color:#6B7096;letter-spacing:3px">TERM PROJECT · DATABASE 261343</div>
+  </div>
+  <div class="abs" id="fade" style="inset:0;background:#F6F2EA;opacity:0"></div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eo = p => 1 - Math.pow(1 - p, 3);
+const eio = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const spring = p => p >= 1 ? 1 : 1 - Math.exp(-6 * p) * Math.cos(10 * p);
+const set = (id, o) => Object.assign($(id).style, o);
+const up = (id, t, at, d = 60, dur = .55) => { const p = eo(prog(t, at, at + dur)); set(id, { opacity: p, transform: `translateY(${(1 - p) * d}px)` }); };
+let TL = null, lastSrc = '';
+function frameAt(sh, t) {   // binary search on recorded timestamps
+  const rt = (t - sh.start) * sh.speed, ts = sh.ts; let lo = 0, hi = ts.length - 1;
+  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (ts[m] <= rt) lo = m; else hi = m - 1; }
+  return `file://${sh.folder}/f${String(lo).padStart(5, '0')}.jpg`;
+}
+async function seek(t) {
+  const I = TL.intro, O = TL.outro_start;
+  // intro
+  set('intro', { opacity: t < I ? 1 - prog(t, I - .45, I) : 0 });
+  const pm = prog(t, .1, .8); set('im', { opacity: clamp(pm * 3), transform: `translateY(${(1 - eo(pm)) * 120}px) scale(${.6 + .4 * spring(pm)})` });
+  up('it', t, .5); up('is', t, .9, 40);
+  // which shot
+  let sh = null, k = -1;
+  TL.shots.forEach((s, i) => { if (t >= s.card && t < (TL.shots[i + 1] ? TL.shots[i + 1].card : O)) { sh = s; k = i; } });
+  let devOp = 0, devTr = 'scale(.9)';
+  if (sh) {
+    // chapter card
+    const inCard = t < sh.start;
+    const cv = inCard ? Math.min(prog(t, sh.card, sh.card + .3), 1 - prog(t, sh.start - .5, sh.start - .25)) : 0;
+    set('card', { opacity: cv });
+    $('cn').textContent = sh.num; $('ct').textContent = sh.title; $('cs').textContent = sh.sub;
+    const cp = eo(prog(t, sh.card, sh.card + .6));
+    set('ct', { transform: `translateY(${(1 - cp) * 50}px) scale(${.96 + .04 * cp})` });
+    set('cs', { transform: `translateY(${(1 - eo(prog(t, sh.card + .15, sh.card + .75))) * 30}px)` });
+    // device rises in at the end of the card, then a slow push-in
+    const r = eo(prog(t, sh.start - .3, sh.start + .35));
+    const push = 1 + .035 * prog(t, sh.start, sh.end);
+    devOp = r; devTr = `translateY(${(1 - r) * 140}px) scale(${(.86 + .14 * r) * push * .985})`;
+    // leaving: shrink a little before the next card / outro
+    const nextAt = TL.shots[k + 1] ? TL.shots[k + 1].card : O;
+    const out = eio(prog(t, nextAt - .3, nextAt));
+    if (out > 0) { devOp *= 1 - out; devTr += ` scale(${1 - .06 * out})`; }
+    if (!inCard || t > sh.start - .3) {
+      const src = frameAt(sh, Math.max(t, sh.start));
+      if (src !== lastSrc) { $('fr').src = src; lastSrc = src; try { await $('fr').decode(); } catch (e) {} }
+    }
+    // captions
+    let cap = null, capT = 0;
+    for (const [ct, lab] of sh.caps) if (t >= ct) { cap = lab; capT = ct; }
+    const cpo = cap ? Math.min(eo(prog(t, capT, capT + .35)), 1 - prog(t, nextAt - .5, nextAt - .2)) : 0;
+    if (cap) $('cap').textContent = cap;
+    set('cap', { opacity: cpo * (inCard ? 0 : 1), transform: `translateX(-50%) translateY(${(1 - eo(prog(t, capT, capT + .35))) * 16}px)` });
+    $('tag').textContent = `${sh.num} · ${sh.title}`;
+    set('tag', { opacity: inCard ? 0 : Math.min(prog(t, sh.start, sh.start + .4), 1 - prog(t, nextAt - .3, nextAt)) });
+  } else { set('card', { opacity: 0 }); set('cap', { opacity: 0 }); set('tag', { opacity: 0 }); }
+  set('dev', { opacity: devOp, transform: devTr });
+  // outro
+  set('outro', { opacity: prog(t, O, O + .4) });
+  const po = prog(t, O + .15, O + .85); set('om', { opacity: clamp(po * 3), transform: `translateY(${(1 - eo(po)) * 120}px) scale(${.6 + .4 * spring(po)})` });
+  up('ot', t, O + .45); up('os', t, O + .85, 40); up('of', t, O + 1.15, 30);
+  set('fade', { opacity: prog(t, TL.total - .5, TL.total) });
+}
+window.init = tl => { TL = tl; };
+window.seek = seek;
+</script>
+</body>
+</html>
